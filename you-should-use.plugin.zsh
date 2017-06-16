@@ -1,4 +1,4 @@
-#! /bin/zsh
+#!/bin/zsh
 
 function _check_aliases() {
   typeset -g -A ialiases
