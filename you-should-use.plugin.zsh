@@ -1,5 +1,11 @@
 #!/bin/zsh
 
+function lsalias() {
+  for k in "${(@k)aliases}"; do
+    echo "$k = \"$aliases[$k]\""
+  done
+}
+
 function _check_aliases() {
   typeset -g -A ialiases
   for k in "${(@k)aliases}"; do
