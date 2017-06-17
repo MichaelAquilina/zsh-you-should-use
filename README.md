@@ -6,7 +6,7 @@ Simple zsh plugin that reminds you that you should use one of your existing alia
 Usage
 -----
 
-You dont need to do anything. Once it's installed, `zsh-you-should-know` will let you know if you wrote a
+You dont need to do anything. Once it's installed, `zsh-you-should-use` will let you know if you wrote a
 command with an existing alias.
 
 ```
