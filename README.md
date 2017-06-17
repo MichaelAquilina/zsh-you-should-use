@@ -20,6 +20,26 @@ Changes not staged for commit:
 no changes added to commit
 ```
 
+List Aliases
+------------
+
+I have also included a bonus command `lsalias` as part of this plugin that will allow you to list your existing aliases.
+
+```
+$ lsalias
+.. = "cd .."
+gc = "git commit"
+cd.. = "cd .."
+gd = "git diff"
+xc = "xcopy"
+h = "history"
+LS = "LS -e"
+gap = "git add -p"
+xp = "xpaste"
+t = "tig"
+...
+```
+
 Installation
 ------------
 
