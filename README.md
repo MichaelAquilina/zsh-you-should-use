@@ -40,4 +40,4 @@ zgen load "MichaelAquilina/zsh-you-should-use"
 Contributing
 ------------
 
-Pull requests and Feedback are welcome! Feel free to open any issues that you find :tada:
+Pull requests and Feedback are welcome! Feel free to open an issue for any bugs that you find! :tada:
