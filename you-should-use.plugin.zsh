@@ -7,16 +7,12 @@ function lsalias() {
 }
 
 function _check_aliases() {
-  typeset -g -A ialiases
   for k in "${(@k)aliases}"; do
     v="${aliases[$k]}"
-    ialiases["$v"]="$k"
+    if [[ "$1" = "$v"* ]]; then
+      echo "Found existing alias for \"$v\". You should use: \"$k\""
+    fi
   done
-
-  v="${ialiases["$1"]}"
-  if [[ -n "$v" ]]; then
-    echo "Alias exists for '$1'. You should use '$v'"
-  fi
 }
 
 add-zsh-hook preexec _check_aliases
