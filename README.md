@@ -45,8 +45,8 @@ Hardcore Mode
 
 For the brave and adventerous only.
 
-You can enabled Hardcore mode to enforce the use of aliases. Doing this will refuse to execute a command you
-have typed if an alternative alias for it exists.
+You can enabled Hardcore mode to enforce the use of aliases. Enabling this will cause zsh to refuse to execute commands you
+have entered if an alternative alias for it exists.
 
 Enable hardcore mode by setting the variable `ZSH_YSU_HARDCORE` to 1.
 
