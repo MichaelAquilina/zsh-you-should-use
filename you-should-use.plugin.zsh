@@ -7,9 +7,9 @@ function lsalias() {
 }
 
 function _check_aliases() {
-  BOLD='\033[1m'
-  RED='\e[31m'
-  NONE='\033[00m'
+  local BOLD='\033[1m'
+  local RED='\e[31m'
+  local NONE='\033[00m'
   local FOUND_ALIAS=0
   for k in "${(@k)aliases}"; do
     v="${aliases[$k]}"
