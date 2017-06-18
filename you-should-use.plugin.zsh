@@ -19,7 +19,7 @@ function _check_aliases() {
     fi
   done
 
-  if [[ "$ZSH_YSU_HARDCORE" = 1 && "$FOUND_ALIAS" = 1 ]]; then
+  if [[ "$YSU_HARDCORE" = 1 && "$FOUND_ALIAS" = 1 ]]; then
       echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
       kill -s INT $$
   fi

@@ -48,10 +48,10 @@ For the brave and adventerous only.
 You can enabled Hardcore mode to enforce the use of aliases. Enabling this will cause zsh to refuse to execute commands you
 have entered if an alternative alias for it exists.
 
-Enable hardcore mode by setting the variable `ZSH_YSU_HARDCORE` to 1.
+Enable hardcore mode by setting the variable `YSU_HARDCORE` to 1.
 
 ```
-export ZSH_YSU_HARDCORE=1
+export YSU_HARDCORE=1
 ```
 
 Installation
