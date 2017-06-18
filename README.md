@@ -40,6 +40,18 @@ t = "tig"
 ...
 ```
 
+Hardcore Mode
+-------------
+
+You can enabled Hardcore mode to enforce the use of aliases. Doing this will refuse to execute a command you
+have typed if an alternative alias for it exists.
+
+Enable hardcore mode by setting the variable `ZSH_YSU_HARDCORE` to 1.
+
+```
+export ZSH_YSU_HARDCORE=1
+```
+
 Installation
 ------------
 
