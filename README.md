@@ -43,6 +43,8 @@ t = "tig"
 Hardcore Mode
 -------------
 
+For the brave and adventerous only.
+
 You can enabled Hardcore mode to enforce the use of aliases. Doing this will refuse to execute a command you
 have typed if an alternative alias for it exists.
 
