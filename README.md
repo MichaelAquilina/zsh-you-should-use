@@ -59,14 +59,17 @@ Installation
 
 Add one of the following to your `.zshrc` file depending on your package manager:
 
+[ZPlug](https://github.com/zplug/zplug)
 ```
 zplug "MichaelAquilina/zsh-you-should-use"
 ```
 
+[Antigen](https://github.com/zsh-users/antigen)
 ```
 antigen bundle "MichaelAquilina/zsh-you-should-use"
 ```
 
+[Zgen](https://github.com/tarjoilija/zgen)
 ```
 zgen load "MichaelAquilina/zsh-you-should-use"
 ```
