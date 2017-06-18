@@ -7,10 +7,12 @@ function lsalias() {
 }
 
 function _check_aliases() {
+  BOLD='\033[1m'
+  NONE='\033[00m'
   for k in "${(@k)aliases}"; do
     v="${aliases[$k]}"
     if [[ "$1" = "$v"* ]]; then
-      echo "Found existing alias for \"$v\". You should use: \"$k\""
+      echo "${BOLD}Found existing alias for \"$v\". You should use: \"$k\"${NONE}"
     fi
   done
 }
