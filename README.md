@@ -55,7 +55,7 @@ Enable hardcore mode by setting the variable `YSU_HARDCORE` to 1.
 export YSU_HARDCORE=1
 ```
 
-Now if you type a command that has an alias defined for it and you didnt use it, zsh will refuse to execute that command:
+Now if you type a command that has an alias defined and you didnt use it, zsh will refuse to execute that command:
 
 ```
 $ export YSU_HARDCORE=1
