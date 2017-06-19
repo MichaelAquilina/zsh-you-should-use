@@ -46,12 +46,28 @@ Hardcore Mode
 For the brave and adventerous only.
 
 You can enable Hardcore mode to enforce the use of aliases. Enabling this will cause zsh to refuse to execute commands you
-have entered if an alternative alias for it exists.
+have entered if an alternative alias for it exists. This is a handy way of forcing you to use your aliases and help you
+turn those aliases into muscle memory.
 
 Enable hardcore mode by setting the variable `YSU_HARDCORE` to 1.
 
 ```
 export YSU_HARDCORE=1
+```
+
+Now if you type a command that has an alias defined for it and you didnt use it, zsh will refuse to execute that command:
+
+```
+$ export YSU_HARDCORE=1
+$ ls -lh
+Found existing alias for "ls -lh". You should use: "ll"
+You Should Use hardcore mode enabled. Use your aliases!
+$ ll
+drwx------  3 michael users    16 Jun 18 21:47 Documents
+drwxr-xr-x  6 michael users    16 Jun 18 21:54 Development
+-rw-------  1 michael users    16 Jun 18 21:57 Pictures
+-rw-r--r--  1 michael users    16 Jun  4 10:35 Music
+drwx------  2 michael users    16 Jun 19 20:17 bin
 ```
 
 Installation
