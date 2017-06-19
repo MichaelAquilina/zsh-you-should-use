@@ -63,11 +63,9 @@ $ ls -lh
 Found existing alias for "ls -lh". You should use: "ll"
 You Should Use hardcore mode enabled. Use your aliases!
 $ ll
-drwx------  3 michael users    16 Jun 18 21:47 Documents
-drwxr-xr-x  6 michael users    16 Jun 18 21:54 Development
--rw-------  1 michael users    16 Jun 18 21:57 Pictures
--rw-r--r--  1 michael users    16 Jun  4 10:35 Music
-drwx------  2 michael users    16 Jun 19 20:17 bin
+total 8.0K
+-rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
+-rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
 ```
 
 Installation
