@@ -20,6 +20,15 @@ Changes not staged for commit:
 no changes added to commit
 ```
 
+Displaying Results
+------------------
+
+By default, `you-should-use` will display *all* matches with aliases found. However, you can change
+this so that it only displays the best match found by setting the value of `YSU_MODE`.
+
+To enable best match: `export YSU_MODE=BESTMATCH`
+To enable all (default): `export YSU_MODE=ALL`
+
 Hardcore Mode
 -------------
 
