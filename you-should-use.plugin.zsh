@@ -19,7 +19,7 @@ function _check_aliases() {
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
       found_aliases+="$k"
 
-      if [[ "${#v}" > "${#best_match}" ]]; then
+      if [[ "${#v}" -gt "${#best_match}" ]]; then
         best_match="$v"
         best_match_key="$k"
       fi
