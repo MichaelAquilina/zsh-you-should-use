@@ -1,36 +1,44 @@
 #!/bin/zsh
 
+function ysu_message() {
+  echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
+}
+
+
 function _check_aliases() {
   local BOLD='\033[1m'
   local RED='\e[31m'
   local NONE='\033[00m'
-  local FOUND_ALIAS=()
+  local found_aliases=()
+  local best_match=""
+  local best_match_key=""
+
+  # Find alias matches
   for k in "${(@k)aliases}"; do
     local v="${aliases[$k]}"
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
-      FOUND_ALIAS+="$k"
+      found_aliases+="$k"
+
+      if [[ "${#v}" > "${#best_match}" ]]; then
+        best_match="$v"
+        best_match_key="$k"
+      fi
     fi
   done
 
-  local best_match=""
-  local best_match_key=""
-  for k in $FOUND_ALIAS; do
-    local v="${aliases[$k]}"
-    if [[ "${#v}" > "${#best_match}" ]]; then
-      best_match="$v"
-      best_match_key="$k"
-    fi
+  # Print result matches based on current mode
+  if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
+    for k in $found_aliases; do
+      local v="${aliases[$k]}"
+      ysu_message "$v" "$k"
+    done
 
-    if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
-      echo "${BOLD}Found existing alias for \"$v\". You should use: \"$k\"${NONE}"
-    fi
-  done
-
-  if [[ "$YSU_MODE" = "BESTMATCH" && -n "$best_match" ]]; then
-      echo "${BOLD}Found existing alias for \"$best_match\". You should use: \"$best_match_key\"${NONE}"
+  elif [[ "$YSU_MODE" = "BESTMATCH" && -n "$best_match" ]]; then
+    ysu_message "$best_match" "$best_match_key"
   fi
 
-  if [[ "$YSU_HARDCORE" = 1 && -n "$FOUND_ALIAS" ]]; then
+  # Prevent command from running if hardcore mode enabled
+  if [[ "$YSU_HARDCORE" = 1 && -n "$found_aliases" ]]; then
       echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
       kill -s INT $$
   fi
