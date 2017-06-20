@@ -11,7 +11,6 @@ function _check_aliases() {
   local NONE='\033[00m'
   local found_aliases=()
   local best_match=""
-  local best_match_key=""
 
   # Find alias matches
   for k in "${(@k)aliases}"; do
@@ -20,8 +19,7 @@ function _check_aliases() {
       found_aliases+="$k"
 
       if [[ "${#v}" -gt "${#best_match}" ]]; then
-        best_match="$v"
-        best_match_key="$k"
+        best_match="$k"
       fi
     fi
   done
@@ -34,7 +32,8 @@ function _check_aliases() {
     done
 
   elif [[ "$YSU_MODE" = "BESTMATCH" && -n "$best_match" ]]; then
-    ysu_message "$best_match" "$best_match_key"
+    local v="${aliases[$best_match]}"
+    ysu_message "$v" "$best_match"
   fi
 
   # Prevent command from running if hardcore mode enabled
