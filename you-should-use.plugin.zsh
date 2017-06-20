@@ -7,7 +7,7 @@ function _check_aliases() {
   local FOUND_ALIAS=0
   for k in "${(@k)aliases}"; do
     local v="${aliases[$k]}"
-    if [[ "$1" = "$v"* ]]; then
+    if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
       echo "${BOLD}Found existing alias for \"$v\". You should use: \"$k\"${NONE}"
       FOUND_ALIAS=1
     fi
