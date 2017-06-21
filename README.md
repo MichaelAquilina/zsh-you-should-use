@@ -20,6 +20,26 @@ Changes not staged for commit:
 no changes added to commit
 ```
 
+Installation
+------------
+
+Add one of the following to your `.zshrc` file depending on your package manager:
+
+[ZPlug](https://github.com/zplug/zplug)
+```
+zplug "MichaelAquilina/zsh-you-should-use"
+```
+
+[Antigen](https://github.com/zsh-users/antigen)
+```
+antigen bundle "MichaelAquilina/zsh-you-should-use"
+```
+
+[Zgen](https://github.com/tarjoilija/zgen)
+```
+zgen load "MichaelAquilina/zsh-you-should-use"
+```
+
 Displaying Results
 ------------------
 
@@ -55,26 +75,6 @@ $ ll
 total 8.0K
 -rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
 -rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
-```
-
-Installation
-------------
-
-Add one of the following to your `.zshrc` file depending on your package manager:
-
-[ZPlug](https://github.com/zplug/zplug)
-```
-zplug "MichaelAquilina/zsh-you-should-use"
-```
-
-[Antigen](https://github.com/zsh-users/antigen)
-```
-antigen bundle "MichaelAquilina/zsh-you-should-use"
-```
-
-[Zgen](https://github.com/tarjoilija/zgen)
-```
-zgen load "MichaelAquilina/zsh-you-should-use"
 ```
 
 Contributing
