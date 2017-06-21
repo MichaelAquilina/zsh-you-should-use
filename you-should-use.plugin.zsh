@@ -1,14 +1,30 @@
 #!/bin/zsh
 
 function ysu_message() {
+  local BOLD='\033[1m'
+  local RED='\e[31m'
+  local NONE='\033[00m'
   echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
 }
 
 
+function _check_global_aliases() {
+  IFS="\n"
+  local global_aliases="$(alias -g)"
+  for entry in $global_aliases; do
+    local tokens=("${(@s/=/)entry}")
+    local k="${tokens[1]}"
+    # Need to remove leading and trailing '
+    local v="${tokens[2]:1:-1}"
+
+    if [[ "$1" = *"$v"* ]]; then
+      ysu_message $v $k
+    fi
+  done
+}
+
+
 function _check_aliases() {
-  local BOLD='\033[1m'
-  local RED='\e[31m'
-  local NONE='\033[00m'
   local found_aliases=()
   local best_match=""
 
@@ -53,3 +69,4 @@ function _check_aliases() {
 }
 
 add-zsh-hook preexec _check_aliases
+add-zsh-hook preexec _check_global_aliases

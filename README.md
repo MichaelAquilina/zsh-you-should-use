@@ -10,6 +10,7 @@ You dont need to do anything. Once it's installed, `zsh-you-should-use` will let
 command with an existing alias.
 
 ```
+$ alias gc="git commit"
 $ git commit -m "test commit"
 Found existing alias for "git commit". You should use: "gc"
 On branch master
@@ -19,6 +20,17 @@ Changes not staged for commit:
 
 no changes added to commit
 ```
+
+`you-should-use` also detects global aliases:
+
+```
+$ alias -g NE="2>/dev/null"
+$ find . -name "*.zsh" 2>/dev/null
+Found existing alias for "2>/dev/null". You should use: "NE"
+./you-should-use.plugin.zsh
+```
+
+Git aliases will be supported in the near future!
 
 Installation
 ------------
