@@ -16,6 +16,15 @@ function _check_aliases() {
   for k in "${(@k)aliases}"; do
     local v="${aliases[$k]}"
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
+
+      # if the alias is the same length as its command
+      # we assume that it is there to cater for typos.
+      # If not, then the alias would not save any time
+      # for the user and so doesnt hold much value anyway
+      if [[ "${#v}" -eq "${#k}" ]]; then
+        break
+      fi
+
       found_aliases+="$k"
 
       if [[ "${#v}" -gt "${#best_match}" ]]; then
