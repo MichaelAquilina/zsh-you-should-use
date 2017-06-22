@@ -2,15 +2,32 @@
 
 function ysu_message() {
   local BOLD='\033[1m'
-  local RED='\e[31m'
   local NONE='\033[00m'
   echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
+}
+
+
+function ysu_global_message() {
+  local BOLD='\033[1m'
+  local NONE='\033[00m'
+  echo "${BOLD}Found existing global alias for \"$1\". You should use: \"$2\"${NONE}"
+}
+
+
+# Prevent command from running if hardcore mode enabled
+function _check_ysu_hardcore() {
+  if [[ "$YSU_HARDCORE" = 1 ]]; then
+      local RED='\e[31m'
+      echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
+      kill -s INT $$
+  fi
 }
 
 
 function _check_global_aliases() {
   IFS="\n"
   local global_aliases="$(alias -g)"
+  local found=""
   for entry in $global_aliases; do
     local tokens=("${(@s/=/)entry}")
     local k="${tokens[1]}"
@@ -18,9 +35,14 @@ function _check_global_aliases() {
     local v="${tokens[2]:1:-1}"
 
     if [[ "$1" = *"$v"* ]]; then
-      ysu_message $v $k
+      ysu_global_message $v $k
+      found=1
     fi
   done
+
+  if [[ -n "$found" ]]; then
+   _check_ysu_hardcore
+  fi
 }
 
 
@@ -61,10 +83,8 @@ function _check_aliases() {
     ysu_message "$v" "$best_match"
   fi
 
-  # Prevent command from running if hardcore mode enabled
-  if [[ "$YSU_HARDCORE" = 1 && -n "$found_aliases" ]]; then
-      echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
-      kill -s INT $$
+  if [[ -n $found_aliases ]]; then
+    _check_ysu_hardcore
   fi
 }
 
