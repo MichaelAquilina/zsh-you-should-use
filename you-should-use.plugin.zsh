@@ -25,22 +25,20 @@ function _check_ysu_hardcore() {
 
 
 function _check_global_aliases() {
-  IFS="\n"
-  local global_aliases="$(alias -g)"
-  local found=""
-  for entry in $global_aliases; do
+  local found=false
+  alias -g | while read entry; do
     local tokens=("${(@s/=/)entry}")
     local k="${tokens[1]}"
     # Need to remove leading and trailing '
     local v="${tokens[2]:1:-1}"
 
     if [[ "$1" = *"$v"* ]]; then
-      ysu_global_message $v $k
-      found=1
+      ysu_global_message "$v" "$k"
+      found=true
     fi
   done
 
-  if [[ -n "$found" ]]; then
+  if $found; then
    _check_ysu_hardcore
   fi
 }
