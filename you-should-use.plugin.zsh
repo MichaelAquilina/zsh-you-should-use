@@ -18,6 +18,8 @@ function ysu_global_message() {
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
       local RED='\e[31m'
+      local BOLD='\033[1m'
+      local NONE='\033[00m'
       echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
       kill -s INT $$
   fi
@@ -29,8 +31,12 @@ function _check_global_aliases() {
   alias -g | while read entry; do
     local tokens=("${(@s/=/)entry}")
     local k="${tokens[1]}"
-    # Need to remove leading and trailing '
-    local v="${tokens[2]:1:-1}"
+    local v="${tokens[2]}"
+
+    # Need to remove leading and trailing ' if they exist
+    if [[ "${v[1]}" = "'" && "${v[-1]}" = "'" ]]; then
+      v="${v:1:-1}"
+    fi
 
     if [[ "$1" = *"$v"* ]]; then
       ysu_global_message "$v" "$k"
@@ -81,7 +87,7 @@ function _check_aliases() {
     ysu_message "$v" "$best_match"
   fi
 
-  if [[ -n $found_aliases ]]; then
+  if [[ -n "$found_aliases" ]]; then
     _check_ysu_hardcore
   fi
 }
