@@ -40,6 +40,13 @@ antigen bundle "MichaelAquilina/zsh-you-should-use"
 zgen load "MichaelAquilina/zsh-you-should-use"
 ```
 
+[oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
+
+Copy this repository to `$ZSH/custom/plugins`, where `$ZSH` is the root directory of oh-my-zsh.  Then add this line to your `.zshrc`
+```
+plugins=(you-should-use $plugins)
+```
+
 Displaying Results
 ------------------
 

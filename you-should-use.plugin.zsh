@@ -52,4 +52,5 @@ function _check_aliases() {
   fi
 }
 
+autoload -U add-zsh-hook
 add-zsh-hook preexec _check_aliases
