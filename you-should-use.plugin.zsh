@@ -31,12 +31,8 @@ function _check_global_aliases() {
   alias -g | while read entry; do
     local tokens=("${(@s/=/)entry}")
     local k="${tokens[1]}"
-    local v="${tokens[2]}"
-
     # Need to remove leading and trailing ' if they exist
-    if [[ "${v[1]}" = "'" && "${v[-1]}" = "'" ]]; then
-      v="${v:1:-1}"
-    fi
+    local v="${(Q)tokens[2]}"
 
     if [[ "$1" = *"$v"* ]]; then
       ysu_global_message "$v" "$k"
