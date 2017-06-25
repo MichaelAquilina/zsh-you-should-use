@@ -34,7 +34,7 @@ function _check_ysu_hardcore() {
 
 
 function _check_git_aliases() {
-  if [[ "$1" = "git "* ]]; then
+  if [[ "$2" = "git "* ]]; then
       local found=false
       git config --get-regexp "^alias\..+$" | while read entry; do
         local tokens=("${(@s/ /)entry}")
@@ -43,7 +43,7 @@ function _check_git_aliases() {
         # Need to remove leading and trailing ' if they exist
         local v="${(Q)tokens[2]}"
 
-        if [[ "$1" = "git $v" || "$1" = "git $v "* ]]; then
+        if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
           ysu_git_message "$v" "$k"
           found=true
         fi
