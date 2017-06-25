@@ -3,6 +3,8 @@ You Should Use
 
 Simple zsh plugin that reminds you that you should use one of your existing aliases for a command you just typed.
 
+`you-should-use` supports detection of aliases, global aliases and git alises.
+
 Usage
 -----
 
@@ -30,7 +32,15 @@ Found existing alias for "2>/dev/null". You should use: "NE"
 ./you-should-use.plugin.zsh
 ```
 
-Git aliases will be supported in the near future!
+and Git aliases:
+
+```
+$ git config --global alias.config cfg
+$ git config --get-regexp alias\..
+Found existing git alias for "config". You should use: "git cfg"
+alias.cp cherry-pick
+alias.cfg config
+```
 
 Installation
 ------------
