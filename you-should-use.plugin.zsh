@@ -55,11 +55,11 @@ function _check_aliases() {
     local v="${aliases[$k]}"
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
 
-      # if the alias is the same length as its command
+      # if the alias longer or the same length as its command
       # we assume that it is there to cater for typos.
       # If not, then the alias would not save any time
       # for the user and so doesnt hold much value anyway
-      if [[ "${#v}" -eq "${#k}" ]]; then
+      if [[ "${#v}" -le "${#k}" ]]; then
         break
       fi
 
