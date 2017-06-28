@@ -12,7 +12,9 @@ command with an existing alias.
 ```
 $ alias gc="git commit"
 $ git commit -m "test commit"
-Found existing alias for "git commit". You should use: "gc"
+<pre>
+<b>Found existing alias for "git commit". You should use: "gc"</b>
+</pre>
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Changes not staged for commit:
@@ -26,7 +28,9 @@ no changes added to commit
 ```
 $ alias -g NE="2>/dev/null"
 $ find . -name "*.zsh" 2>/dev/null
-Found existing alias for "2>/dev/null". You should use: "NE"
+<pre>
+<b>Found existing alias for "2>/dev/null". You should use: "NE"</b>
+</pre>
 ./you-should-use.plugin.zsh
 ```
 
