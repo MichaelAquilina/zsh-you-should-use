@@ -1,0 +1,24 @@
+#!/usr/bin/env zunit
+
+@setup {
+    load "../you-should-use.plugin.zsh"
+}
+
+@teardown {
+}
+
+@test 'aliases no match' {
+   alias ls="less -R"
+   run _check_git_aliases "git status"
+
+   assert "$output" is_empty
+   assert $state equals 0
+}
+
+@test 'aliases match' {
+   alias gs="git status"
+   run _check_aliases "git status"
+
+   assert "$output" same_as '\033[1mFound existing alias for "git status". You should use: "gs"\033[00m'
+   assert $state equals 0
+}
