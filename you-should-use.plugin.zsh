@@ -14,6 +14,13 @@ function ysu_global_message() {
 }
 
 
+function ysu_git_message() {
+  local BOLD='\033[1m'
+  local NONE='\033[00m'
+  echo "${BOLD}Found existing git alias for \"$1\". You should use: \"git $2\"${NONE}"
+}
+
+
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
@@ -22,6 +29,27 @@ function _check_ysu_hardcore() {
       local NONE='\033[00m'
       echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}"
       kill -s INT $$
+  fi
+}
+
+
+function _check_git_aliases() {
+  if [[ "$2" = "git "* ]]; then
+      local found=false
+      git config --get-regexp "^alias\..+$" | while read entry; do
+        local tokens=("${(@s/ /)entry}")
+        local k="${tokens[1]#alias.}"
+        local v="${tokens[2]}"
+
+        if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
+          ysu_git_message "$v" "$k"
+          found=true
+        fi
+      done
+
+      if $found; then
+       _check_ysu_hardcore
+      fi
   fi
 }
 
@@ -91,3 +119,4 @@ function _check_aliases() {
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec _check_aliases
 add-zsh-hook preexec _check_global_aliases
+add-zsh-hook preexec _check_git_aliases
