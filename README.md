@@ -3,7 +3,7 @@ You Should Use
 
 Simple zsh plugin that reminds you that you should use one of your existing aliases for a command you just typed.
 
-`you-should-use` supports detection of aliases, global aliases and git alises.
+Also supports detection of global and git aliases.
 
 Usage
 -----
