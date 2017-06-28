@@ -117,3 +117,20 @@ to my own workflow and I could be missing many others.
 Because of this if there is a specific use case that does not work as you would expect
 or if you have any suggestions to how the plugin should behave, feel free to
 [open an issue](https://github.com/MichaelAquilina/zsh-you-should-use/issues/new)
+
+
+Running Tests
+-------------
+
+Install [zunit](https://zunit.xyz/). Run `zunit` in the root directory of the repo.
+
+```
+$ zunit
+Launching ZUnit
+ZUnit: 0.7.0
+ZSH:   zsh 5.3.1 (x86_64-suse-linux-gnu)
+
+✔ ysu message correct output
+✔ ysu global message correct output
+✔ ysu git message correct output
+```
