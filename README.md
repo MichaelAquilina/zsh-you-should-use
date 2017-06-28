@@ -1,6 +1,8 @@
 You Should Use
 ==============
 
+![Travis CI](https://img.shields.io/travis/MichaelAquilina/hashedindex.svg)
+
 Simple zsh plugin that reminds you that you should use one of your existing aliases for a command you just typed.
 
 Also supports detection of global and git aliases.
