@@ -39,6 +39,7 @@ function _check_git_aliases() {
       git config --get-regexp "^alias\..+$" | while read entry; do
         local tokens=("${(@s/ /)entry}")
         local k="${tokens[1]#alias.}"
+        local v="${tokens[2]}"
 
         if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
           ysu_git_message "$v" "$k"
