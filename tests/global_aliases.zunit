@@ -1,0 +1,25 @@
+#!/usr/bin/env zunit
+
+@setup {
+    load "../you-should-use.plugin.zsh"
+}
+
+@teardown {
+}
+
+@test 'global aliases no match' {
+    alias -g hw="Hello World!"
+    run _check_global_aliases "echo 'hello'"
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'global aliases match' {
+    alias -g NE="2>/dev/null"
+    run _check_global_aliases "echo "hello" 2>/dev/null"
+
+    assert "$output" same_as '\033[1mFound existing global alias for "2>/dev/null". You should use: "NE"\033[00m'
+    assert $state equals 0
+}
+
