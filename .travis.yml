@@ -1,0 +1,31 @@
+dist: trusty
+sudo: required
+
+language: bash
+addons:
+  apt:
+    packages:
+    - build-essential
+
+before_install:
+    - export LOCAL="$(mktemp --directory --tmpdir=${TMPDIR:/tmp} local.bin.XXXXXX)"
+    - wget https://fourdots.com/mirror/zsh/zsh-5.3.1.tar.xz
+    - tar -xf zsh-5.3.1.tar.xz
+    - cd zsh-5.3.1
+    - ./configure --prefix=$LOCAL
+    - make
+    - make install
+    - cd -
+    - export PATH="$LOCAL/bin:$PATH"
+
+before_script:
+    - mkdir ~/bin
+    - curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
+    - chmod u+x ~/bin/revolver
+    - curl -L https://raw.githubusercontent.com/molovo/color/master/color.zsh > ~/bin/color
+    - chmod u+x ~/bin/color
+    - curl -L https://github.com/molovo/zunit/releases/download/v0.7.0/zunit > ~/bin/zunit
+    - chmod u+x ~/bin/zunit
+
+script:
+    - zunit

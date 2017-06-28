@@ -1,6 +1,8 @@
 You Should Use
 ==============
 
+![Travis CI](https://img.shields.io/travis/MichaelAquilina/hashedindex.svg)
+
 Simple zsh plugin that reminds you that you should use one of your existing aliases for a command you just typed.
 
 Also supports detection of global and git aliases.
@@ -134,3 +136,9 @@ ZSH:   zsh 5.3.1 (x86_64-suse-linux-gnu)
 ✔ ysu global message correct output
 ✔ ysu git message correct output
 ```
+
+NOTE: The tests that run move your git configuration to a temporary location during
+the test process so that your user configuration does not interfere with tests. This will
+be restored at the end of each test so there is no risk in losing your settings. If for
+some strange reason zunit crashes or does not restore your git configuration automatically,
+all you need to do is run `mv ~/.gitconfig.bak ~/.gitconfig`

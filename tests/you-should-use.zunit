@@ -23,5 +23,4 @@
 
     assert $state equals 0
     assert "$output" same_as '\033[1mFound existing git alias for "config". You should use: "git cfg"\033[00m'
-
 }
