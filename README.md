@@ -109,4 +109,11 @@ total 8.0K
 Contributing
 ------------
 
-Pull requests and Feedback are welcome! Feel free to open an issue for any bugs that you find! :tada:
+Pull requests and Feedback are welcome! :tada:
+
+I have tried to cater for as many use cases that I can think of. However, they are naturally tailored to
+to my own workflow and I could be missing many others.
+
+Because of this if there is a specific use case that does not work as you would expect
+or if you have any suggestions to how the plugin should behave, feel free to
+[open an issue](https://github.com/MichaelAquilina/zsh-you-should-use/issues/new)
