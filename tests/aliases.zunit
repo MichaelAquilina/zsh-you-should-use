@@ -15,7 +15,7 @@
     assert $state equals 0
 }
 
-@test 'aliases longer than their commands are ignored' {
+@test 'aliases longer or the same length as their commands are ignored' {
     alias longalias='ls -lA'
     alias ls_-lA='ls -lA'
     run _check_aliases "ls -lA"
