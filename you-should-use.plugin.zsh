@@ -117,6 +117,10 @@ function _check_aliases() {
 }
 
 autoload -Uz add-zsh-hook
+add-zsh-hook -D preexec _check_aliases
+add-zsh-hook -D preexec _check_global_aliases
+add-zsh-hook -D preexec _check_git_aliases
+
 add-zsh-hook preexec _check_aliases
 add-zsh-hook preexec _check_global_aliases
 add-zsh-hook preexec _check_git_aliases
