@@ -9,7 +9,16 @@
 
 @test 'aliases no match' {
     alias ls="less -R"
-    run _check_git_aliases "git status"
+    run _check_aliases "less"
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'aliases longer than their commands are ignored' {
+    alias longalias='ls -lA'
+    alias ls_-lA='ls -lA'
+    run _check_aliases "ls -lA"
 
     assert "$output" is_empty
     assert $state equals 0
