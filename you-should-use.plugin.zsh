@@ -34,12 +34,16 @@ function _check_ysu_hardcore() {
 
 
 function _check_git_aliases() {
+  local found
+  local tokens
+  local k
+  local v
   if [[ "$2" = "git "* ]]; then
-      local found=false
+      found=false
       git config --get-regexp "^alias\..+$" | sort | while read entry; do
-        local tokens=("${(@s/ /)entry}")
-        local k="${tokens[1]#alias.}"
-        local v="${tokens[2]}"
+        tokens=("${(@s/ /)entry}")
+        k="${tokens[1]#alias.}"
+        v="${tokens[2]}"
 
         if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
           ysu_git_message "$v" "$k"
