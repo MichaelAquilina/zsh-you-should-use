@@ -36,7 +36,7 @@ function _check_ysu_hardcore() {
 function _check_git_aliases() {
   if [[ "$2" = "git "* ]]; then
       local found=false
-      git config --get-regexp "^alias\..+$" | while read entry; do
+      git config --get-regexp "^alias\..+$" | sort | while read entry; do
         local tokens=("${(@s/ /)entry}")
         local k="${tokens[1]#alias.}"
         local v="${tokens[2]}"
@@ -56,7 +56,7 @@ function _check_git_aliases() {
 
 function _check_global_aliases() {
   local found=false
-  alias -g | while read entry; do
+  alias -g | sort | while read entry; do
     local tokens=("${(@s/=/)entry}")
     local k="${tokens[1]}"
     # Need to remove leading and trailing ' if they exist
