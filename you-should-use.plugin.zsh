@@ -79,7 +79,7 @@ function _check_aliases() {
   local best_match=""
 
   # Find alias matches
-  for k in "${(@k)aliases}"; do
+  for k in "${(@ok)aliases}"; do
     local v="${aliases[$k]}"
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
 
