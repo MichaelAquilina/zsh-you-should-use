@@ -56,11 +56,14 @@ function _check_git_aliases() {
 
 function _check_global_aliases() {
   local found=false
+  local tokens
+  local k
+  local v
   alias -g | sort | while read entry; do
-    local tokens=("${(@s/=/)entry}")
-    local k="${tokens[1]}"
+    tokens=("${(@s/=/)entry}")
+    k="${tokens[1]}"
     # Need to remove leading and trailing ' if they exist
-    local v="${(Q)tokens[2]}"
+    v="${(Q)tokens[2]}"
 
     if [[ "$1" = *"$v"* ]]; then
       ysu_global_message "$v" "$k"
@@ -78,10 +81,11 @@ function _check_aliases() {
   local found_aliases
   found_aliases=()
   local best_match=""
+  local v
 
   # Find alias matches
   for k in "${(@ok)aliases}"; do
-    local v="${aliases[$k]}"
+    v="${aliases[$k]}"
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
 
       # if the alias longer or the same length as its command
@@ -103,12 +107,12 @@ function _check_aliases() {
   # Print result matches based on current mode
   if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
     for k in $found_aliases; do
-      local v="${aliases[$k]}"
+      v="${aliases[$k]}"
       ysu_message "$v" "$k"
     done
 
   elif [[ "$YSU_MODE" = "BESTMATCH" && -n "$best_match" ]]; then
-    local v="${aliases[$best_match]}"
+    v="${aliases[$best_match]}"
     ysu_message "$v" "$best_match"
   fi
 
