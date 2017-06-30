@@ -75,7 +75,8 @@ function _check_global_aliases() {
 
 
 function _check_aliases() {
-  local found_aliases=()
+  local found_aliases
+  found_aliases=()
   local best_match=""
 
   # Find alias matches
