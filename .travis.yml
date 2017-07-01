@@ -7,9 +7,7 @@ env:
  - ZSH_VERSION=5.3.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.3.1/zsh-5.3.1.tar.xz
  - ZSH_VERSION=5.2 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.2/zsh-5.2.tar.xz
  - ZSH_VERSION=5.1.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.1.1/zsh-5.1.1.tar.xz
- - ZSH_VERSION=5.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.1/zsh-5.1.tar.xz
  - ZSH_VERSION=5.0.8 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.0.8/zsh-5.0.8.tar.gz
- - ZSH_VERSION=5.0.7 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.0.7/zsh-5.0.7.tar.gz
 
 addons:
   apt:
