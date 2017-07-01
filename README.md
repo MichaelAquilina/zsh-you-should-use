@@ -44,6 +44,11 @@ alias.cp cherry-pick
 alias.cfg config
 ```
 
+Requirements
+------------
+`you-should-use` officially supports zsh versions larger than 5.0. It is possible it might work
+on even older versions but they are not officially tested as part of the build process.
+
 Installation
 ------------
 
