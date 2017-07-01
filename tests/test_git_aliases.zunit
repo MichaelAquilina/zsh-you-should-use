@@ -13,6 +13,7 @@
 }
 
 @test 'git aliases not triggred by non git commands' {
+   git config --global alias.cp cherry-pick
    run _check_git_aliases "ls -l" "ls -l"
 
    assert $state equals 0
