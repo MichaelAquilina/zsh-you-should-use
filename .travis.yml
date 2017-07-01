@@ -1,7 +1,7 @@
 dist: trusty
 sudo: required
 
-language: bash
+language: generic
 
 env:
  - ZSH_VERSION=5.3.1 URL=https://fourdots.com/mirror/zsh/zsh-5.3.1.tar.xz
