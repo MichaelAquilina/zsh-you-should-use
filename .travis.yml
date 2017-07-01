@@ -8,6 +8,8 @@ env:
  - ZSH_VERSION=5.2 URL=https://fourdots.com/mirror/zsh/old/zsh-5.2.tar.xz
  - ZSH_VERSION=5.1.1 URL=https://fourdots.com/mirror/zsh/old/zsh-5.1.1.tar.xz
  - ZSH_VERSION=5.1 URL=https://fourdots.com/mirror/zsh/old/zsh-5.1.tar.xz
+ - ZSH_VERSION=5.0.8 URL=https://fourdots.com/mirror/zsh/old/zsh-5.0.8.tar.gz
+ - ZSH_VERSION=5.0.7 URL=https://fourdots.com/mirror/zsh/old/zsh-5.0.7.tar.gz
 
 addons:
   apt:
@@ -17,7 +19,7 @@ addons:
 before_install:
     - export LOCAL="$(mktemp --directory --tmpdir=${TMPDIR:/tmp} local.bin.XXXXXX)"
     - wget $URL
-    - tar -xf zsh-$ZSH_VERSION.tar.xz
+    - tar -xf zsh-$ZSH_VERSION.tar.*
     - cd zsh-$ZSH_VERSION
     - ./configure --prefix=$LOCAL
     - make
