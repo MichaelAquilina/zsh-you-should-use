@@ -2,6 +2,11 @@ dist: trusty
 sudo: required
 
 language: bash
+
+env:
+ - ZSH_VERSION=5.3.1 URL=https://fourdots.com/mirror/zsh/zsh-5.3.1.tar.xz
+ - ZSH_VERSION=5.2 URL=https://fourdots.com/mirror/zsh/old/zsh-5.2.tar.xz
+
 addons:
   apt:
     packages:
@@ -9,9 +14,9 @@ addons:
 
 before_install:
     - export LOCAL="$(mktemp --directory --tmpdir=${TMPDIR:/tmp} local.bin.XXXXXX)"
-    - wget https://fourdots.com/mirror/zsh/zsh-5.3.1.tar.xz
-    - tar -xf zsh-5.3.1.tar.xz
-    - cd zsh-5.3.1
+    - wget $URL
+    - tar -xf zsh-$ZSH_VERSION.tar.xz
+    - cd zsh-$ZSH_VERSION
     - ./configure --prefix=$LOCAL
     - make
     - make install
