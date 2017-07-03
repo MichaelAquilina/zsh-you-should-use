@@ -89,22 +89,26 @@ function _check_aliases() {
   # Find alias matches
   for k in "${(@ok)aliases}"; do
     v="${aliases[$k]}"
+
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
 
       # if the alias longer or the same length as its command
       # we assume that it is there to cater for typos.
       # If not, then the alias would not save any time
       # for the user and so doesnt hold much value anyway
-      if [[ "${#v}" -le "${#k}" ]]; then
-        break
-      fi
+      if [[ "${#v}" -gt "${#k}" ]]; then
 
-      found_aliases+="$k"
+        found_aliases+="$k"
 
-      if [[ "${#v}" -gt "${#best_match}" ]]; then
-        best_match="$k"
+        # Match aliases to longest portion of command
+        if [[ "${#v}" -gt "${#best_match}" ]]; then
+            best_match="$k"
+          # on equal length, choose the shortest alias
+          elif [[ "${#v}" -eq "${#best_match}" && ${#k} -lt "${#best_match}" ]]; then
+            best_match="$k"
+          fi
+        fi
       fi
-    fi
   done
 
   # Print result matches based on current mode
