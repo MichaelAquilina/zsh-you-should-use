@@ -4,6 +4,12 @@
     load "../you-should-use.plugin.zsh"
 }
 
+@test 'ysu preexec functions are loaded' {
+    assert '_check_aliases' in $preexec_functions
+    assert '_check_git_aliases' in $preexec_functions
+    assert '_check_global_aliases' in $preexec_functions
+}
+
 @test 'ysu message correct output' {
     run ysu_message "ls -l" "ll"
 
