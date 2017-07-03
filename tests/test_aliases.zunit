@@ -47,3 +47,17 @@
     assert "$output" same_as '\033[1mFound existing alias for "git status -v". You should use: "gsv"\033[00m'
     assert $state equals 0
 }
+
+@test 'aliases exact match' {
+    alias hu='hg update'
+    run _check_aliases 'hg update'
+
+    assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+}
+
+@test 'aliases substring match' {
+    alias hu='hg update'
+    run _check_aliases 'hg update -all'
+
+    assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+}
