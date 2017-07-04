@@ -37,7 +37,7 @@
     assert $state equals 0
 }
 
-@test 'aliases bestmatch - choosest longest matching alias value' {
+@test 'aliases bestmatch - chooses longest matching alias value' {
     export YSU_MODE="BESTMATCH"
     alias gs="git status"
     alias g="git"
@@ -48,7 +48,7 @@
     assert $state equals 0
 }
 
-@test 'aliases bestmatch - choosest shortest alias key on equal value lengths' {
+@test 'aliases bestmatch - chooses shortest alias key on equal value lengths' {
     export YSU_MODE="BESTMATCH"
     alias v="vim"
     alias nvim="vim"
