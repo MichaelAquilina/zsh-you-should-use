@@ -87,7 +87,7 @@ function _check_aliases() {
   local v
 
   # Find alias matches
-  for k in "${(@ok)aliases}"; do
+  for k in "${(@k)aliases}"; do
     v="${aliases[$k]}"
 
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
@@ -113,7 +113,7 @@ function _check_aliases() {
 
   # Print result matches based on current mode
   if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
-    for k in $found_aliases; do
+      for k in ${(@ok)found_aliases}; do
       v="${aliases[$k]}"
       ysu_message "$v" "$k"
     done

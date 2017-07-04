@@ -26,14 +26,14 @@
 
 @test 'aliases match - all' {
     export YSU_MODE="ALL"
-    alias gs="git status"
-    alias g="git"
-    alias gsv="git status -v"
+    alias c="git status -v"
+    alias a="git status"
+    alias b="git"
     run _check_aliases "git status -v"
 
-    assert "$lines[1]" same_as '\033[1mFound existing alias for "git". You should use: "g"\033[00m'
-    assert "$lines[2]" same_as '\033[1mFound existing alias for "git status". You should use: "gs"\033[00m'
-    assert "$lines[3]" same_as '\033[1mFound existing alias for "git status -v". You should use: "gsv"\033[00m'
+    assert "$lines[1]" same_as '\033[1mFound existing alias for "git status". You should use: "a"\033[00m'
+    assert "$lines[2]" same_as '\033[1mFound existing alias for "git". You should use: "b"\033[00m'
+    assert "$lines[3]" same_as '\033[1mFound existing alias for "git status -v". You should use: "c"\033[00m'
     assert $state equals 0
 }
 
