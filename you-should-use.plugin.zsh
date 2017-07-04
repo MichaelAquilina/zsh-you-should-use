@@ -102,7 +102,7 @@ function _check_aliases() {
 
         # Match aliases to longest portion of command
         if [[ "${#v}" -gt "${#best_match}" ]]; then
-            best_match="$k"
+          best_match="$k"
           # on equal length, choose the shortest alias
           elif [[ "${#v}" -eq "${#best_match}" && ${#k} -lt "${#best_match}" ]]; then
             best_match="$k"
@@ -113,7 +113,7 @@ function _check_aliases() {
 
   # Print result matches based on current mode
   if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
-      for k in ${(@ok)found_aliases}; do
+    for k in ${(@ok)found_aliases}; do
       v="${aliases[$k]}"
       ysu_message "$v" "$k"
     done
