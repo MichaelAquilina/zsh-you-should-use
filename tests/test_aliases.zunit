@@ -24,7 +24,7 @@
     assert $state equals 0
 }
 
-@test 'aliases match - all' {
+@test 'aliases match - all with alphabetical ordering' {
     export YSU_MODE="ALL"
     alias c="git status -v"
     alias a="git status"
