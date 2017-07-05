@@ -28,11 +28,9 @@ before_install:
 before_script:
     - mkdir ~/bin
     - curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
-    - chmod u+x ~/bin/revolver
     - curl -L https://raw.githubusercontent.com/molovo/color/master/color.zsh > ~/bin/color
-    - chmod u+x ~/bin/color
     - curl -L https://github.com/molovo/zunit/releases/download/v0.7.0/zunit > ~/bin/zunit
-    - chmod u+x ~/bin/zunit
+    - chmod u+x ~/bin/{revolver,color,zunit}
 
 script:
     - zunit
