@@ -63,6 +63,7 @@
     run _check_aliases 'hg update'
 
     assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+    assert $state equals 0
 }
 
 @test 'aliases substring match' {
@@ -70,4 +71,5 @@
     run _check_aliases 'hg update -all'
 
     assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+    assert $state equals 0
 }
