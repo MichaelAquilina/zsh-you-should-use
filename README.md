@@ -44,6 +44,11 @@ alias.cp cherry-pick
 alias.cfg config
 ```
 
+Requirements
+------------
+`you-should-use` officially supports zsh versions larger than 5.0. It is possible it might work
+on even older versions but they are not officially tested as part of the build process.
+
 Installation
 ------------
 
@@ -74,11 +79,11 @@ plugins=(you-should-use $plugins)
 Displaying Results
 ------------------
 
-By default, `you-should-use` will display *all* matches with aliases found. However, you can change
-this so that it only displays the best match found by setting the value of `YSU_MODE`.
+By default, `you-should-use` will display the best match from any matching aliases found.
+However, you can change this behaviour so that it displays *all* matches found by setting the value of `YSU_MODE`.
 
-* To enable best match: `export YSU_MODE=BESTMATCH`
-* To enable all (default): `export YSU_MODE=ALL`
+* To only display best match (default): `export YSU_MODE=BESTMATCH`
+* To display all matches: `export YSU_MODE=ALL`
 
 Hardcore Mode
 -------------
