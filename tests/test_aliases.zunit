@@ -37,6 +37,15 @@
     assert $state equals 0
 }
 
+@test 'aliases bestmatch default' {
+    alias gs="git status"
+    alias g="git"
+    run _check_aliases "git status -v"
+
+    assert "$output" same_as '\033[1mFound existing alias for "git status". You should use: "gs"\033[00m'
+    assert $state equals 0
+}
+
 @test 'aliases bestmatch - chooses longest matching alias value' {
     export YSU_MODE="BESTMATCH"
     alias gs="git status"

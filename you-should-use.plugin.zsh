@@ -112,13 +112,13 @@ function _check_aliases() {
   done
 
   # Print result matches based on current mode
-  if [[ -z "$YSU_MODE" || "$YSU_MODE" = "ALL" ]]; then
+  if [[ "$YSU_MODE" = "ALL" ]]; then
     for k in ${(@ok)found_aliases}; do
       v="${aliases[$k]}"
       ysu_message "$v" "$k"
     done
 
-  elif [[ "$YSU_MODE" = "BESTMATCH" && -n "$best_match" ]]; then
+  elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
     v="${aliases[$best_match]}"
     ysu_message "$v" "$best_match"
   fi
