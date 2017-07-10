@@ -31,9 +31,9 @@
     alias b="git"
     run _check_aliases "git status -v"
 
-    assert "$lines[1]" same_as '\033[1mFound existing alias for "git status". You should use: "a"\033[00m'
-    assert "$lines[2]" same_as '\033[1mFound existing alias for "git". You should use: "b"\033[00m'
-    assert "$lines[3]" same_as '\033[1mFound existing alias for "git status -v". You should use: "c"\033[00m'
+    assert 'Found existing alias for "git status". You should use: "a"' is_substring_of "$lines[1]"
+    assert 'Found existing alias for "git". You should use: "b"' is_substring_of "$lines[2]"
+    assert 'Found existing alias for "git status -v". You should use: "c"' is_substring_of "$lines[3]"
     assert $state equals 0
 }
 
@@ -42,7 +42,7 @@
     alias g="git"
     run _check_aliases "git status -v"
 
-    assert "$output" same_as '\033[1mFound existing alias for "git status". You should use: "gs"\033[00m'
+    assert 'Found existing alias for "git status". You should use: "gs"' is_substring_of "$output"
     assert $state equals 0
 }
 
@@ -53,7 +53,7 @@
     alias gsv="git status -v"
     run _check_aliases "git status -v"
 
-    assert "$output" same_as '\033[1mFound existing alias for "git status -v". You should use: "gsv"\033[00m'
+    assert 'Found existing alias for "git status -v". You should use: "gsv"' is_substring_of "$output"
     assert $state equals 0
 }
 
@@ -63,7 +63,7 @@
     alias nvim="vim"
     run _check_aliases "vim"
 
-    assert "$output" same_as '\033[1mFound existing alias for "vim". You should use: "v"\033[00m'
+    assert 'Found existing alias for "vim". You should use: "v"' is_substring_of "$output"
     assert $state equals 0
 }
 
@@ -71,7 +71,7 @@
     alias hu='hg update'
     run _check_aliases 'hg update'
 
-    assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+    assert 'Found existing alias for "hg update". You should use: "hu"' is_substring_of "$output"
     assert $state equals 0
 }
 
@@ -79,6 +79,6 @@
     alias hu='hg update'
     run _check_aliases 'hg update -all'
 
-    assert "$output" same_as '\033[1mFound existing alias for "hg update". You should use: "hu"\033[00m'
+    assert 'Found existing alias for "hg update". You should use: "hu"' is_substring_of "$output"
     assert $state equals 0
 }
