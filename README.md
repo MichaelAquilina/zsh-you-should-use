@@ -134,7 +134,7 @@ Install [zunit](https://zunit.xyz/). Run `zunit` in the root directory of the re
 ```
 $ zunit
 Launching ZUnit
-ZUnit: 0.7.0
+ZUnit: 0.8.0
 ZSH:   zsh 5.3.1 (x86_64-suse-linux-gnu)
 
 ✔ ysu message correct output

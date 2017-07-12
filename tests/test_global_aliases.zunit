@@ -19,7 +19,7 @@
     alias -g NE="2>/dev/null"
     run _check_global_aliases "echo "hello" 2>/dev/null"
 
-    assert 'Found existing global alias for "2>/dev/null". You should use: "NE"' is_substring_of "$output"
+    assert "$output" contains 'Found existing global alias for "2>/dev/null". You should use: "NE"'
     assert $state equals 0
 }
 
