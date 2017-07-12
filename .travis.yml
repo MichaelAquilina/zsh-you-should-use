@@ -29,7 +29,7 @@ before_script:
     - mkdir -p ~/bin
     - curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
     - curl -L https://raw.githubusercontent.com/molovo/color/master/color.zsh > ~/bin/color
-    - curl -L https://github.com/molovo/zunit/releases/download/v0.8.0/zunit > ~/bin/zunit
+    - curl -L https://github.com/molovo/zunit/releases/download/v0.8.1/zunit > ~/bin/zunit
     - chmod u+x ~/bin/{revolver,color,zunit}
 
 script:
