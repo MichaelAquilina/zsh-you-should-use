@@ -1,7 +1,7 @@
 You Should Use
 ==============
 
-![Travis CI](https://travis-ci.org/MichaelAquilina/zsh-you-should-use/#)
+![Travis CI](https://travis-ci.org/MichaelAquilina/zsh-you-should-use.svg?branch=master)
 
 Simple zsh plugin that reminds you that you should use one of your existing aliases for a command you just typed.
 
@@ -129,12 +129,12 @@ or if you have any suggestions to how the plugin should behave, feel free to
 Running Tests
 -------------
 
-Install [zunit](https://zunit.xyz/). Run `zunit` in the root directory of the repo.
+Install [zunit](https://zunit.xyz/) (0.8.1 or higher). Run `zunit` in the root directory of the repo.
 
 ```
 $ zunit
 Launching ZUnit
-ZUnit: 0.7.0
+ZUnit: 0.8.1
 ZSH:   zsh 5.3.1 (x86_64-suse-linux-gnu)
 
 ✔ ysu message correct output
