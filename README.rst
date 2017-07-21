@@ -1,7 +1,7 @@
 You Should Use
 ==============
 
-|TravisCI|
+|TravisCI| |Version|
 
 Simple zsh plugin that reminds you that you should use one of your
 existing aliases for a command you just typed.
@@ -174,3 +174,6 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 
 .. |TravisCI| image:: https://travis-ci.org/MichaelAquilina/zsh-you-should-use.svg?branch=master
    :target: https://travis-ci.org/MichaelAquilina/zsh-you-should-use
+
+.. |Version| image:: https://badge.fury.io/gh/MichaelAquilina%2Fzsh-you-should-use.svg
+   :target: https://badge.fury.io/gh/MichaelAquilina%2Fzsh-you-should-use
