@@ -31,7 +31,7 @@
    git config --global alias.cfg config
    run _check_git_aliases "git config --list" "git config --list"
 
-   assert "$output" same_as '\033[1mFound existing git alias for "config". You should use: "git cfg"\033[00m'
+   assert "$output" contains 'Found existing git alias for "config". You should use: "git cfg"'
    assert $state equals 0
 }
 
@@ -39,7 +39,7 @@
    git config --global alias.st status
    run _check_git_aliases "git status" "git status"
 
-   assert "$output" same_as '\033[1mFound existing git alias for "status". You should use: "git st"\033[00m'
+   assert "$output" contains 'Found existing git alias for "status". You should use: "git st"'
    assert $state equals 0
 
 }
