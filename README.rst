@@ -81,7 +81,14 @@ Zgen_
 oh-my-zsh_
 
 Copy this repository to ``$ZSH/custom/plugins``, where ``$ZSH`` is the
-root directory of oh-my-zsh. Then add this line to your ``.zshrc``
+root directory of oh-my-zsh:
+
+::
+
+    git clone git@github.com:MichaelAquilina/zsh-you-should-use.git $ZSH/custom/plugins/zsh-you-should-use
+
+
+Then add this line to your ``.zshrc``
 
 ::
 
