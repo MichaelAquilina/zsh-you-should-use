@@ -49,9 +49,10 @@ and Git aliases:
 Requirements
 ------------
 
-``you-should-use`` officially supports zsh versions larger than 5.0. It
-is possible it might work on even older versions but they are not
-officially tested as part of the build process.
+``you-should-use`` officially supports zsh versions larger than 5.0.
+
+It is possible the plugin might work on even older versions.
+However they would not have been tested as part of the CI test process.
 
 Installation
 ------------
@@ -80,7 +81,14 @@ Zgen_
 oh-my-zsh_
 
 Copy this repository to ``$ZSH/custom/plugins``, where ``$ZSH`` is the
-root directory of oh-my-zsh. Then add this line to your ``.zshrc``
+root directory of oh-my-zsh:
+
+::
+
+    git clone git@github.com:MichaelAquilina/zsh-you-should-use.git $ZSH/custom/plugins/zsh-you-should-use
+
+
+Then add this line to your ``.zshrc``
 
 ::
 
