@@ -85,7 +85,7 @@ root directory of oh-my-zsh:
 
 ::
 
-    git clone git@github.com:MichaelAquilina/zsh-you-should-use.git $ZSH/custom/plugins/zsh-you-should-use
+    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH/custom/plugins/zsh-you-should-use
 
 
 Then add this line to your ``.zshrc``
