@@ -34,7 +34,7 @@ function _check_ysu_hardcore() {
 
 
 function _check_git_aliases() {
-  if [[ "$2" = "git "* ]]; then
+  if [[ "$1" = "git "* ]]; then
       local found=false
       local tokens
       local k
