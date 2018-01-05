@@ -158,12 +158,14 @@ directory of the repo.
 
     $ zunit
     Launching ZUnit
-    ZUnit: 0.8.0
+    ZUnit: 0.8.2
     ZSH:   zsh 5.3.1 (x86_64-suse-linux-gnu)
 
     ✔ ysu message correct output
     ✔ ysu global message correct output
     ✔ ysu git message correct output
+
+NOTE: It is required that you use a minimum zunit version of 0.8.2
 
 NOTE: The tests that run move your git configuration to a temporary
 location during the test process so that your user configuration does
