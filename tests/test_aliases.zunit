@@ -60,6 +60,16 @@
     assert $state equals 0
 }
 
+@test 'aliases bestmatch - chooses longest matching alias value case 2' {
+    export YSU_MODE="BESTMATCH"
+    alias gco="git checkout"
+    alias gcom="git checkout master"
+    run _check_aliases "git checkout master"
+
+    assert "$output" contains 'Found existing alias for "git checkout master". You should use: "gcom"'
+    assert $state equals 0
+}
+
 @test 'aliases bestmatch - chooses shortest alias key on equal value lengths' {
     export YSU_MODE="BESTMATCH"
     alias v="vim"

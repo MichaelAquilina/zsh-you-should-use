@@ -84,6 +84,7 @@ function _check_aliases() {
   local found_aliases
   found_aliases=()
   local best_match=""
+  local best_match_value=""
   local v
 
   # Find alias matches
@@ -101,11 +102,13 @@ function _check_aliases() {
         found_aliases+="$k"
 
         # Match aliases to longest portion of command
-        if [[ "${#v}" -gt "${#best_match}" ]]; then
+        if [[ "${#v}" -gt "${#best_match_value}" ]]; then
           best_match="$k"
-          # on equal length, choose the shortest alias
+          best_match_value="$v"
+        # on equal length, choose the shortest alias
         elif [[ "${#v}" -eq "${#best_match}" && ${#k} -lt "${#best_match}" ]]; then
           best_match="$k"
+          best_match_value="$v"
         fi
       fi
     fi
