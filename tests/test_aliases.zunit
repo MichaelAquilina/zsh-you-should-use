@@ -8,6 +8,7 @@
 }
 
 @test 'aliases no match' {
+    export YSU_MODE="ALL"
     alias ls="less -R"
     run _check_aliases "less"
 
@@ -16,6 +17,7 @@
 }
 
 @test 'aliases longer or the same length as their commands are ignored' {
+    export YSU_MODE="ALL"
     alias longalias='ls -lA'
     alias ls_-lA='ls -lA'
     run _check_aliases "ls -lA"
@@ -38,6 +40,7 @@
 }
 
 @test 'aliases bestmatch default' {
+    unset YSU_MODE
     alias gs="git status"
     alias g="git"
     run _check_aliases "git status -v"
@@ -68,6 +71,7 @@
 }
 
 @test 'aliases exact match' {
+    export YSU_MODE="ALL"
     alias hu='hg update'
     run _check_aliases 'hg update'
 
@@ -76,6 +80,7 @@
 }
 
 @test 'aliases substring match' {
+    export YSU_MODE="ALL"
     alias hu='hg update'
     run _check_aliases 'hg update -all'
 
