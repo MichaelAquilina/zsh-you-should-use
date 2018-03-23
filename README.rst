@@ -107,7 +107,7 @@ it displays *all* matches found by setting the value of ``YSU_MODE``.
 Hardcore Mode
 -------------
 
-For the brave and adventerous only.
+**For the brave and adventerous only** :godmode:
 
 You can enable Hardcore mode to enforce the use of aliases. Enabling
 this will cause zsh to refuse to execute commands you have entered if an
