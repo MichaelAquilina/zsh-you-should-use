@@ -5,24 +5,24 @@ NONE='\033[00m'
 RED='\e[31m'
 
 function ysu_message() {
-  >&2 echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
+  (>&2 printf "${BOLD}Found existing alias for \"%s\". You should use: \"%s\"${NONE}\n" "$1" "$2")
 }
 
 
 function ysu_global_message() {
-  (>&2 echo "${BOLD}Found existing global alias for \"$1\". You should use: \"$2\"${NONE}")
+  (>&2 printf "${BOLD}Found existing global alias for \"%s\". You should use: \"%s\"${NONE}\n" "$1" "$2")
 }
 
 
 function ysu_git_message() {
-  (>&2 echo "${BOLD}Found existing git alias for \"$1\". You should use: \"git $2\"${NONE}")
+  (>&2 printf "${BOLD}Found existing git alias for \"%s\". You should use: \"git %s\"${NONE}\n" "$1" "$2")
 }
 
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
-      (>&2 echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}")
+      (>&2 printf "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n")
       kill -s INT $$
   fi
 }
