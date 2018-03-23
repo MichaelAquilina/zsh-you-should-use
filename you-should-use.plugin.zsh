@@ -1,22 +1,20 @@
 #!/bin/zsh
 
+BOLD='\033[1m'
+NONE='\033[00m'
+RED='\e[31m'
+
 function ysu_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
   >&2 echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
 }
 
 
 function ysu_global_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
   (>&2 echo "${BOLD}Found existing global alias for \"$1\". You should use: \"$2\"${NONE}")
 }
 
 
 function ysu_git_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
   (>&2 echo "${BOLD}Found existing git alias for \"$1\". You should use: \"git $2\"${NONE}")
 }
 
@@ -24,9 +22,6 @@ function ysu_git_message() {
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
-      local RED='\e[31m'
-      local BOLD='\033[1m'
-      local NONE='\033[00m'
       (>&2 echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}")
       kill -s INT $$
   fi
