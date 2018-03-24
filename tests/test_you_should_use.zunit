@@ -25,7 +25,7 @@
 }
 
 @test 'ysu message - custom message' {
-    export MESSAGE_FORMAT="Hi there %alias_type! %command <=> %alias"
+    export YSU_MESSAGE_FORMAT="Hi there %alias_type! %command <=> %alias"
     run ysu_message "git alias" "tig" "t"
 
     assert $state equals 0
@@ -33,7 +33,7 @@
 }
 
 @test 'ysu message - custom message 2' {
-    export MESSAGE_FORMAT="%alias is a %alias_type for %command"
+    export YSU_MESSAGE_FORMAT="%alias is a %alias_type for %command"
     run ysu_message "alias" "xdg-open" "xopen"
 
     assert $state equals 0
@@ -41,7 +41,7 @@
 }
 
 @test 'ysu message - custom message multiple usages' {
-    export MESSAGE_FORMAT="%alias %alias %command %command %alias_type %alias_type"
+    export YSU_MESSAGE_FORMAT="%alias %alias %command %command %alias_type %alias_type"
     run ysu_message 'git alias' 'xpaste' 'xp'
 
     assert $state equals 0
