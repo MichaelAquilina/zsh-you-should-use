@@ -129,7 +129,7 @@ Where the following variables represent:
 * %command - the command that was typed by the user
 * %alias - the matching alias that was found
 
-This default message can be customizing by setting the ``YSU_MESSAGE_FORMAT`` environment variable.
+This default message can be customised by setting the ``YSU_MESSAGE_FORMAT`` environment variable.
 
 If for example, you wish to display your own custom message in red, you can add the
 following to your ``~/.zshrc``:
