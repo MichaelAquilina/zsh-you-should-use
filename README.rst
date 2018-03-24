@@ -104,6 +104,36 @@ it displays *all* matches found by setting the value of ``YSU_MODE``.
 -  To only display best match (default): ``export YSU_MODE=BESTMATCH``
 -  To display all matches: ``export YSU_MODE=ALL``
 
+
+Customizing Messages
+--------------------
+
+By default, zsh-you-should-use displays the following message in bold when an alias
+is found corresponding to the command you just typed:
+
+::
+
+    Found existing %alias_type for \"%command\". You should use: \"%alias\"
+
+This can be easily changed to any message you want by setting the value of ``$MESSAGE_FORMAT``.
+The following variables will be replaced when being displayed:
+
+* %alias_type - the type of alias detected (alias, git alias, global alias)
+* %command - the command that was typed by the user
+* %alias - the matching alias that was found
+
+So for example, if you wish to display a custom message in red, you can add the
+following to your ``~/.zshrc``.
+
+::
+
+    export MESSAGE_FORMAT="\e[31mHey! I found this %alias_type for %command: %alias\033[00m"
+
+``\e[31m`` is the escape code in terminals to use red foreground text. ``\033[00m`` sets
+the text back to a normal color.
+
+You can read more about terminal escape codes here: http://wiki.bash-hackers.org/scripting/terminalcodes
+
 Hardcore Mode
 -------------
 
