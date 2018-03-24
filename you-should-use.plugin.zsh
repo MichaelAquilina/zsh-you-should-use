@@ -5,17 +5,11 @@ NONE='\033[00m'
 RED='\e[31m'
 
 function ysu_message() {
-  (>&2 printf "${BOLD}Found existing alias for \"%s\". You should use: \"%s\"${NONE}\n" "$1" "$2")
-}
+  local alias_type="$1"
+  local target_command="$2"
+  local target_alias="$3"
 
-
-function ysu_global_message() {
-  (>&2 printf "${BOLD}Found existing global alias for \"%s\". You should use: \"%s\"${NONE}\n" "$1" "$2")
-}
-
-
-function ysu_git_message() {
-  (>&2 printf "${BOLD}Found existing git alias for \"%s\". You should use: \"git %s\"${NONE}\n" "$1" "$2")
+  (>&2 printf "${BOLD}Found existing $alias_type for \"$target_command\". You should use: \"$target_alias\"${NONE}\n")
 }
 
 
@@ -40,7 +34,7 @@ function _check_git_aliases() {
         v="${tokens[2]}"
 
         if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
-          ysu_git_message "$v" "$k"
+          ysu_message "git alias" "$v" "git $k"
           found=true
         fi
       done
@@ -64,7 +58,7 @@ function _check_global_aliases() {
     v="${(Q)tokens[2]}"
 
     if [[ "$1" = *"$v"* ]]; then
-      ysu_global_message "$v" "$k"
+      ysu_message "global alias" "$v" "$k"
       found=true
     fi
   done
@@ -113,12 +107,12 @@ function _check_aliases() {
   if [[ "$YSU_MODE" = "ALL" ]]; then
     for k in ${(@ok)found_aliases}; do
       v="${aliases[$k]}"
-      ysu_message "$v" "$k"
+      ysu_message "alias" "$v" "$k"
     done
 
   elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
     v="${aliases[$best_match]}"
-    ysu_message "$v" "$best_match"
+    ysu_message "alias" "$v" "$best_match"
   fi
 
   if [[ -n "$found_aliases" ]]; then

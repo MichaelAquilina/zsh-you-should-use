@@ -11,22 +11,15 @@
 }
 
 @test 'ysu message correct output' {
-    run ysu_message "ls -l" "ll"
+    run ysu_message "alias" "ls -l" "ll"
 
     assert $state equals 0
     assert "$output" same_as '\033[1mFound existing alias for "ls -l". You should use: "ll"\033[00m'
 }
 
-@test 'ysu global message correct output' {
-    run ysu_global_message "2>/dev/null" "NE"
+@test 'ysu message correct output 2' {
+    run ysu_message "foobar" "2>/dev/null" "NE"
 
     assert $state equals 0
-    assert "$output" same_as '\033[1mFound existing global alias for "2>/dev/null". You should use: "NE"\033[00m'
-}
-
-@test 'ysu git message correct output' {
-    run ysu_git_message 'config' 'cfg'
-
-    assert $state equals 0
-    assert "$output" same_as '\033[1mFound existing git alias for "config". You should use: "git cfg"\033[00m'
+    assert "$output" same_as '\033[1mFound existing foobar for "2>/dev/null". You should use: "NE"\033[00m'
 }
