@@ -4,6 +4,7 @@ Changelog for zsh-you-should-use
 0.4.0
 -----
 * Introduce CHANGELOG
+* Add ability to change message output on alias detection
 
 
 0.3.2
