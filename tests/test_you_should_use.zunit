@@ -23,3 +23,27 @@
     assert $state equals 0
     assert "$output" same_as '\033[1mFound existing foobar for "2>/dev/null". You should use: "NE"\033[00m'
 }
+
+@test 'ysu message - custom message' {
+    export MESSAGE_FORMAT="Hi there %alias_type! %command <=> %alias"
+    run ysu_message "git alias" "tig" "t"
+
+    assert $state equals 0
+    assert "$output" same_as "Hi there git alias! tig <=> t"
+}
+
+@test 'ysu message - custom message 2' {
+    export MESSAGE_FORMAT="%alias is a %alias_type for %command"
+    run ysu_message "alias" "xdg-open" "xopen"
+
+    assert $state equals 0
+    assert "$output" same_as "xopen is a alias for xdg-open"
+}
+
+@test 'ysu message - custom message multiple usages' {
+    export MESSAGE_FORMAT="%alias %alias %command %command %alias_type %alias_type"
+    run ysu_message 'git alias' 'xpaste' 'xp'
+
+    assert $state equals 0
+    assert "$output" same_as "xp xp xpaste xpaste git alias git alias"
+}
