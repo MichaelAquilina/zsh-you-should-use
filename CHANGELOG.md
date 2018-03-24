@@ -5,6 +5,7 @@ Changelog for zsh-you-should-use
 -----
 * Introduce CHANGELOG
 * Add ability to change message output on alias detection
+* Add index to README for quick navigation
 
 
 0.3.2
