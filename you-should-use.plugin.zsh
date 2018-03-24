@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-BOLD='\033[1m'
-NONE='\033[00m'
+BOLD='\e[1m'
+NONE='\e[0m'
 RED='\e[31m'
 export YSU_MESSAGE_FORMAT="${BOLD}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}"
 
