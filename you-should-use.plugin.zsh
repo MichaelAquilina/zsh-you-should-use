@@ -1,33 +1,25 @@
 #!/bin/zsh
 
+BOLD='\e[1m'
+NONE='\e[0m'
+RED='\e[31m'
+export YSU_MESSAGE_FORMAT="${BOLD}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}"
+
+
 function ysu_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
-  >&2 echo "${BOLD}Found existing alias for \"$1\". You should use: \"$2\"${NONE}"
-}
+  local MESSAGE="$YSU_MESSAGE_FORMAT"
+  MESSAGE="${MESSAGE//\%alias_type/$1}"
+  MESSAGE="${MESSAGE//\%command/$2}"
+  MESSAGE="${MESSAGE//\%alias/$3}"
 
-
-function ysu_global_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
-  (>&2 echo "${BOLD}Found existing global alias for \"$1\". You should use: \"$2\"${NONE}")
-}
-
-
-function ysu_git_message() {
-  local BOLD='\033[1m'
-  local NONE='\033[00m'
-  (>&2 echo "${BOLD}Found existing git alias for \"$1\". You should use: \"git $2\"${NONE}")
+  (>&2 printf "$MESSAGE\n")
 }
 
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
-      local RED='\e[31m'
-      local BOLD='\033[1m'
-      local NONE='\033[00m'
-      (>&2 echo "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}")
+      (>&2 printf "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n")
       kill -s INT $$
   fi
 }
@@ -45,7 +37,7 @@ function _check_git_aliases() {
         v="${tokens[2]}"
 
         if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
-          ysu_git_message "$v" "$k"
+          ysu_message "git alias" "$v" "git $k"
           found=true
         fi
       done
@@ -69,7 +61,7 @@ function _check_global_aliases() {
     v="${(Q)tokens[2]}"
 
     if [[ "$1" = *"$v"* ]]; then
-      ysu_global_message "$v" "$k"
+      ysu_message "global alias" "$v" "$k"
       found=true
     fi
   done
@@ -118,12 +110,12 @@ function _check_aliases() {
   if [[ "$YSU_MODE" = "ALL" ]]; then
     for k in ${(@ok)found_aliases}; do
       v="${aliases[$k]}"
-      ysu_message "$v" "$k"
+      ysu_message "alias" "$v" "$k"
     done
 
   elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
     v="${aliases[$best_match]}"
-    ysu_message "$v" "$best_match"
+    ysu_message "alias" "$v" "$best_match"
   fi
 
   if [[ -n "$found_aliases" ]]; then

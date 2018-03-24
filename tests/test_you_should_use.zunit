@@ -11,22 +11,39 @@
 }
 
 @test 'ysu message correct output' {
-    run ysu_message "ls -l" "ll"
+    run ysu_message "alias" "ls -l" "ll"
 
     assert $state equals 0
-    assert "$output" same_as '\033[1mFound existing alias for "ls -l". You should use: "ll"\033[00m'
+    assert "$output" same_as '\e[1mFound existing alias for "ls -l". You should use: "ll"\e[0m'
 }
 
-@test 'ysu global message correct output' {
-    run ysu_global_message "2>/dev/null" "NE"
+@test 'ysu message correct output 2' {
+    run ysu_message "foobar" "2>/dev/null" "NE"
 
     assert $state equals 0
-    assert "$output" same_as '\033[1mFound existing global alias for "2>/dev/null". You should use: "NE"\033[00m'
+    assert "$output" same_as '\e[1mFound existing foobar for "2>/dev/null". You should use: "NE"\e[0m'
 }
 
-@test 'ysu git message correct output' {
-    run ysu_git_message 'config' 'cfg'
+@test 'ysu message - custom message' {
+    export YSU_MESSAGE_FORMAT="Hi there %alias_type! %command <=> %alias"
+    run ysu_message "git alias" "tig" "t"
 
     assert $state equals 0
-    assert "$output" same_as '\033[1mFound existing git alias for "config". You should use: "git cfg"\033[00m'
+    assert "$output" same_as "Hi there git alias! tig <=> t"
+}
+
+@test 'ysu message - custom message 2' {
+    export YSU_MESSAGE_FORMAT="%alias is a %alias_type for %command"
+    run ysu_message "alias" "xdg-open" "xopen"
+
+    assert $state equals 0
+    assert "$output" same_as "xopen is a alias for xdg-open"
+}
+
+@test 'ysu message - custom message multiple usages' {
+    export YSU_MESSAGE_FORMAT="%alias %alias %command %command %alias_type %alias_type"
+    run ysu_message 'git alias' 'xpaste' 'xp'
+
+    assert $state equals 0
+    assert "$output" same_as "xp xp xpaste xpaste git alias git alias"
 }

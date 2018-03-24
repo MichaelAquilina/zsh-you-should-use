@@ -8,6 +8,15 @@ existing aliases for a command you just typed.
 
 Also supports detection of global and git aliases.
 
+* Usage_
+* Requirements_
+* Installation_
+* `Displaying Results`_
+* `Customising Messages`_
+* `Hardcore Mode`_
+* Contributing_
+* `Running Tests`_
+
 Usage
 -----
 
@@ -103,6 +112,37 @@ it displays *all* matches found by setting the value of ``YSU_MODE``.
 
 -  To only display best match (default): ``export YSU_MODE=BESTMATCH``
 -  To display all matches: ``export YSU_MODE=ALL``
+
+
+Customising Messages
+--------------------
+
+By default, the following message is displayed in bold when an alias is found:
+
+::
+
+    Found existing %alias_type for \"%command\". You should use: \"%alias\"
+
+Where the following variables represent:
+
+* %alias_type - the type of alias detected (alias, git alias, global alias)
+* %command - the command that was typed by the user
+* %alias - the matching alias that was found
+
+This default message can be customizing by setting the ``YSU_MESSAGE_FORMAT`` environment variable.
+
+If for example, you wish to display your own custom message in red, you can add the
+following to your ``~/.zshrc``:
+
+::
+
+    export YSU_MESSAGE_FORMAT="\e[31mHey! I found this %alias_type for %command: %alias\033[00m"
+
+``\e[31m`` is the escape code in terminals to use red foreground text. ``\033[00m`` sets
+the text back to a normal color.
+
+You can read more about how you can use terminal escape codes here:
+http://wiki.bash-hackers.org/scripting/terminalcodes
 
 Hardcore Mode
 -------------
