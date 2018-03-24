@@ -8,6 +8,18 @@ existing aliases for a command you just typed.
 
 Also supports detection of global and git aliases.
 
+Sections
+--------
+
+* Usage_
+* Requirements_
+* Installation_
+* `Displaying Results`_
+* `Customising Messages`_
+* `Hardcore Mode`_
+* Contributing_
+* `Running Tests`_
+
 Usage
 -----
 
