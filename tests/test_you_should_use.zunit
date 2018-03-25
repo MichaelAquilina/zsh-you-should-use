@@ -11,6 +11,7 @@
 }
 
 @test 'ysu message correct output' {
+    unset YSU_MESSAGE_FORMAT
     run ysu_message "alias" "ls -l" "ll"
 
     assert $state equals 0
@@ -18,6 +19,7 @@
 }
 
 @test 'ysu message correct output 2' {
+    unset YSU_MESSAGE_FORMAT
     run ysu_message "foobar" "2>/dev/null" "NE"
 
     assert $state equals 0

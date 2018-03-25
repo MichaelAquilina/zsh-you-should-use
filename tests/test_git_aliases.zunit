@@ -2,6 +2,8 @@
 
 @setup {
     load "../you-should-use.plugin.zsh"
+    unset YSU_MESSAGE_FORMAT
+    #
     # Remove use git configuration which may interfere with tests
     mv ~/.gitconfig ~/.gitconfig.bak
     touch ~/.gitconfig

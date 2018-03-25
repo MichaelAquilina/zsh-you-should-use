@@ -2,6 +2,7 @@
 
 @setup {
     load "../you-should-use.plugin.zsh"
+    unset YSU_MESSAGE_FORMAT
 }
 
 @teardown {
