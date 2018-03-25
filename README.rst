@@ -136,9 +136,9 @@ following to your ``~/.zshrc``:
 
 ::
 
-    export YSU_MESSAGE_FORMAT="\e[31mHey! I found this %alias_type for %command: %alias\033[00m"
+    export YSU_MESSAGE_FORMAT="\e[31mHey! I found this %alias_type for %command: %alias\e[0m"
 
-``\e[31m`` is the escape code in terminals to use red foreground text. ``\033[00m`` sets
+``\e[31m`` is the escape code in terminals to use red foreground text. ``\e[0m`` sets
 the text back to a normal color.
 
 You can read more about how you can use terminal escape codes here:
