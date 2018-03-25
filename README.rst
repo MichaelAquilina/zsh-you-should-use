@@ -121,7 +121,7 @@ By default, the following message is displayed in bold when an alias is found:
 
 ::
 
-    Found existing %alias_type for \"%command\". You should use: \"%alias\"
+    Found existing %alias_type for "%command". You should use: "%alias"
 
 Where the following variables represent:
 
