@@ -3,11 +3,17 @@
 BOLD='\e[1m'
 NONE='\e[0m'
 RED='\e[31m'
-export YSU_MESSAGE_FORMAT="${BOLD}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}"
+DEFAULT_MESSAGE_FORMAT="${BOLD}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}"
 
 
 function ysu_message() {
-  local MESSAGE="$YSU_MESSAGE_FORMAT"
+  local MESSAGE=""
+  if [[ -n "$YSU_MESSAGE_FORMAT" ]]; then
+    MESSAGE="$YSU_MESSAGE_FORMAT"
+  else
+    MESSAGE="$DEFAULT_MESSAGE_FORMAT"
+  fi
+
   MESSAGE="${MESSAGE//\%alias_type/$1}"
   MESSAGE="${MESSAGE//\%command/$2}"
   MESSAGE="${MESSAGE//\%alias/$3}"
