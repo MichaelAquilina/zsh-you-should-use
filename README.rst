@@ -125,9 +125,9 @@ By default, the following message is displayed in bold when an alias is found:
 
 Where the following variables represent:
 
-* %alias_type - the type of alias detected (alias, git alias, global alias)
-* %command - the command that was typed by the user
-* %alias - the matching alias that was found
+* ``%alias_type`` - the type of alias detected (alias, git alias, global alias)
+* ``%command`` - the command that was typed by the user
+* ``%alias`` - the matching alias that was found
 
 This default message can be customised by setting the ``YSU_MESSAGE_FORMAT`` environment variable.
 
