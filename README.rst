@@ -1,7 +1,7 @@
 You Should Use
 ==============
 
-|TravisCI| |Version|
+|TravisCI| |Version| |GPLv3|
 
 Simple zsh plugin that reminds you that you should use one of your
 existing aliases for a command you just typed.
@@ -221,6 +221,9 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _ZGen: https://github.com/tarjoilija/zgen
 
 .. _oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+
+.. |GPLv3| image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
+   :target: https://www.gnu.org/licenses/gpl-3.0
 
 .. |TravisCI| image:: https://travis-ci.org/MichaelAquilina/zsh-you-should-use.svg?branch=master
    :target: https://travis-ci.org/MichaelAquilina/zsh-you-should-use
