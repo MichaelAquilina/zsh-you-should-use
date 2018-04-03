@@ -103,6 +103,16 @@ Then add this line to your ``.zshrc``
 
     plugins=(you-should-use $plugins)
 
+`Arch Linux`_
+
+Install the ``zsh-you-should-use`` (AUR_) package::
+
+    yaourt -S zsh-you-should-use
+
+Then add this line to your ``.zshrc``::
+
+    source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh
+
 Displaying Results
 ------------------
 
@@ -221,6 +231,10 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _ZGen: https://github.com/tarjoilija/zgen
 
 .. _oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+
+.. _Arch Linux: https://www.archlinux.org/
+
+.. _AUR: https://aur.archlinux.org/packages/zsh-you-should-use/
 
 .. |GPLv3| image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
    :target: https://www.gnu.org/licenses/gpl-3.0
