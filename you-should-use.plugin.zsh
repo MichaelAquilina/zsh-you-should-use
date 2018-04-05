@@ -5,6 +5,13 @@ NONE='\e[0m'
 RED='\e[31m'
 DEFAULT_MESSAGE_FORMAT="${BOLD}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}"
 
+YSU_WHITELIST=()
+
+
+function _is_whitelisted() {
+    [[ ${YSU_WHITELIST[(ie)$1]} -le ${#YSU_WHITELIST} ]]
+}
+
 
 function ysu_message() {
   local MESSAGE=""
