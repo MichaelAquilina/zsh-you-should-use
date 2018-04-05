@@ -1,0 +1,14 @@
+#!/usr/bin/env zunit
+
+@setup {
+    load "../you-should-use.plugin.zsh"
+}
+
+
+@test 'test empty whitelist' {
+    export YSU_WHITELIST=()
+
+    run _is_whitelisted foo
+
+    assert $state equals 1
+}
