@@ -1,7 +1,9 @@
 dist: trusty
 sudo: required
 
-language: generic
+language: python
+python:
+  - "3.6"
 
 env:
  - ZSH_VERSION=5.3.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.3.1/zsh-5.3.1.tar.xz
