@@ -25,6 +25,10 @@ before_install:
     - cd -
     - export PATH="$LOCAL/bin:$PATH"
 
+
+install:
+    - pip install restructuredtext_lint
+
 before_script:
     - mkdir -p ~/bin
     - curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
@@ -32,4 +36,5 @@ before_script:
     - chmod u+x ~/bin/{revolver,zunit}
 
 script:
+    - rst-lint *.rst
     - zunit
