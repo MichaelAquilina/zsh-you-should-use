@@ -1,35 +1,33 @@
 dist: trusty
-sudo: required
+sudo: false
 
 language: python
 python:
   - "3.6"
 
 env:
- - ZSH_VERSION=5.3.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.3.1/zsh-5.3.1.tar.xz
- - ZSH_VERSION=5.2 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.2/zsh-5.2.tar.xz
- - ZSH_VERSION=5.1.1 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.1.1/zsh-5.1.1.tar.xz
- - ZSH_VERSION=5.0.8 URL=https://downloads.sourceforge.net/project/zsh/zsh/5.0.8/zsh-5.0.8.tar.gz
-
-addons:
-  apt:
-    packages:
-    - build-essential
+ - ZSH_TARGET="5.4.2"
+ - ZSH_TARGET="5.3.1"
+ - ZSH_TARGET="5.2"
+ - ZSH_TARGET="5.1.1"
 
 before_install:
+    # setup ccache to run instead of gcc
+    - export PATH="/usr/lib/ccache:$PATH"
+    # Download zsh
     - export LOCAL="$(mktemp --directory --tmpdir=${TMPDIR:/tmp} local.bin.XXXXXX)"
-    - wget $URL
-    - tar -xf zsh-$ZSH_VERSION.tar.*
-    - cd zsh-$ZSH_VERSION
+    - wget "https://downloads.sourceforge.net/project/zsh/zsh/$ZSH_TARGET/zsh-$ZSH_TARGET.tar.xz"
+
+install:
+    - pip install restructuredtext_lint
+    # Build and install zsh
+    - tar -xf zsh-$ZSH_TARGET.tar.xz
+    - cd zsh-$ZSH_TARGET
     - ./configure --prefix=$LOCAL
     - make
     - make install
     - cd -
     - export PATH="$LOCAL/bin:$PATH"
-
-
-install:
-    - pip install restructuredtext_lint
 
 before_script:
     - mkdir -p ~/bin
@@ -40,3 +38,9 @@ before_script:
 script:
     - rst-lint *.rst
     - zunit --verbose
+
+
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+    - "$HOME/.ccache"
