@@ -24,36 +24,15 @@ You dont need to do anything. Once it's installed,
 ``zsh-you-should-use`` will let you know if you wrote a command with an
 existing alias.
 
-::
-
-    $ alias gc="git commit"
-    $ git commit -m "test commit"
-    Found existing alias for "git commit". You should use: "gc"
-    On branch master
-    Your branch is up-to-date with 'origin/master'.
-    Changes not staged for commit:
-        modified:   README.md
-
-    no changes added to commit
+.. image:: https://imgur.com/kfubO2M.png
 
 ``you-should-use`` also detects global aliases:
 
-::
-
-    $ alias -g NE="2>/dev/null"
-    $ find . -name "*.zsh" 2>/dev/null
-    Found existing alias for "2>/dev/null". You should use: "NE"
-    ./you-should-use.plugin.zsh
+.. image:: https://imgur.com/9EwyPva.png
 
 and Git aliases:
 
-::
-
-    $ git config --global alias.config cfg
-    $ git config --get-regexp alias\..
-    Found existing git alias for "config". You should use: "git cfg"
-    alias.cp cherry-pick
-    alias.cfg config
+.. image:: https://imgur.com/KHfVGeC.png
 
 Requirements
 ------------
