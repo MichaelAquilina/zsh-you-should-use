@@ -1,6 +1,11 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.4.3
+-----
+* Use yellow messages by default
+
+
 0.4.2
 -----
 * Specify LICENSE (GPLv3)
