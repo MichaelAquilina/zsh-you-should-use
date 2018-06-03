@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+export YSU_VERSION='0.4.4'
+
 BOLD='\e[1m'
 NONE='\e[0m'
 RED='\e[31m'
