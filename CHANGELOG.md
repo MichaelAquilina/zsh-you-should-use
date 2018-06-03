@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.4.4
+-----
+* export you-should-use version
+
 0.4.3
 -----
 * Use yellow messages by default
