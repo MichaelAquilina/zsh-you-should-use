@@ -6,6 +6,8 @@ Please provide the following details when opening an issue:
 
 ## zsh version (zsh --version)
 
+## you-should-use version (echo "$YSU_VERSION")
+
 ## How is zsh-you-should-use installed?
 
 - [ ] zplug
