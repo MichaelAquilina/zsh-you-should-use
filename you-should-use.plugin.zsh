@@ -7,7 +7,7 @@ NONE='\e[0m'
 RED='\e[31m'
 YELLOW='\e[33m'
 DEFAULT='\e[39m'
-DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing %alias_type for \"%command\". You should use: \"%alias\"${NONE}${DEFAULT}"
+DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing %alias_type for \"%command\". You can use: \"%alias\"${NONE}${DEFAULT}"
 
 
 function ysu_message() {
