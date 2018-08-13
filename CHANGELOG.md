@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.5.0
+-----
+* Add functions to temporarily disable (and re-enable) you-should-use
+
 0.4.4
 -----
 * export you-should-use version

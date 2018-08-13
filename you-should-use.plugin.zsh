@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='0.4.4'
+export YSU_VERSION='0.5.0'
 
 BOLD='\e[1m'
 NONE='\e[0m'
