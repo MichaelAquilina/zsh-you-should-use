@@ -12,7 +12,18 @@
     assert "$YSU_VERSION" same_as "$git_version"
 }
 
-@test 'ysu preexec functions are loaded' {
+@test 'ysu preexec functions are loaded by default' {
+    assert '_check_aliases' in $preexec_functions
+    assert '_check_git_aliases' in $preexec_functions
+    assert '_check_global_aliases' in $preexec_functions
+}
+
+@test 'ysu disable/enable functions' {
+    disable_you_should_use
+    assert '_check_aliases' not_in $preexec_functions
+    assert '_check_git_aliases' not_in $preexec_functions
+    assert '_check_global_aliases' not_in $preexec_functions
+    enable_you_should_use
     assert '_check_aliases' in $preexec_functions
     assert '_check_git_aliases' in $preexec_functions
     assert '_check_global_aliases' in $preexec_functions
