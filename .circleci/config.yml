@@ -1,0 +1,70 @@
+version: 2
+
+
+test: &test
+  steps:
+    - checkout
+    - run:
+        name: Install Curl and Git
+        command: apt-get update && apt-get install -y curl git
+    - run:
+        name: Download requirements
+        command: |
+          mkdir -p ~/bin
+          curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
+          curl -L https://github.com/molovo/zunit/releases/download/v0.8.2/zunit > ~/bin/zunit
+          chmod u+x ~/bin/{revolver,zunit}
+    - run:
+        name: Run Zunit
+        command: |
+          export PATH="$HOME/bin:$PATH"
+          zunit --verbose
+
+
+jobs:
+  lint:
+    docker:
+      - image: "python:3.7-stretch"
+    steps:
+      - checkout
+      - run:
+          name: run restructuredtext linter
+          command: |
+            pip install restructuredtext_lint
+            rst-lint *.rst
+
+  test-zsh-5.1:
+      docker:
+        - image: "zshusers/zsh-5.1.1"
+      <<: *test
+
+  test-zsh-5.2:
+      docker:
+        - image: "zshusers/zsh-5.2"
+      <<: *test
+
+  test-zsh-5.3:
+      docker:
+        - image: "zshusers/zsh-5.3.1"
+      <<: *test
+
+  test-zsh-5.4:
+      docker:
+        - image: "zshusers/zsh-5.4.2"
+      <<: *test
+
+  test-zsh-5.5:
+      docker:
+        - image: "zshusers/zsh-5.5.1"
+      <<: *test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - lint
+      - test-zsh-5.1
+      - test-zsh-5.2
+      - test-zsh-5.3
+      - test-zsh-5.4
+      - test-zsh-5.5
