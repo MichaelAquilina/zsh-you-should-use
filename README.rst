@@ -14,6 +14,7 @@ Also supports detection of global and git aliases.
 * `Displaying Results`_
 * `Customising Messages`_
 * `Hardcore Mode`_
+* `Temporarily Disabling Messages`_
 * Contributing_
 * `Running Tests`_
 
@@ -162,6 +163,14 @@ it, zsh will refuse to execute that command:
     total 8.0K
     -rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
     -rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
+
+
+Temporarily Disabling Messages
+------------------------------
+
+You can temporarily disable you should use by running the command ``enable_you_should_use``.
+
+When you want to re-enable messages, run the command ``disable_you_should_use``.
 
 Contributing
 ------------
