@@ -38,7 +38,7 @@ and Git aliases:
 Requirements
 ------------
 
-``you-should-use`` officially supports zsh versions larger than 5.1.
+``you-should-use`` officially supports zsh versions 5.1 onwards.
 
 It is possible the plugin might work on even older versions.
 However they would not have been tested as part of the CI test process.
