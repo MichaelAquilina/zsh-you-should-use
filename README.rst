@@ -168,9 +168,9 @@ it, zsh will refuse to execute that command:
 Temporarily Disabling Messages
 ------------------------------
 
-You can temporarily disable you should use by running the command ``enable_you_should_use``.
+You can temporarily disable you should use by running the command ``disable_you_should_use``.
 
-When you want to re-enable messages, run the command ``disable_you_should_use``.
+When you want to re-enable messages, run the command ``enable_you_should_use``.
 
 Contributing
 ------------
