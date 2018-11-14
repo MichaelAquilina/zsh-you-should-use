@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.6.0
+-----
+* Improved colouring for default message
+
 0.5.1
 -----
 * Minor fixes and updates to README.
