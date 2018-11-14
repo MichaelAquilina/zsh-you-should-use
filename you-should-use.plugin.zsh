@@ -7,10 +7,9 @@ NONE='\e[0m'
 RED='\e[31m'
 YELLOW='\e[33m'
 PURPLE='\e[35m'
-DEFAULT='\e[39m'
 DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
-You should use: ${PURPLE}\"%alias\"${NONE}${DEFAULT}"
+You should use: ${PURPLE}\"%alias\"${NONE}"
 
 
 function ysu_message() {
