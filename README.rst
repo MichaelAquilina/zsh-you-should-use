@@ -25,15 +25,15 @@ You dont need to do anything. Once it's installed,
 ``zsh-you-should-use`` will let you know if you wrote a command with an
 existing alias.
 
-.. image:: https://imgur.com/kfubO2M.png
+.. image:: img/alias.png
 
 ``you-should-use`` also detects global aliases:
 
-.. image:: https://imgur.com/9EwyPva.png
+.. image:: img/global.png
 
 and Git aliases:
 
-.. image:: https://imgur.com/KHfVGeC.png
+.. image:: img/git.png
 
 Requirements
 ------------
