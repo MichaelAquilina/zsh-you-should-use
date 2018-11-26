@@ -70,7 +70,7 @@ Zgen_
 oh-my-zsh_
 
 Copy this repository to ``$ZSH_CUSTOM/custom/plugins``, where ``$ZSH_CUSTOM`` 
-is the directory with custom plugins of oh-my-zsh [read more](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization):
+is the directory with custom plugins of oh-my-zsh `(read more) <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`_:
 ::
 
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
