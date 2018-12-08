@@ -5,7 +5,7 @@ test: &test
   steps:
     - checkout
     - run:
-        name: Install Depdencies
+        name: Install Dependencies
         command: apt-get update && apt-get install -y curl git ncurses-bin
     - run:
         name: Download requirements
