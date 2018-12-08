@@ -5,8 +5,8 @@ test: &test
   steps:
     - checkout
     - run:
-        name: Install Curl and Git
-        command: apt-get update && apt-get install -y curl git
+        name: Install Depdencies
+        command: apt-get update && apt-get install -y curl git ncurses-bin
     - run:
         name: Download requirements
         command: |
@@ -17,6 +17,7 @@ test: &test
     - run:
         name: Run Zunit
         command: |
+          export TERM="xterm-256color"
           export PATH="$HOME/bin:$PATH"
           zunit --verbose
 
