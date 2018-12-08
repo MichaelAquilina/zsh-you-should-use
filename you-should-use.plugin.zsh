@@ -2,11 +2,17 @@
 
 export YSU_VERSION='0.6.0'
 
-NONE="$(tput sgr0)"
-BOLD="$(tput bold)"
-RED="$(tput setaf 1)"
-YELLOW="$(tput setaf 3)"
-PURPLE="$(tput setaf 5)"
+if !tput -V > /dev/null; then
+    printf "WARNING: tput command not found on your PATH.\n"
+    printf "zsh-you-should-use will fallback to uncoloured messages\n"
+else
+    NONE="$(tput sgr0)"
+    BOLD="$(tput bold)"
+    RED="$(tput setaf 1)"
+    YELLOW="$(tput setaf 3)"
+    PURPLE="$(tput setaf 5)"
+fi
+
 DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"
