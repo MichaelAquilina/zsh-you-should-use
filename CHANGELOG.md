@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.7.0
+-----
+* Use tput command instead of raw escape codes
+
 0.6.0
 -----
 * Improved colouring for default message
