@@ -34,7 +34,11 @@
     run ysu_message "alias" "ls -l" "ll"
 
     assert $state equals 0
-    assert "$output" same_as '\e[1m\e[33mFound existing alias for \e[35m"ls -l"\e[33m. You should use: \e[35m"ll"\e[0m'
+
+    expected="$(tput bold)$(tput setaf 3)Found existing alias for $(tput setaf 5)\"ls -l\"$(tput setaf 3). "
+    expected+="You should use: $(tput setaf 5)\"ll\"$(tput sgr0)"
+
+    assert "$output" same_as "$expected"
 }
 
 @test 'ysu message correct output 2' {
@@ -42,7 +46,11 @@
     run ysu_message "foobar" "2>/dev/null" "NE"
 
     assert $state equals 0
-    assert "$output" same_as '\e[1m\e[33mFound existing foobar for \e[35m"2>/dev/null"\e[33m. You should use: \e[35m"NE"\e[0m'
+
+    expected="$(tput bold)$(tput setaf 3)Found existing foobar for $(tput setaf 5)\"2>/dev/null\"$(tput setaf 3). "
+    expected+="You should use: $(tput setaf 5)\"NE\"$(tput sgr0)"
+
+    assert "$output" same_as "$expected"
 }
 
 @test 'ysu message - custom message' {

@@ -2,11 +2,11 @@
 
 export YSU_VERSION='0.6.0'
 
-BOLD='\e[1m'
-NONE='\e[0m'
-RED='\e[31m'
-YELLOW='\e[33m'
-PURPLE='\e[35m'
+NONE="$(tput sgr0)"
+BOLD="$(tput bold)"
+RED="$(tput setaf 1)"
+YELLOW="$(tput setaf 3)"
+PURPLE="$(tput setaf 5)"
 DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"

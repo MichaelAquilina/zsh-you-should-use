@@ -125,12 +125,12 @@ following to your ``~/.zshrc``:
 
 ::
 
-    export YSU_MESSAGE_FORMAT="\e[31mHey! I found this %alias_type for %command: %alias\e[0m"
+    export YSU_MESSAGE_FORMAT="$(tput setaf 1)Hey! I found this %alias_type for %command: %alias$(tput sgr0)"
 
-``\e[31m`` is the escape code in terminals to use red foreground text. ``\e[0m`` sets
+``$(tput setaf 1)`` generates the escape code terminals use for red foreground text. ``$(tput sgr0)`` sets
 the text back to a normal color.
 
-You can read more about how you can use terminal escape codes here:
+You can read more about how you can use tput and terminal escape codes here:
 http://wiki.bash-hackers.org/scripting/terminalcodes
 
 Hardcore Mode
