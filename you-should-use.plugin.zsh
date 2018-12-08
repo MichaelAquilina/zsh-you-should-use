@@ -2,7 +2,7 @@
 
 export YSU_VERSION='0.7.0'
 
-if !tput -V > /dev/null; then
+if !tput -V >&2 /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
     printf "zsh-you-should-use will fallback to uncoloured messages\n"
 else
