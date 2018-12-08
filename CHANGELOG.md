@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+0.7.2
+-----
+* Use type builtin to check if tput command is available
+
 0.7.1
 -----
 * Suppress error messages showing when tput is not installed
