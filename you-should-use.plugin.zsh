@@ -13,19 +13,12 @@ else
     PURPLE="$(tput setaf 5)"
 fi
 
-DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+function ysu_message() {
+  DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"
 
-
-function ysu_message() {
-  local MESSAGE=""
-  if [[ -n "$YSU_MESSAGE_FORMAT" ]]; then
-    MESSAGE="$YSU_MESSAGE_FORMAT"
-  else
-    MESSAGE="$DEFAULT_MESSAGE_FORMAT"
-  fi
-
+  local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
   MESSAGE="${MESSAGE//\%alias_type/$1}"
   MESSAGE="${MESSAGE//\%command/$2}"
   MESSAGE="${MESSAGE//\%alias/$3}"
