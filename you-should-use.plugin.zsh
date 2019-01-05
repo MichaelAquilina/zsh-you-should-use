@@ -15,7 +15,7 @@ fi
 
 # Writing to a buffer rather than directly to stdout/stderr allows us to decide
 # if we want to write the reminder message before or after a command has been executed
-function write_ysu_buffer() {
+function _write_ysu_buffer() {
     YSU_BUFFER+="$@"
 
     # Maintain historical behaviour by default
@@ -24,7 +24,7 @@ function write_ysu_buffer() {
         _flush_ysu_buffer
     elif [[ "$position" != "after" ]]; then
         (>&2 printf "${RED}${BOLD}Unknown value for YSU_MESSAGE_POSITION '$position'. ")
-        (>&2 printf "Expected value 'before' or 'after'${NORMAL}\n")
+        (>&2 printf "Expected value 'before' or 'after'${NONE}\n")
         _flush_ysu_buffer
     fi
 }
@@ -44,14 +44,14 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
   MESSAGE="${MESSAGE//\%command/$2}"
   MESSAGE="${MESSAGE//\%alias/$3}"
 
-  write_ysu_buffer "$MESSAGE\n"
+  _write_ysu_buffer "$MESSAGE\n"
 }
 
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
-      write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
+      _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
       kill -s INT $$
   fi
 }

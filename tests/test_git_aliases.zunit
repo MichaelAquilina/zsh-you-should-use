@@ -3,6 +3,7 @@
 @setup {
     load "../you-should-use.plugin.zsh"
     YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
+    unset YSU_MESSAGE_POSITION
 
     if [[ ! -f ~/.gitconfig ]]; then
         touch ~/.gitconfig
