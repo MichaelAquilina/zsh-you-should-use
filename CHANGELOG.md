@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.0.0
+-----
+* Add ability to display reminder message *before* or *after* a command is executed
+
 0.7.3
 -----
 * Fix Default message format conflicting with autoswitch-virtualenv plugin
