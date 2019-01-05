@@ -13,6 +13,27 @@ else
     PURPLE="$(tput setaf 5)"
 fi
 
+# Writing to a buffer rather than directly to stdout/stderr allows us to decide
+# if we want to write the reminder message before or after a command has been executed
+function write_ysu_buffer() {
+    YSU_BUFFER+="$@"
+
+    # Maintain historical behaviour by default
+    position="${YSU_MESSAGE_POSITION:-before}"
+    if [[ "$position" = "before" ]]; then
+        _flush_ysu_buffer
+    elif [[ "$position" != "after" ]]; then
+        (>&2 printf "${RED}${BOLD}Unknown value for YSU_MESSAGE_POSITION '$position'. ")
+        (>&2 printf "Expected value 'before' or 'after'${NORMAL}\n")
+        _flush_ysu_buffer
+    fi
+}
+
+function _flush_ysu_buffer() {
+    (>&2 printf "$YSU_BUFFER")
+    YSU_BUFFER=""
+}
+
 function ysu_message() {
   DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
@@ -23,14 +44,14 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
   MESSAGE="${MESSAGE//\%command/$2}"
   MESSAGE="${MESSAGE//\%alias/$3}"
 
-  (>&2 printf "$MESSAGE\n")
+  write_ysu_buffer "$MESSAGE\n"
 }
 
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
   if [[ "$YSU_HARDCORE" = 1 ]]; then
-      (>&2 printf "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n")
+      write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
       kill -s INT $$
   fi
 }
@@ -138,6 +159,7 @@ function disable_you_should_use() {
     add-zsh-hook -D preexec _check_aliases
     add-zsh-hook -D preexec _check_global_aliases
     add-zsh-hook -D preexec _check_git_aliases
+    add-zsh-hook -D precmd _flush_ysu_buffer
 }
 
 function enable_you_should_use() {
@@ -145,6 +167,7 @@ function enable_you_should_use() {
     add-zsh-hook preexec _check_aliases
     add-zsh-hook preexec _check_global_aliases
     add-zsh-hook preexec _check_git_aliases
+    add-zsh-hook precmd _flush_ysu_buffer
 }
 
 autoload -Uz add-zsh-hook
