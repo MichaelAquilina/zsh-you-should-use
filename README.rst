@@ -11,6 +11,7 @@ Also supports detection of global and git aliases.
 * Usage_
 * Requirements_
 * Installation_
+* `Message Position`_
 * `Displaying Results`_
 * `Customising Messages`_
 * `Hardcore Mode`_
@@ -91,6 +92,18 @@ Install the ``zsh-you-should-use`` (AUR_) package::
 Then add this line to your ``.zshrc``::
 
     source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh
+
+Message Position
+----------------
+
+By default, ``you-should-use`` will display its reminder message *before*
+a command has exected. However, you can choose to display the mesasge *after* a
+command has executed by setting the value of ``YSU_MESSAGE_POSITION``.
+
+::
+
+    export YSU_MESSAGE_POSITION="after"
+
 
 Displaying Results
 ------------------

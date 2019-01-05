@@ -2,6 +2,7 @@
 
 @setup {
     load "../you-should-use.plugin.zsh"
+    unset YSU_MESSAGE_POSITION
 }
 
 @test 'ysu version exported' {
@@ -16,6 +17,7 @@
     assert '_check_aliases' in $preexec_functions
     assert '_check_git_aliases' in $preexec_functions
     assert '_check_global_aliases' in $preexec_functions
+    assert '_flush_ysu_buffer' in $precmd_functions
 }
 
 @test 'ysu disable/enable functions' {
@@ -23,10 +25,12 @@
     assert '_check_aliases' not_in $preexec_functions
     assert '_check_git_aliases' not_in $preexec_functions
     assert '_check_global_aliases' not_in $preexec_functions
+    assert '_flush_ysu_buffer' not_in $precmd_functions
     enable_you_should_use
     assert '_check_aliases' in $preexec_functions
     assert '_check_git_aliases' in $preexec_functions
     assert '_check_global_aliases' in $preexec_functions
+    assert '_flush_ysu_buffer' in $precmd_functions
 }
 
 @test 'ysu message correct output' {
@@ -51,6 +55,19 @@
     expected+="You should use: $(tput setaf 5)\"NE\"$(tput sgr0)"
 
     assert "$output" same_as "$expected"
+}
+
+@test 'ysu - _write_ysu_buffer after' {
+    unset YSU_MESSAGE_FORMAT
+    YSU_MESSAGE_POSITION="after"
+    YSU_BUFFER=""
+
+    _write_ysu_buffer "hello world"
+
+    assert $state equals 0
+
+    assert "$output" is_empty
+    assert "$YSU_BUFFER" same_as "hello world"
 }
 
 @test 'ysu message - custom message' {
