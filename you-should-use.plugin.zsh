@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.0.0'
+export YSU_VERSION='1.1.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -60,13 +60,10 @@ function _check_ysu_hardcore() {
 function _check_git_aliases() {
   if [[ "$1" = "git "* ]]; then
       local found=false
-      local tokens
       local k
       local v
-      git config --get-regexp "^alias\..+$" | sort | while read entry; do
-        tokens=("${(@s/ /)entry}")
-        k="${tokens[1]#alias.}"
-        v="${tokens[2]}"
+      git config --get-regexp "^alias\..+$" | sort | while read k v; do
+        k="${k#alias.}"
 
         if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
           ysu_message "git alias" "$v" "git $k"
