@@ -77,7 +77,7 @@ is the directory with custom plugins of oh-my-zsh `(read more) <https://github.c
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
 
 
-Then add this line to your ``.zshrc``
+Then add this line to your ``.zshrc``. Make sure it is **before** the line ``source $ZSH/oh-my-zsh.sh``.
 
 ::
 
