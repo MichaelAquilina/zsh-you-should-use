@@ -186,7 +186,7 @@ You can permanently disable aliases by including them in the YSU_IGNORED_ALIASES
   $ ls -l
   Hint: alias "ll" exists for "ls -l"
 
-  $ export YSU_IGNORED_ALIASES="g ll"
+  $ export YSU_IGNORED_ALIASES=("g" "ll")
   $ ls -l
 
 

@@ -113,8 +113,7 @@ function _check_aliases() {
     v="${aliases[$k]}"
 
     # Skip ignored aliases
-    ignored_aliases=(${=YSU_IGNORED_ALIASES})
-    if [[ ${ignored_aliases[(r)$k]} == "$k" ]]; then
+    if [[ ${YSU_IGNORED_ALIASES[(r)$k]} == "$k" ]]; then
       continue
     fi
 
