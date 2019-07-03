@@ -176,6 +176,19 @@ it, zsh will refuse to execute that command:
     -rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
     -rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
 
+Permanently Disabling Aliases
+-----------------------------
+
+You can permanently disable aliases by including them in the YSU_IGNORED_ALIASES variable (which is a whitespace separated list):
+
+::
+
+  $ ls -l
+  Hint: alias "ll" exists for "ls -l"
+
+  $ export YSU_IGNORED_ALIASES="g ll"
+  $ ls -l
+
 
 Temporarily Disabling Messages
 ------------------------------
