@@ -100,3 +100,25 @@
     assert "$output" contains 'Found existing alias for "hg update". You should use: "hu"'
     assert $state equals 0
 }
+
+@test 'aliases ignores - does not report an ignored alias' {
+    export YSU_MODE="ALL"
+    export YSU_IGNORED_ALIASES=("something" "e" "else")
+    alias e="echo"
+    alias l="ls"
+    run _check_aliases "echo hello"
+
+    assert $output is_empty
+    assert $state equals 0
+}
+
+@test 'aliases ignores only - only ignores specified aliases' {
+    export YSU_MODE="ALL"
+    export YSU_IGNORED_ALIASES=("something" "else")
+    alias e="echo"
+    alias l="ls"
+    run _check_aliases "echo hello"
+
+    assert $output contains 'Found existing alias for "echo"'
+    assert $state equals 0
+}

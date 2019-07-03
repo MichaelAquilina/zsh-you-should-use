@@ -112,6 +112,11 @@ function _check_aliases() {
   for k in "${(@k)aliases}"; do
     v="${aliases[$k]}"
 
+    # Skip ignored aliases
+    if [[ ${YSU_IGNORED_ALIASES[(r)$k]} == "$k" ]]; then
+      continue
+    fi
+
     if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
 
       # if the alias longer or the same length as its command
