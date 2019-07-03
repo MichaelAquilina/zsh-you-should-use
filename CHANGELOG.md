@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.2.0
+-----
+* Add support for ignoring aliases
+
 1.1.0
 -----
 * git aliases with parameters are now correctly matched (Thanks @crater2150)
