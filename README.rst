@@ -15,6 +15,7 @@ Also supports detection of global and git aliases.
 * `Displaying Results`_
 * `Customising Messages`_
 * `Hardcore Mode`_
+* `Permanently Disabling Aliases`_
 * `Temporarily Disabling Messages`_
 * Contributing_
 * `Running Tests`_
@@ -179,7 +180,7 @@ it, zsh will refuse to execute that command:
 Permanently Disabling Aliases
 -----------------------------
 
-You can permanently disable aliases by including them in the YSU_IGNORED_ALIASES variable (which is a whitespace separated list):
+You can permanently disable aliases by including them in the ``YSU_IGNORED_ALIASES variable`` (which is an array):
 
 ::
 
