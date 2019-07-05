@@ -180,7 +180,7 @@ it, zsh will refuse to execute that command:
 Permanently Disabling Aliases
 -----------------------------
 
-You can permanently disable aliases by including them in the ``YSU_IGNORED_ALIASES variable`` (which is an array):
+You can permanently disable aliases by including them in the ``YSU_IGNORED_ALIASES`` variable (which is an array):
 
 ::
 
