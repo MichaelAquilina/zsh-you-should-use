@@ -3,7 +3,7 @@
 @setup {
     load "../you-should-use.plugin.zsh"
     unset YSU_MESSAGE_POSITION
-    YSU_BUFFER=""
+    _YSU_BUFFER=""
 }
 
 @teardown {
@@ -15,31 +15,31 @@
 
 @test 'ysu - _write_ysu_buffer before' {
     YSU_MESSAGE_POSITION="before"
-    export YSU_BUFFER
+    export _YSU_BUFFER
 
     _write_ysu_buffer "hello world" 2> output.txt
 
     assert $state equals 0
 
     assert "$(< output.txt)" same_as "hello world"
-    assert "$YSU_BUFFER" is_empty
+    assert "$_YSU_BUFFER" is_empty
 }
 
 @test 'ysu - _write_ysu_buffer after' {
     YSU_MESSAGE_POSITION="after"
-    export YSU_BUFFER
+    export _YSU_BUFFER
 
     _write_ysu_buffer "hello world" 2> output.txt
 
     assert $state equals 0
 
     assert "$(< output.txt)" is_empty
-    assert "$YSU_BUFFER" same_as "hello world"
+    assert "$_YSU_BUFFER" same_as "hello world"
 }
 
 @test 'ysu - _write_ysu_buffer invalid' {
     YSU_MESSAGE_POSITION="invalid"
-    export YSU_BUFFER
+    export _YSU_BUFFER
 
     _write_ysu_buffer "" 2> output.txt
 
@@ -49,5 +49,5 @@
     expected+="Expected value 'before' or 'after'$(tput sgr0)\n"
 
     assert "$(< output.txt)" same_as "$expected"
-    assert "$YSU_BUFFER" is_empty
+    assert "$_YSU_BUFFER" is_empty
 }

@@ -60,14 +60,14 @@
 @test 'ysu - _write_ysu_buffer after' {
     unset YSU_MESSAGE_FORMAT
     YSU_MESSAGE_POSITION="after"
-    YSU_BUFFER=""
+    _YSU_BUFFER=""
 
     _write_ysu_buffer "hello world"
 
     assert $state equals 0
 
     assert "$output" is_empty
-    assert "$YSU_BUFFER" same_as "hello world"
+    assert "$_YSU_BUFFER" same_as "hello world"
 }
 
 @test 'ysu message - custom message' {

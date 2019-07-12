@@ -16,10 +16,10 @@ fi
 # Writing to a buffer rather than directly to stdout/stderr allows us to decide
 # if we want to write the reminder message before or after a command has been executed
 function _write_ysu_buffer() {
-    YSU_BUFFER+="$@"
+    _YSU_BUFFER+="$@"
 
     # Maintain historical behaviour by default
-    position="${YSU_MESSAGE_POSITION:-before}"
+    local position="${YSU_MESSAGE_POSITION:-before}"
     if [[ "$position" = "before" ]]; then
         _flush_ysu_buffer
     elif [[ "$position" != "after" ]]; then
@@ -30,12 +30,12 @@ function _write_ysu_buffer() {
 }
 
 function _flush_ysu_buffer() {
-    (>&2 printf "$YSU_BUFFER")
-    YSU_BUFFER=""
+    (>&2 printf "$_YSU_BUFFER")
+    _YSU_BUFFER=""
 }
 
 function ysu_message() {
-  DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+  local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
 Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"
 
