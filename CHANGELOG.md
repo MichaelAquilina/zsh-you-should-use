@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.2.1
+-----
+* Fix minor bug where variables would pollute user's environment
+
 1.2.0
 -----
 * Add support for ignoring aliases
