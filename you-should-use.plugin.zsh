@@ -15,7 +15,9 @@ fi
 
 function check_alias_usage() {
     # Optional parameter that limits how far back history is checked
-    local limit="${1:-90000}"
+    # I've chosen a large default value instead of bypassing tail because it's simpler
+    # TODO: this should probably be cleaned up
+    local limit="${1:-9000000000000000}"
 
     declare -A usage
     for key in "${(@k)aliases}"; do
@@ -23,7 +25,7 @@ function check_alias_usage() {
     done
 
     # TODO:
-    # Handle pipe (|) and (&&) + (&)
+    # Handle and (&&) + (&)
     # others? watch, time etc...
 
     local current=0
@@ -32,7 +34,7 @@ function check_alias_usage() {
         total=$limit
     fi
 
-    <"$HISTFILE" | head "-$limit" | cut -d";" -f2 | while read line; do
+    <"$HISTFILE" | tail "-$limit" | cut -d";" -f2 | while read line; do
         for entry in ${(@s/|/)line}; do
             # Remove leading whitespace
             # TODO: This is extremely slow
