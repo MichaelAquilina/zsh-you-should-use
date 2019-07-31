@@ -13,6 +13,32 @@ else
     PURPLE="$(tput setaf 5)"
 fi
 
+function check_alias_usage() {
+    declare -A usage
+    for key in "${(@k)aliases}"; do
+        usage[$key]=0
+    done
+
+    # TODO:
+    # Handle pipe (|) and (&&) + (&)
+
+    <"$HISTFILE" | cut -d";" -f2 | while read entry; do
+        # We only care about the first word because that's all aliases work with
+        # (this does not count global and git aliases)
+        local word=${entry[(w)1]}
+        if [[ -n ${usage[$word]} ]]; then
+            local prev=$usage[$word]
+            let "prev = prev + 1 "
+            usage[$word]=$prev
+        fi
+    done
+
+    # Print ordered usage
+    for key in ${(k)usage}; do
+        echo "${usage[$key]}: $key='${aliases[$key]}'"
+    done | sort -rn -k1
+}
+
 # Writing to a buffer rather than directly to stdout/stderr allows us to decide
 # if we want to write the reminder message before or after a command has been executed
 function _write_ysu_buffer() {
