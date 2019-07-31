@@ -14,6 +14,9 @@ else
 fi
 
 function check_alias_usage() {
+    # Optional parameter that limits how far back history is checked
+    local limit="${1:-90000}"
+
     declare -A usage
     for key in "${(@k)aliases}"; do
         usage[$key]=0
@@ -21,17 +24,36 @@ function check_alias_usage() {
 
     # TODO:
     # Handle pipe (|) and (&&) + (&)
+    # others? watch, time etc...
 
-    <"$HISTFILE" | cut -d";" -f2 | while read entry; do
-        # We only care about the first word because that's all aliases work with
-        # (this does not count global and git aliases)
-        local word=${entry[(w)1]}
-        if [[ -n ${usage[$word]} ]]; then
-            local prev=$usage[$word]
-            let "prev = prev + 1 "
-            usage[$word]=$prev
-        fi
+    local current=0
+    local total=$(wc -l < "$HISTFILE")
+    if [[ $total -gt $limit ]]; then
+        total=$limit
+    fi
+
+    <"$HISTFILE" | head "-$limit" | cut -d";" -f2 | while read line; do
+        for entry in ${(@s/|/)line}; do
+            # Remove leading whitespace
+            # TODO: This is extremely slow
+            entry="$(echo "$entry" | sed -e 's/^ *//')"
+
+            # We only care about the first word because that's all aliases work with
+            # (this does not count global and git aliases)
+            local word=${entry[(w)1]}
+            if [[ -n ${usage[$word]} ]]; then
+                local prev=$usage[$word]
+                let "prev = prev + 1 "
+                usage[$word]=$prev
+            fi
+        done
+
+        # print current progress
+        let "current = current + 1"
+        printf "[$current/$total]\r"
     done
+    # Clear all previous line output
+    printf "\r\033[K"
 
     # Print ordered usage
     for key in ${(k)usage}; do
