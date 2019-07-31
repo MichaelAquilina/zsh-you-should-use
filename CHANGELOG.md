@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.3.0
+-----
+* Add `check_alias_usage` function to generate report of aliases being used by user
+
 1.2.1
 -----
 * Fix minor bug where variables would pollute user's environment

@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.2.1'
+export YSU_VERSION='1.3.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -12,6 +12,56 @@ else
     YELLOW="$(tput setaf 3)"
     PURPLE="$(tput setaf 5)"
 fi
+
+function check_alias_usage() {
+    # Optional parameter that limits how far back history is checked
+    # I've chosen a large default value instead of bypassing tail because it's simpler
+    # TODO: this should probably be cleaned up
+    local limit="${1:-9000000000000000}"
+
+    declare -A usage
+    for key in "${(@k)aliases}"; do
+        usage[$key]=0
+    done
+
+    # TODO:
+    # Handle and (&&) + (&)
+    # others? watch, time etc...
+
+    local current=0
+    local total=$(wc -l < "$HISTFILE")
+    if [[ $total -gt $limit ]]; then
+        total=$limit
+    fi
+
+    <"$HISTFILE" | tail "-$limit" | cut -d";" -f2 | while read line; do
+        for entry in ${(@s/|/)line}; do
+            # Remove leading whitespace
+            # TODO: This is extremely slow
+            entry="$(echo "$entry" | sed -e 's/^ *//')"
+
+            # We only care about the first word because that's all aliases work with
+            # (this does not count global and git aliases)
+            local word=${entry[(w)1]}
+            if [[ -n ${usage[$word]} ]]; then
+                local prev=$usage[$word]
+                let "prev = prev + 1 "
+                usage[$word]=$prev
+            fi
+        done
+
+        # print current progress
+        let "current = current + 1"
+        printf "[$current/$total]\r"
+    done
+    # Clear all previous line output
+    printf "\r\033[K"
+
+    # Print ordered usage
+    for key in ${(k)usage}; do
+        echo "${usage[$key]}: $key='${aliases[$key]}'"
+    done | sort -rn -k1
+}
 
 # Writing to a buffer rather than directly to stdout/stderr allows us to decide
 # if we want to write the reminder message before or after a command has been executed
