@@ -204,11 +204,12 @@ a convenience function ``check_alias_usage`` which you can run to analyse your a
     28: dcr='docker-compose
 
 ``check_alias_usage`` analyses your history to generate this data for you. If your history is disabled
-or if you limit your history to a certain amount of time, then alias report generated will be a reflection
-of the data available.
+or if you limit your history to a certain amount of time, then the alias report generated will be a reflection
+of the limited data available.
 
-You can limit how far back ``check_alias_usage`` looks back in history by providing an optional numeric
-parameter. This specifies how many entries in the history to check when generating the report:
+Optionally, you can limit how far ``check_alias_usage`` looks back in history by providing an optional numeric
+parameter. This parameter specifies how many entries in the history to check when generating the report.
+In the example below, history is limited to the last 200 entries when generating the alias report.
 
 ::
 
