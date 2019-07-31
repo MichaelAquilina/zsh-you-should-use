@@ -15,6 +15,7 @@ Also supports detection of global and git aliases.
 * `Displaying Results`_
 * `Customising Messages`_
 * `Hardcore Mode`_
+* `Check your Alias usage`_
 * `Permanently Disabling Aliases`_
 * `Temporarily Disabling Messages`_
 * Contributing_
@@ -176,6 +177,56 @@ it, zsh will refuse to execute that command:
     total 8.0K
     -rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
     -rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
+
+Check your Alias usage
+----------------------
+
+It's often useful to check how often we use our aliases so that we have an idea of which ones we
+could probably get rid of (or remind ourselves of them if we forgot). ``zsh-you-should-use`` provides
+a convenience function ``check_alias_usage`` which you can run to analyse your alias usage.
+
+::
+
+    $ check_alias_usage
+    924: curl='curl --silent'
+    652: gco='git checkout'
+    199: json='jq '.' -C'
+    157: less='less -R'
+    100: ll='ls -lh --group-directories-first'
+    93: vim='nvim'
+    76: watch='watch '
+    61: v='vim'
+    60: md='mkdir'
+    39: gr='git rebase'
+    38: dc='docker-compose'
+    35: ls='ls --color=auto'
+    33: h='history'
+    28: dcr='docker-compose
+
+``check_alias_usage`` analyses your history to generate this data for you. If your history is disabled
+or if you limit your history to a certain amount of time, then alias report generated will be a reflection
+of the data available.
+
+You can limit how far back ``check_alias_usage`` looks back in history by providing an optional numeric
+parameter. This specifies how many entries in the history to check when generating the report:
+
+::
+
+    $ check_alias_usage 200
+    9: h='history'
+    3: gpoh='git push -u origin HEAD'
+    3: gco='git checkout'
+    2: v='vim'
+    2: ll='ls -lh --group-directories-first'
+    2: gpohw='gpoh && git web --pull-request'
+    2: gc='git commit'
+    2: gap='git add -p'
+    2: ap='ansible-playbook'
+    1: xopen='GDK_BACKEND=wayland xdg-open'
+    1: t='tig'
+    1: gw='git web'
+    1: gs='git status'
+
 
 Permanently Disabling Aliases
 -----------------------------
