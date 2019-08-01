@@ -99,7 +99,7 @@ Message Position
 ----------------
 
 By default, ``you-should-use`` will display its reminder message *before*
-a command has exected. However, you can choose to display the mesasge *after* a
+a command has executed. However, you can choose to display the mesasge *after* a
 command has executed by setting the value of ``YSU_MESSAGE_POSITION``.
 
 ::
