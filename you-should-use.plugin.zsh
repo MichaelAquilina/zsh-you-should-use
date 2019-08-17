@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.3.0'
+export YSU_VERSION='1.4.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -108,6 +108,12 @@ function _check_ysu_hardcore() {
 
 
 function _check_git_aliases() {
+
+  # sudo will use another user's profile and so aliases would not apply
+  if [[ "$1" = "sudo "* ]]; then
+      return
+  fi
+
   if [[ "$1" = "git "* ]]; then
       local found=false
       local k
@@ -133,6 +139,12 @@ function _check_global_aliases() {
   local tokens
   local k
   local v
+
+  # sudo will use another user's profile and so aliases would not apply
+  if [[ "$1" = "sudo "* ]]; then
+      return
+  fi
+
   alias -g | sort | while read entry; do
     tokens=("${(@s/=/)entry}")
     k="${tokens[1]}"
@@ -157,6 +169,11 @@ function _check_aliases() {
   local best_match=""
   local best_match_value=""
   local v
+
+  # sudo will use another user's profile and so aliases would not apply
+  if [[ "$1" = "sudo "* ]]; then
+      return
+  fi
 
   # Find alias matches
   for k in "${(@k)aliases}"; do

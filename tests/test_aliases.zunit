@@ -77,9 +77,19 @@
     export YSU_MODE="BESTMATCH"
     alias v="vim"
     alias nvim="vim"
+
     run _check_aliases "vim"
 
     assert "$output" contains 'Found existing alias for "vim". You should use: "v"'
+    assert $state equals 0
+}
+
+@test 'aliases ignore if sudo' {
+    unset YSU_MODE
+    alias gs="git status"
+    run _check_aliases "sudo git status -v"
+
+    assert "$output" is_empty
     assert $state equals 0
 }
 
