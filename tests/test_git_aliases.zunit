@@ -50,6 +50,14 @@
    assert $state equals 0
 }
 
+@test 'git aliases ignore on sudo' {
+   git config --global alias.cfg config
+   run _check_git_aliases "sudo git config --list" "sudo git config --list"
+
+   assert "$output" is_empty
+   assert $state equals 0
+}
+
 @test 'git aliases exact match' {
    git config --global alias.st status
    run _check_git_aliases "git status" "git status"
