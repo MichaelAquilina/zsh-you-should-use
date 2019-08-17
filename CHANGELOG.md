@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.4.0
+-----
+* Aliases reminders are no longer shown if running commands with sudo
+
 1.3.0
 -----
 * Add `check_alias_usage` function to generate report of aliases being used by user
