@@ -132,3 +132,12 @@
     assert $output contains 'Found existing alias for "echo"'
     assert $state equals 0
 }
+
+@test 'expands aliases to find potentially better matches' {
+    alias gd='git diff'
+    alias gdw='git diff --word-diff'
+    run _check_aliases "gd --word-diff" "git diff --word-diff"
+
+    assert $output contains 'You should use: "gdw"'
+    assert $state equals 0
+}
