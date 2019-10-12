@@ -21,7 +21,7 @@ Also supports detection of global and git aliases.
 * Contributing_
 * `Running Tests`_
 
-You can also view the [Changelog](CHANGELOG.md) for a history of changes.
+You can also view the CHANGELOG_ for a history of changes.
 
 Usage
 -----
@@ -303,6 +303,8 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _Arch Linux: https://www.archlinux.org/
 
 .. _AUR: https://aur.archlinux.org/packages/zsh-you-should-use/
+
+.. _CHANGELOG: CHANGELOG.md
 
 .. |GPLv3| image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
    :target: https://www.gnu.org/licenses/gpl-3.0
