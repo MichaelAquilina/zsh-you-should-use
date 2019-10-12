@@ -108,20 +108,21 @@ function _check_ysu_hardcore() {
 
 
 function _check_git_aliases() {
+    local typed="$1"
+    local expanded="$2"
+
     # sudo will use another user's profile and so aliases would not apply
-    if [[ "$1" = "sudo "* ]]; then
+    if [[ "$typed" = "sudo "* ]]; then
         return
     fi
 
-    if [[ "$1" = "git "* ]]; then
+    if [[ "$typed" = "git "* ]]; then
         local found=false
-        local k
-        local v
-        git config --get-regexp "^alias\..+$" | sort | while read k v; do
-            k="${k#alias.}"
+        git config --get-regexp "^alias\..+$" | sort | while read key value; do
+            key="${key#alias.}"
 
-            if [[ "$2" = "git $v" || "$2" = "git $v "* ]]; then
-                ysu_message "git alias" "$v" "git $k"
+            if [[ "$expanded" = "git $value" || "$expanded" = "git $value "* ]]; then
+                ysu_message "git alias" "$value" "git $key"
                 found=true
             fi
         done
@@ -134,73 +135,80 @@ function _check_git_aliases() {
 
 
 function _check_global_aliases() {
+    local typed="$1"
+    local expanded="$2"
+
     local found=false
     local tokens
-    local k
-    local v
+    local key
+    local value
 
     # sudo will use another user's profile and so aliases would not apply
-    if [[ "$1" = "sudo "* ]]; then
+    if [[ "$typed" = "sudo "* ]]; then
         return
     fi
 
     alias -g | sort | while read entry; do
         tokens=("${(@s/=/)entry}")
-        k="${tokens[1]}"
+        key="${tokens[1]}"
         # Need to remove leading and trailing ' if they exist
-        v="${(Q)tokens[2]}"
+        value="${(Q)tokens[2]}"
 
-        if [[ "$1" = *"$v"* ]]; then
-            ysu_message "global alias" "$v" "$k"
+        if [[ "$typed" = *"$value"* ]]; then
+            ysu_message "global alias" "$value" "$key"
             found=true
         fi
     done
 
     if $found; then
-    _check_ysu_hardcore
+        _check_ysu_hardcore
     fi
 }
 
 
 function _check_aliases() {
+    local typed="$1"
+    local expanded="$2"
+
     local found_aliases
     found_aliases=()
     local best_match=""
     local best_match_value=""
-    local v
+    local key
+    local value
 
     # sudo will use another user's profile and so aliases would not apply
-    if [[ "$1" = "sudo "* ]]; then
+    if [[ "$typed" = "sudo "* ]]; then
         return
     fi
 
     # Find alias matches
-    for k in "${(@k)aliases}"; do
-        v="${aliases[$k]}"
+    for key in "${(@k)aliases}"; do
+        value="${aliases[$key]}"
 
         # Skip ignored aliases
-        if [[ ${YSU_IGNORED_ALIASES[(r)$k]} == "$k" ]]; then
+        if [[ ${YSU_IGNORED_ALIASES[(r)$key]} == "$key" ]]; then
             continue
         fi
 
-        if [[ "$1" = "$v" || "$1" = "$v "* ]]; then
+        if [[ "$typed" = "$value" || "$typed" = "$value "* ]]; then
 
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.
         # If not, then the alias would not save any time
         # for the user and so doesn't hold much value anyway
-        if [[ "${#v}" -gt "${#k}" ]]; then
+        if [[ "${#value}" -gt "${#key}" ]]; then
 
-            found_aliases+="$k"
+            found_aliases+="$key"
 
             # Match aliases to longest portion of command
-            if [[ "${#v}" -gt "${#best_match_value}" ]]; then
-                best_match="$k"
-                best_match_value="$v"
+            if [[ "${#value}" -gt "${#best_match_value}" ]]; then
+                best_match="$key"
+                best_match_value="$value"
             # on equal length, choose the shortest alias
-            elif [[ "${#v}" -eq "${#best_match}" && ${#k} -lt "${#best_match}" ]]; then
-                best_match="$k"
-                best_match_value="$v"
+            elif [[ "${#value}" -eq "${#best_match}" && ${#key} -lt "${#best_match}" ]]; then
+                best_match="$key"
+                best_match_value="$value"
             fi
         fi
         fi
@@ -208,14 +216,14 @@ function _check_aliases() {
 
     # Print result matches based on current mode
     if [[ "$YSU_MODE" = "ALL" ]]; then
-        for k in ${(@ok)found_aliases}; do
-            v="${aliases[$k]}"
-            ysu_message "alias" "$v" "$k"
+        for key in ${(@ok)found_aliases}; do
+            value="${aliases[$key]}"
+            ysu_message "alias" "$value" "$key"
         done
 
     elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
-        v="${aliases[$best_match]}"
-        ysu_message "alias" "$v" "$best_match"
+        value="${aliases[$best_match]}"
+        ysu_message "alias" "$value" "$best_match"
     fi
 
     if [[ -n "$found_aliases" ]]; then
