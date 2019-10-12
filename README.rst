@@ -21,6 +21,8 @@ Also supports detection of global and git aliases.
 * Contributing_
 * `Running Tests`_
 
+You can also view the [Changelog](CHANGELOG.md) for a history of changes.
+
 Usage
 -----
 
