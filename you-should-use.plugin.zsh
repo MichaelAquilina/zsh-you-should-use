@@ -191,7 +191,10 @@ function _check_aliases() {
             continue
         fi
 
-        if [[ "$typed" = "$value" || "$typed" = "$value "* ]]; then
+        if [[ "$typed" = "$value" || \
+              "$typed" = "$value "* ||
+              "$expanded" = "$value" || \
+              "$expanded" = "$value "* ]]; then
 
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.
