@@ -133,6 +133,14 @@
     assert $state equals 0
 }
 
+@test 'dont display recommendations for an alias if it is used' {
+    alias hu='hg update'
+    run _check_aliases 'hu' 'hg update'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'expands aliases to find potentially better matches' {
     alias gd='git diff'
     alias gdw='git diff --word-diff'
