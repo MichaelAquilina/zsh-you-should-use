@@ -141,6 +141,14 @@
     assert $state equals 0
 }
 
+@test 'dont display recommendations for an alias if it is used - 2' {
+    alias eh='echo hello'
+    run _check_aliases 'eh world' 'echo hello world'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'expands aliases to find potentially better matches' {
     alias gd='git diff'
     alias gdw='git diff --word-diff'
