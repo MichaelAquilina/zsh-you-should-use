@@ -196,8 +196,8 @@ function _check_aliases() {
               "$expanded" = "$value" || \
               "$expanded" = "$value "* ]]; then
 
-        # make sure that the alias being checked is not already
-        # was has been typed by the user
+        # make sure that the alias being checked has not already
+        # been typed by the user
         if [[ "$typed" = "$key" || "$typed" = "$key "* ]]; then
             continue
         fi
