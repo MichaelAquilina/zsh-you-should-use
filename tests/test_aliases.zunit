@@ -132,3 +132,28 @@
     assert $output contains 'Found existing alias for "echo"'
     assert $state equals 0
 }
+
+@test 'dont display recommendations for an alias if it is used' {
+    alias hu='hg update'
+    run _check_aliases 'hu' 'hg update'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'dont display recommendations for an alias if it is used - 2' {
+    alias eh='echo hello'
+    run _check_aliases 'eh world' 'echo hello world'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'expands aliases to find potentially better matches' {
+    alias gd='git diff'
+    alias gdw='git diff --word-diff'
+    run _check_aliases "gd --word-diff" "git diff --word-diff"
+
+    assert $output contains 'You should use: "gdw"'
+    assert $state equals 0
+}
