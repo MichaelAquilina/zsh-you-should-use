@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.5.1'
+export YSU_VERSION='1.5.2'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
