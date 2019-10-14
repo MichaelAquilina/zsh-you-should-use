@@ -149,6 +149,16 @@
     assert $state equals 0
 }
 
+@test 'dont display recommendations for an alias if it is used - 3' {
+    alias ls='ls --color=auto'
+    alias ll='ls -lh --group-directories-first'
+
+    run _check_aliases 'll' 'ls --color=auto -lh --group-directories-first'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'expands aliases to find potentially better matches' {
     alias gd='git diff'
     alias gdw='git diff --word-diff'
