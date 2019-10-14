@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.5.3
+-----
+* Fix another bug in alias expansion (#88)
+
 1.5.2
 -----
 * Fix bug in 1.5.0 where an alias would be recommended even though it had just been typed by the user
