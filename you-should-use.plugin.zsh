@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.5.3'
+export YSU_VERSION='1.6.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -192,9 +192,7 @@ function _check_aliases() {
         fi
 
         if [[ "$typed" = "$value" || \
-              "$typed" = "$value "* ||
-              "$expanded" = "$value" || \
-              "$expanded" = "$value "* ]]; then
+              "$typed" = "$value "* ]]; then
 
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.

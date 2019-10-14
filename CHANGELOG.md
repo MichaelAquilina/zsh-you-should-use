@@ -1,9 +1,9 @@
 Changelog for zsh-you-should-use
 ================================
 
-1.5.3
+1.6.0
 -----
-* Fix another bug in alias expansion (#88)
+* Revert smart alias expansion detection feature from 1.5.0 release as it is causing numerous regressions
 
 1.5.2
 -----
