@@ -196,12 +196,6 @@ function _check_aliases() {
               "$expanded" = "$value" || \
               "$expanded" = "$value "* ]]; then
 
-        # make sure that the alias being checked has not already
-        # been typed by the user
-        if [[ "$typed" = "$key" || "$typed" = "$key "* ]]; then
-            continue
-        fi
-
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.
         # If not, then the alias would not save any time
@@ -231,7 +225,12 @@ function _check_aliases() {
         done
 
     elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
+        # make sure that the best matched alias has not already
+        # been typed by the user
         value="${aliases[$best_match]}"
+        if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
+            return
+        fi
         ysu_message "alias" "$value" "$best_match"
     fi
 
