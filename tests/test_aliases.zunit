@@ -149,6 +149,16 @@
     assert $state equals 0
 }
 
+@test 'dont display recommendations for an alias if it is used - 4' {
+    alias ..='cd ..'
+    alias cd..='cd ..'
+
+    run _check_aliases '..' 'cd ..'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'dont display recommendations for an alias if it is used - 3' {
     alias ls='ls --color=auto'
     alias ll='ls -lh --group-directories-first'
