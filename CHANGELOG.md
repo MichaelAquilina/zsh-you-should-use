@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.6.1
+-----
+* Fix detection of substrings with global aliases (#91)
+
 1.6.0
 -----
 * Revert smart alias expansion detection feature from 1.5.0 release as it is causing numerous regressions
