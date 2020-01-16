@@ -154,7 +154,10 @@ function _check_global_aliases() {
         # Need to remove leading and trailing ' if they exist
         value="${(Q)tokens[2]}"
 
-        if [[ "$typed" = *"$value"* ]]; then
+        if [[ "$typed" = *" $value "* || \
+              "$typed" = *" $value" || \
+              "$typed" = "$value "* || \
+              "$typed" = "$value" ]]; then
             ysu_message "global alias" "$value" "$key"
             found=true
         fi

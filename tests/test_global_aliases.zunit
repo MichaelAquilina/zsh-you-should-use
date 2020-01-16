@@ -26,6 +26,14 @@
     assert $state equals 0
 }
 
+@test 'test doesnt match substrings' {
+    alias -g n="nvim"
+    run _check_global_aliases "nvimkaowjqwe"
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'global aliases ignore on sudo' {
     alias -g NE="2>/dev/null"
     run _check_global_aliases "sudo echo "hello" 2>/dev/null"
