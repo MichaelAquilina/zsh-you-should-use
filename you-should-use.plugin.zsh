@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.6.0'
+export YSU_VERSION='1.6.1'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -154,7 +154,10 @@ function _check_global_aliases() {
         # Need to remove leading and trailing ' if they exist
         value="${(Q)tokens[2]}"
 
-        if [[ "$typed" = *"$value"* ]]; then
+        if [[ "$typed" = *" $value "* || \
+              "$typed" = *" $value" || \
+              "$typed" = "$value "* || \
+              "$typed" = "$value" ]]; then
             ysu_message "global alias" "$value" "$key"
             found=true
         fi
