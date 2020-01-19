@@ -239,10 +239,20 @@ You can permanently disable aliases by including them in the ``YSU_IGNORED_ALIAS
 ::
 
   $ ls -l
-  Hint: alias "ll" exists for "ls -l"
+  Found existing alias for "ls -l". You should use: "ll"
 
   $ export YSU_IGNORED_ALIASES=("g" "ll")
   $ ls -l
+
+If you want to ignore global aliases, use the ``YSU_IGNORED_GLOBAL_ALIASES`` environment variable.
+
+::
+
+  $ cd ../..
+  Found existing global alias for "../..". You should use: "..."
+
+  $ export YSU_IGNORED_GLOBAL_ALIASES=("...")
+  $ cd ../..
 
 
 Temporarily Disabling Messages

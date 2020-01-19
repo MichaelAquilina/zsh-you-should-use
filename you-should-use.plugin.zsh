@@ -154,6 +154,11 @@ function _check_global_aliases() {
         # Need to remove leading and trailing ' if they exist
         value="${(Q)tokens[2]}"
 
+        # Skip ignored global aliases
+        if [[ ${YSU_IGNORED_GLOBAL_ALIASES[(r)$key]} == "$key" ]]; then
+            continue
+        fi
+
         if [[ "$typed" = *" $value "* || \
               "$typed" = *" $value" || \
               "$typed" = "$value "* || \
