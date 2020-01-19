@@ -20,7 +20,7 @@
 
 @test 'global aliases match' {
     alias -g NE="2>/dev/null"
-    run _check_global_aliases "echo "hello" 2>/dev/null"
+    run _check_global_aliases "echo 'hello' 2>/dev/null"
 
     assert "$output" contains 'Found existing global alias for "2>/dev/null". You should use: "NE"'
     assert $state equals 0
@@ -36,8 +36,18 @@
 
 @test 'global aliases ignore on sudo' {
     alias -g NE="2>/dev/null"
-    run _check_global_aliases "sudo echo "hello" 2>/dev/null"
+    run _check_global_aliases "sudo echo 'hello' 2>/dev/null"
 
     assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'global aliases - does not report an ignored alias' {
+    export YSU_MODE="ALL"
+    export YSU_IGNORED_GLOBAL_ALIASES=("..." "NE")
+    alias -g ...="../.."
+    run _check_global_aliases "cd ../.."
+
+    assert $output is_empty
     assert $state equals 0
 }

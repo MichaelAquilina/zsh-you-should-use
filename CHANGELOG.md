@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.7.0
+-----
+* Add support for ignoring global aliases
+
 1.6.1
 -----
 * Fix detection of substrings with global aliases (#91)
