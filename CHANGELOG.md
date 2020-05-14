@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.7.1
+-----
+* Fix issue where \ and % would not be escaped correctly in messages (Issue #98)
+
 1.7.0
 -----
 * Add support for ignoring global aliases
