@@ -11,13 +11,22 @@ Also supports detection of global and git aliases.
 * Usage_
 * Requirements_
 * Installation_
+
+Customization
+
 * `Message Position`_
 * `Displaying Results`_
 * `Customising Messages`_
+
+Advanced Features
+
 * `Hardcore Mode`_
 * `Check your Alias usage`_
 * `Permanently Disabling Aliases`_
 * `Temporarily Disabling Messages`_
+
+Contributing
+
 * Contributing_
 * `Running Tests`_
 
