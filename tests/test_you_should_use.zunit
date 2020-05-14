@@ -57,6 +57,18 @@
     assert "$output" same_as "$expected"
 }
 
+@test 'escapes \ and % correctly' {
+    unset YSU_MESSAGE_FORMAT
+    run ysu_message "alias" "printf '%s\\n'" "pf"
+
+    assert $state equals 0
+
+    expected="$(tput bold)$(tput setaf 3)Found existing alias for $(tput setaf 5)\"printf '%s\\n'\"$(tput setaf 3). "
+    expected+="You should use: $(tput setaf 5)\"pf\"$(tput sgr0)"
+
+    assert "$output" same_as "$expected"
+}
+
 @test 'ysu - _write_ysu_buffer after' {
     unset YSU_MESSAGE_FORMAT
     YSU_MESSAGE_POSITION="after"
