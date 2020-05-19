@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.7.2
+-----
+* Fix issue where `key` and `entry` variables would leak into users environment
+
 1.7.1
 -----
 * Fix issue where \ and % would not be escaped correctly in messages (Issue #98)
