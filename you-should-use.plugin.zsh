@@ -35,6 +35,7 @@ function check_alias_usage() {
     fi
 
     <"$HISTFILE" | tail "-$limit" | cut -d";" -f2 | while read line; do
+        local entry
         for entry in ${(@s/|/)line}; do
             # Remove leading whitespace
             # TODO: This is extremely slow
