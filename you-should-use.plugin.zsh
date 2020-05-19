@@ -18,6 +18,7 @@ function check_alias_usage() {
     # I've chosen a large default value instead of bypassing tail because it's simpler
     # TODO: this should probably be cleaned up
     local limit="${1:-9000000000000000}"
+    local key
 
     declare -A usage
     for key in "${(@k)aliases}"; do
