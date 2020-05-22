@@ -156,6 +156,7 @@ function _check_global_aliases() {
     local tokens
     local key
     local value
+    local entry
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
