@@ -98,7 +98,7 @@ Then add this line to your ``.zshrc``. Make sure it is **before** the line ``sou
     
 prezto_
 
-Copy this repository to ``$HOME/.zprezto-contrib``, `(read more) <https://github.com/sorin-ionescu/prezto#external-modules>`_:
+Copy this repository to ``$HOME/.zprezto-contrib``
 ::
 
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
