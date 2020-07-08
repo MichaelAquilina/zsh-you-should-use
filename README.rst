@@ -95,6 +95,29 @@ Then add this line to your ``.zshrc``. Make sure it is **before** the line ``sou
 ::
 
     plugins=(you-should-use $plugins)
+    
+prezto_
+
+Copy this repository to ``$HOME/.zprezto-contrib``, `(read more) <https://github.com/sorin-ionescu/prezto#external-modules>`_:
+::
+
+    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
+
+
+Then uncomment this line in ``.zpreztorc``.
+::
+
+    zstyle ':prezto:load' pmodule-dirs $HOME/.zprezto-contrib
+
+
+After that, add plugin to ``zstyle ':prezto:load' pmodule`` line below. Like that:
+
+::
+
+    zstyle ':prezto:load' pmodule \
+      'environment' \
+      'terminal' \
+      'you-should-use'
 
 `Arch Linux`_
 
@@ -318,6 +341,8 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _ZGen: https://github.com/tarjoilija/zgen
 
 .. _oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+
+.. _prezto: https://github.com/sorin-ionescu/prezto
 
 .. _Arch Linux: https://www.archlinux.org/
 
