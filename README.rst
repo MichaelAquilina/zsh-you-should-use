@@ -22,7 +22,7 @@ Advanced Features
 
 * `Hardcore Mode`_
 * `Check your Alias usage`_
-* `Permanently Disabling Aliases`_
+* `Disable Hints for specific Aliases`_
 * `Temporarily Disabling Messages`_
 
 Contributing
@@ -240,10 +240,10 @@ In the example below, history is limited to the last 200 entries when generating
     1: gs='git status'
 
 
-Permanently Disabling Aliases
------------------------------
+Disable Hints for specific Aliases
+----------------------------------
 
-You can permanently disable aliases by including them in the ``YSU_IGNORED_ALIASES`` variable (which is an array):
+You can tell ``you-should-use`` to permanently ignore certain aliases by including them in the ``YSU_IGNORED_ALIASES`` variable (which is an array):
 
 ::
 
