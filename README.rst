@@ -22,7 +22,7 @@ Advanced Features
 
 * `Hardcore Mode`_
 * `Check your Alias usage`_
-* `Permanently Disabling Aliases`_
+* `Disable Hints for specific Aliases`_
 * `Temporarily Disabling Messages`_
 
 Contributing
