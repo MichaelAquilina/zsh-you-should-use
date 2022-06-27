@@ -81,6 +81,18 @@ Zgen_
 
     zgen load "MichaelAquilina/zsh-you-should-use"
 
+Fig_
+
+[Fig](https://fig.io) adds apps, shortcuts, and autocomplete to your existing terminal.
+
+Install ``zsh-you-should-use`` in just one click.
+
+.. raw:: html
+
+    <object data="https://fig.io/badges/install-with-fig.svg" type="image/svg+xml"></object>
+
+.. <a href="https://fig.io/plugins/other/powerlevel10k" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
+
 oh-my-zsh_
 
 Copy this repository to ``$ZSH_CUSTOM/custom/plugins``, where ``$ZSH_CUSTOM``
