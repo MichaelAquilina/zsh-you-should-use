@@ -88,14 +88,8 @@ Fig adds apps, shortcuts, and autocomplete to your existing terminal.
 Install ``zsh-you-should-use`` in just one click.
 
 .. image:: https://fig.io/badges/install-with-fig.svg
-  :width: 400
-  :alt: Alternative text
-
-.. .. raw:: html
-
-..     <object data="https://fig.io/badges/install-with-fig.svg" type="image/svg+xml"></object>
-
-.. <a href="https://fig.io/plugins/other/powerlevel10k" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
+  :target: https://fig.io/plugins/other/zsh-you-should-use_MichaelAquilina
+  :alt: Install with Fig
 
 oh-my-zsh_
 
