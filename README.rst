@@ -83,13 +83,17 @@ Zgen_
 
 Fig_
 
-[Fig](https://fig.io) adds apps, shortcuts, and autocomplete to your existing terminal.
+Fig adds apps, shortcuts, and autocomplete to your existing terminal.
 
 Install ``zsh-you-should-use`` in just one click.
 
-.. raw:: html
+.. image:: https://fig.io/badges/install-with-fig.svg
+  :width: 400
+  :alt: Alternative text
 
-    <object data="https://fig.io/badges/install-with-fig.svg" type="image/svg+xml"></object>
+.. .. raw:: html
+
+..     <object data="https://fig.io/badges/install-with-fig.svg" type="image/svg+xml"></object>
 
 .. <a href="https://fig.io/plugins/other/powerlevel10k" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
 
@@ -328,6 +332,8 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _Antigen: https://github.com/zsh-users/antigen
 
 .. _ZGen: https://github.com/tarjoilija/zgen
+
+.. _Fig: https://fig.io
 
 .. _oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
 
