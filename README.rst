@@ -83,9 +83,7 @@ Zgen_
 
 Fig_
 
-Fig adds apps, shortcuts, and autocomplete to your existing terminal.
-
-Install ``zsh-you-should-use`` in just one click.
+Install ``zsh-you-should-use`` with Fig in just one click.
 
 .. image:: https://fig.io/badges/install-with-fig.svg
   :target: https://fig.io/plugins/other/zsh-you-should-use_MichaelAquilina
