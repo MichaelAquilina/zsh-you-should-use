@@ -108,7 +108,7 @@ Then add this line to your ``.zshrc``. Make sure it is **before** the line ``sou
 
 Install the ``zsh-you-should-use`` (AUR_) package::
 
-    yaourt -S zsh-you-should-use
+    yay -S zsh-you-should-use
 
 Then add this line to your ``.zshrc``::
 
