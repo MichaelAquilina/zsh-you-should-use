@@ -91,18 +91,23 @@ Install ``zsh-you-should-use`` with Fig in just one click.
 
 oh-my-zsh_
 
-Copy this repository to ``$ZSH_CUSTOM/custom/plugins``, where ``$ZSH_CUSTOM``
-is the directory with custom plugins of oh-my-zsh `(read more) <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`_:
-::
+Clone this repository into ``$ZSH_CUSTOM/custom/plugins``:
+
+.. code-block:: sh
 
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
 
+``$ZSH_CUSTOM`` is oh-my-zsh’s customization directory (`docs <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`__).
 
-Then add this line to your ``.zshrc``. Make sure it is **before** the line ``source $ZSH/oh-my-zsh.sh``.
+Then add ``you-should-use`` to the ``plugins`` array in your ``.zshrc``:
 
-::
+.. code-block:: sh
 
-    plugins=(you-should-use $plugins)
+    plugins=(
+        # ...
+        you-should-use
+        # ...
+    )
 
 `Arch Linux`_
 
