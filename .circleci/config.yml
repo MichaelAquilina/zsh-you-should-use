@@ -31,7 +31,7 @@ jobs:
       - run:
           name: run restructuredtext linter
           command: |
-            pip install restructuredtext_lint
+            pip install restructuredtext_lint pygments
             rst-lint *.rst
 
   test-zsh-5.1:
