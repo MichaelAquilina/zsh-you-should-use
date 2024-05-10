@@ -143,6 +143,41 @@ function _flush_ysu_buffer() {
     _YSU_BUFFER=""
 }
 
+function ysu_message() {
+    local message_type="$1"
+    local command_arg="$2"
+    local abbreviation_arg="$3"
+    local DEFAULT_MESSAGE_FORMAT=""
+
+    # Escape arguments for safe output
+    command_arg="${command_arg//\%/%%}"
+    command_arg="${command_arg//\\/\\\\}"
+    abbreviation_arg="${abbreviation_arg//\%/%%}"
+    abbreviation_arg="${abbreviation_arg//\\/\\\\}"
+
+    # Determine message format based on message type and whether it's enabled
+    case "$message_type" in
+        "abbreviation")
+            if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing abbreviation for ${PURPLE}\"$command_arg\"${YELLOW}. \
+You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+        "alias")
+            if zstyle -t ':you-should-use:*' you_should_use_alias_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing alias for ${PURPLE}\"$command_arg\"${YELLOW}. \
+You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+        "used alias")
+            if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+    esac
+    _write_ysu_buffer "$DEFAULT_MESSAGE_FORMAT\n"
+}
+
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
     if [[ "$YSU_HARDCORE" = 1 ]]; then
@@ -150,7 +185,6 @@ function _check_ysu_hardcore() {
         kill -s INT $$
     fi
 }
-
 
 function _check_git_aliases() {
     local typed="$1"
@@ -177,7 +211,6 @@ function _check_git_aliases() {
         fi
     fi
 }
-
 
 function _check_global_aliases() {
     local typed="$1"
@@ -300,44 +333,6 @@ function _check_aliases() {
         _check_ysu_hardcore
     fi
 }
-
-
-function ysu_message() {
-    local message_type="$1"
-    local command_arg="$2"
-    local abbreviation_arg="$3"
-    local DEFAULT_MESSAGE_FORMAT=""
-
-    # Escape arguments for safe output
-    command_arg="${command_arg//\%/%%}"
-    command_arg="${command_arg//\\/\\\\}"
-    abbreviation_arg="${abbreviation_arg//\%/%%}"
-    abbreviation_arg="${abbreviation_arg//\\/\\\\}"
-
-    # Determine message format based on message type and whether it's enabled
-    case "$message_type" in
-        "abbreviation")
-            if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing abbreviation for ${PURPLE}\"$command_arg\"${YELLOW}. \
-You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
-            fi
-            ;;
-        "alias")
-            if zstyle -t ':you-should-use:*' you_should_use_alias_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing alias for ${PURPLE}\"$command_arg\"${YELLOW}. \
-You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
-            fi
-            ;;
-        "used alias")
-            if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$abbreviation_arg\"${NONE}"
-            fi
-            ;;
-    esac
-    _write_ysu_buffer "$DEFAULT_MESSAGE_FORMAT\n"
-}
-
-
 
 function disable_you_should_use() {
     add-zsh-hook -D preexec _check_aliases
