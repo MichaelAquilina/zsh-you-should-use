@@ -17,7 +17,7 @@ function check_alias_usage() {
     # Optional parameter that limits how far back history is checked
     # I've chosen a large default value instead of bypassing tail because it's simpler
     # TODO: this should probably be cleaned up
-    local limit="${1:-9000000000000000}"
+    local limit="${1:-$HISTSIZE}"
     local key
 
     declare -A usage
@@ -188,24 +188,39 @@ function _check_global_aliases() {
     fi
 }
 
-
 function _check_aliases() {
     local typed="$1"
     local expanded="$2"
 
-    local found_aliases
-    found_aliases=()
+    local first_word="${typed%% *}"  # Extracts the first word from the typed command
+    local found_aliases=()
     local best_match=""
     local best_match_value=""
     local key
     local value
+    local found=false
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
         return
     fi
 
-    # Find alias matches
+    # Check if the first word of the typed command is an alias directly
+    for key in "${(@k)aliases}"; do
+        value="${aliases[$key]}"
+        if [[ "$first_word" = "$key" ]]; then  # Check if first word is exactly an alias
+            ysu_message "used alias" "$key" "$value"  # Inform that the alias expands to the full command
+            found=true
+            break
+        fi
+    done
+
+    if $found; then
+        _check_ysu_hardcore
+        return
+    fi
+
+    # Find alias matches based on the full command
     for key in "${(@k)aliases}"; do
         value="${aliases[$key]}"
 
@@ -214,27 +229,23 @@ function _check_aliases() {
             continue
         fi
 
-        if [[ "$typed" = "$value" || \
-              "$typed" = "$value "* ]]; then
-
-        # if the alias longer or the same length as its command
-        # we assume that it is there to cater for typos.
-        # If not, then the alias would not save any time
-        # for the user and so doesn't hold much value anyway
-        if [[ "${#value}" -gt "${#key}" ]]; then
-
-            found_aliases+="$key"
-
-            # Match aliases to longest portion of command
-            if [[ "${#value}" -gt "${#best_match_value}" ]]; then
-                best_match="$key"
-                best_match_value="$value"
-            # on equal length, choose the shortest alias
-            elif [[ "${#value}" -eq "${#best_match}" && ${#key} -lt "${#best_match}" ]]; then
-                best_match="$key"
-                best_match_value="$value"
+        if [[ "$first_word" = "$value" || "$first_word" = "$value "* ]]; then
+            # if the alias is longer or the same length as its command
+            # we assume that it is there to cater for typos.
+            # If not, then the alias would not save any time
+            # for the user and so doesn't hold much value anyway
+            if [[ "${#value}" -gt "${#key}" ]]; then
+                found_aliases+="$key"
+                # Match aliases to the longest portion of command
+                if [[ "${#value}" -gt "${#best_match_value}" ]]; then
+                    best_match="$key"
+                    best_match_value="$value"
+                # On equal length, choose the shortest alias
+                elif [[ "${#value}" -eq "${#best_match_value}" && ${#key} -lt "${#best_match}" ]]; then
+                    best_match="$key"
+                    best_match_value="$value"
+                fi
             fi
-        fi
         fi
     done
 
@@ -244,9 +255,8 @@ function _check_aliases() {
             value="${aliases[$key]}"
             ysu_message "alias" "$value" "$key"
         done
-
     elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
-        # make sure that the best matched alias has not already
+        # Make sure that the best matched alias has not already
         # been typed by the user
         value="${aliases[$best_match]}"
         if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
@@ -258,6 +268,34 @@ function _check_aliases() {
     if [[ -n "$found_aliases" ]]; then
         _check_ysu_hardcore
     fi
+}
+
+
+function ysu_message() {
+    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
+You should use: ${PURPLE}\"%alias\"${NONE}"
+
+    local alias_type_arg="${1}"
+    local command_arg="${2}"
+    local alias_arg="${3}"
+
+    command_arg="${command_arg//\%/%%}"
+    command_arg="${command_arg//\\/\\\\}"
+
+    local message_type="$1"
+    if [[ "$message_type" == "used alias" ]]; then
+        DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+${PURPLE}\"%command\"${YELLOW} \
+-> ${PURPLE}\"%alias\"${NONE}"
+    fi
+
+    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
+    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
+    MESSAGE="${MESSAGE//\%command/$command_arg}"
+    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
+
+    _write_ysu_buffer "$MESSAGE\n"
 }
 
 function disable_you_should_use() {
