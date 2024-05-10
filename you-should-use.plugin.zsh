@@ -18,6 +18,23 @@ else
 fi
 
 function load_abbrs() {
+    typeset -gA abbrs
+    local line abbr_cmd abbr_expansion
+
+    # Fetch abbreviation list directly using abbr list command
+    abbr list | while IFS="=" read -r abbr_cmd abbr_expansion; do
+        # Remove quotes around the command and expansion
+        abbr_cmd=${abbr_cmd//\"/}
+        abbr_expansion=${abbr_expansion//\"/}
+
+        # Store in associative array
+        abbrs[$abbr_cmd]=$abbr_expansion
+    done
+}
+
+
+function load_abbrs_from_file() {
+    # Fetch abbreviation list from file
     local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
     declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
     local line abbr_cmd abbr_expansion
