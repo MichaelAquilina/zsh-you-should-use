@@ -307,7 +307,7 @@ function ysu_message() {
     local command_arg="$2"
     local abbreviation_arg="$3"
     local DEFAULT_MESSAGE_FORMAT=""
-    
+
     # Escape arguments for safe output
     command_arg="${command_arg//\%/%%}"
     command_arg="${command_arg//\\/\\\\}"
@@ -330,7 +330,7 @@ You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
             ;;
         "used alias")
             if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}You used the alias for ${PURPLE}\"$command_arg\"${YELLOW}, which is: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$abbreviation_arg\"${NONE}"
             fi
             ;;
     esac
