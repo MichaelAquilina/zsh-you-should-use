@@ -2,6 +2,10 @@
 
 export YSU_VERSION='1.7.3'
 
+zstyle ':you-should-use:*' you_should_use_alias_enabled true
+zstyle ':you-should-use:*' you_used_alias_enabled true
+zstyle ':you-should-use:*' you_should_use_abbreviation_enabled true
+
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
     printf "zsh-you-should-use will fallback to uncoloured messages\n"
@@ -12,6 +16,57 @@ else
     YELLOW="$(tput setaf 3)"
     PURPLE="$(tput setaf 5)"
 fi
+
+function load_abbrs() {
+    local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
+    declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
+    local line abbr_cmd abbr_expansion
+
+    while IFS="" read -r line || [[ -n $line ]]; do
+        if [[ "$line" =~ ^abbr\ \"([^\"]+)\"\=\"([^\"]+)\" ]]; then
+            abbr_cmd=${match[1]}
+            abbr_expansion=${match[2]}
+            abbrs[$abbr_expansion]=$abbr_cmd
+        fi
+    done < "$abbr_file"
+}
+
+function _check_abbrs() {
+    local typed="$1"
+    # Directly using the typed command to look up its abbreviation
+    local abbr_match="${abbrs[$typed]}"
+
+    if [[ -n "$abbr_match" ]]; then
+        ysu_message "abbreviation" "$typed" "$abbr_match"
+        if [[ "$YSU_HARDCORE" = 1 ]]; then
+            _write_ysu_buffer "${BOLD}${RED}You Should Use abbreviation mode enabled. Use your abbreviation!${NONE}\n"
+            kill -s INT $$
+        fi
+    fi
+}
+
+function _check_aliases() {
+    local typed="$1"
+    local expanded="$2"
+    local first_word="${typed%% *}"
+    local found=false
+
+    for key in "${(@k)aliases}"; do
+        value="${aliases[$key]}"
+        if [[ "$first_word" == "$key" ]]; then
+            found=true
+            ysu_message "used alias" "$key" "$value"
+            break
+        fi
+    done
+
+    if $found; then
+        _check_ysu_hardcore
+    else
+        # Continue with other checks if not found
+        _find_and_recommend_aliases "$typed"
+    fi
+}
 
 function check_alias_usage() {
     # Optional parameter that limits how far back history is checked
@@ -87,30 +142,6 @@ function _flush_ysu_buffer() {
     (>&2 printf "$_YSU_BUFFER")
     _YSU_BUFFER=""
 }
-
-function ysu_message() {
-    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
-Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
-You should use: ${PURPLE}\"%alias\"${NONE}"
-
-    local alias_type_arg="${1}"
-    local command_arg="${2}"
-    local alias_arg="${3}"
-
-    # Escape arguments which will be interpreted by printf incorrectly
-    # unfortunately there does not seem to be a nice way to put this into
-    # a function because returning the values requires to be done by printf/echo!!
-    command_arg="${command_arg//\%/%%}"
-    command_arg="${command_arg//\\/\\\\}"
-
-    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
-    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
-    MESSAGE="${MESSAGE//\%command/$command_arg}"
-    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
-
-    _write_ysu_buffer "$MESSAGE\n"
-}
-
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
@@ -272,37 +303,48 @@ function _check_aliases() {
 
 
 function ysu_message() {
-    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
-Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
-You should use: ${PURPLE}\"%alias\"${NONE}"
-
-    local alias_type_arg="${1}"
-    local command_arg="${2}"
-    local alias_arg="${3}"
-
+    local message_type="$1"
+    local command_arg="$2"
+    local abbreviation_arg="$3"
+    local DEFAULT_MESSAGE_FORMAT=""
+    
+    # Escape arguments for safe output
     command_arg="${command_arg//\%/%%}"
     command_arg="${command_arg//\\/\\\\}"
+    abbreviation_arg="${abbreviation_arg//\%/%%}"
+    abbreviation_arg="${abbreviation_arg//\\/\\\\}"
 
-    local message_type="$1"
-    if [[ "$message_type" == "used alias" ]]; then
-        DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
-${PURPLE}\"%command\"${YELLOW} \
--> ${PURPLE}\"%alias\"${NONE}"
-    fi
-
-    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
-    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
-    MESSAGE="${MESSAGE//\%command/$command_arg}"
-    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
-
-    _write_ysu_buffer "$MESSAGE\n"
+    # Determine message format based on message type and whether it's enabled
+    case "$message_type" in
+        "abbreviation")
+            if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing abbreviation for ${PURPLE}\"$command_arg\"${YELLOW}. \
+You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+        "alias")
+            if zstyle -t ':you-should-use:*' you_should_use_alias_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing alias for ${PURPLE}\"$command_arg\"${YELLOW}. \
+You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+        "used alias")
+            if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
+                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}You used the alias for ${PURPLE}\"$command_arg\"${YELLOW}, which is: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+            fi
+            ;;
+    esac
+    _write_ysu_buffer "$DEFAULT_MESSAGE_FORMAT\n"
 }
+
+
 
 function disable_you_should_use() {
     add-zsh-hook -D preexec _check_aliases
     add-zsh-hook -D preexec _check_global_aliases
     add-zsh-hook -D preexec _check_git_aliases
     add-zsh-hook -D precmd _flush_ysu_buffer
+    add-zsh-hook -D preexec _check_abbrs
 }
 
 function enable_you_should_use() {
@@ -311,7 +353,9 @@ function enable_you_should_use() {
     add-zsh-hook preexec _check_global_aliases
     add-zsh-hook preexec _check_git_aliases
     add-zsh-hook precmd _flush_ysu_buffer
+    add-zsh-hook preexec _check_abbrs
 }
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
+load_abbrs
