@@ -18,6 +18,12 @@ else
 fi
 
 function load_abbrs() {
+    if ! type abbr >/dev/null 2>&1; then
+        #Install zsh-abbr to use this
+        #https://zsh-abbr.olets.dev/
+        return
+    fi
+
     typeset -gA abbrs
     local line abbr_cmd abbr_expansion
 
@@ -34,6 +40,11 @@ function load_abbrs() {
 
 
 function load_abbrs_from_file() {
+    if ! type abbr >/dev/null 2>&1; then
+        #Install zsh-abbr to use this
+        #https://zsh-abbr.olets.dev/
+        return
+    fi
     # Fetch abbreviation list from file
     local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
     declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
@@ -49,6 +60,11 @@ function load_abbrs_from_file() {
 }
 
 function _check_abbrs() {
+    if ! type abbr >/dev/null 2>&1; then
+        #Install zsh-abbr to use this
+        #https://zsh-abbr.olets.dev/
+        return
+    fi
     local typed="$1"
     # Directly using the typed command to look up its abbreviation
     local abbr_match="${abbrs[$typed]}"
@@ -356,7 +372,9 @@ function disable_you_should_use() {
     add-zsh-hook -D preexec _check_global_aliases
     add-zsh-hook -D preexec _check_git_aliases
     add-zsh-hook -D precmd _flush_ysu_buffer
-    add-zsh-hook -D preexec _check_abbrs
+    if type abbr >/dev/null 2>&1; then
+        add-zsh-hook -D preexec _check_abbrs
+    fi
 }
 
 function enable_you_should_use() {
@@ -365,9 +383,14 @@ function enable_you_should_use() {
     add-zsh-hook preexec _check_global_aliases
     add-zsh-hook preexec _check_git_aliases
     add-zsh-hook precmd _flush_ysu_buffer
-    add-zsh-hook preexec _check_abbrs
+    if type abbr >/dev/null 2>&1; then
+        add-zsh-hook preexec _check_abbrs
+    fi
+    
 }
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
-load_abbrs
+if type abbr >/dev/null 2>&1; then
+   load_abbrs
+fi
