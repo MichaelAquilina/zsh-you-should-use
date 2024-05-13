@@ -95,7 +95,7 @@ function ysu_message() {
 
     # Determine message format based on message type and whether it's enabled
     case "$alias_type_arg" in
-        "used_alias")
+        "abbreviation")
             if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
                 DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$alias_arg\"${NONE}"
             fi
@@ -107,7 +107,7 @@ Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"
             fi
             ;;
-        "abbreviation")
+        "used_alias")
             if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
                 DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$alias_arg\"${YELLOW} -> ${PURPLE}\"$command_arg\"${NONE}"
             fi
@@ -213,6 +213,7 @@ function _check_global_aliases() {
     fi
 }
 
+
 function _check_aliases() {
     local typed="$1"
     local expanded="$2"
@@ -221,28 +222,10 @@ function _check_aliases() {
     local best_match_value=""
     local key
     local value
-    local found=false
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
         return
-    fi
-
-    if zstyle -T ':you-should-use:*' you_used_alias_enabled ; then
-        # Check if the first word of the typed command is an alias directly
-        for key in "${(@k)aliases}"; do
-            value="${aliases[$key]}"
-            if [[ "$first_word" = "$key" ]]; then  # Check if first word is exactly an alias
-                ysu_message "used_alias" "$key" "$value"  # Inform that the alias expands to the full command
-                found=true
-                break
-            fi
-        done
-
-        if $found; then
-            _check_ysu_hardcore
-            return
-        fi
     fi
 
     # Find alias matches
@@ -252,6 +235,14 @@ function _check_aliases() {
         # Skip ignored aliases
         if [[ ${YSU_IGNORED_ALIASES[(r)$key]} == "$key" ]]; then
             continue
+        fi
+
+        # Check if alias feature 'you_used_alias_enabled' is enabled
+        if zstyle -T ':you-should-use:*' you_used_alias_enabled; then
+            if [[ "$typed" = "$key" || "$typed" = "$key "* ]]; then
+                ysu_message "used_alias" "$value" "$key"
+                continue
+            fi
         fi
 
         if [[ "$typed" = "$value" || \
@@ -277,7 +268,6 @@ function _check_aliases() {
         fi
         fi
     done
-
 
     # Print result matches based on current mode
     if [[ "$YSU_MODE" = "ALL" ]]; then
@@ -385,8 +375,8 @@ function enable_you_should_use() {
 }
 
 zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_used_alias_enabled false
-zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
+zstyle ':you-should-use:*' you_used_alias_enabled true
+zstyle ':you-should-use:*' you_should_use_abbreviation_enabled true
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
