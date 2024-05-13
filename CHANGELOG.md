@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.7.4
+-----
+* Fix test failures when key and value are not split correctly (#132)
+
 1.7.3
 -----
 * Fix further issue where local variables would leak into users environment
