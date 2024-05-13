@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.7.3'
+export YSU_VERSION='1.7.4'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -88,7 +88,6 @@ function _flush_ysu_buffer() {
     _YSU_BUFFER=""
 }
 
-
 function ysu_message() {
     local alias_type_arg="${1}"
     local command_arg="${2}"
@@ -133,31 +132,6 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
     _write_ysu_buffer "$MESSAGE\n"
 }
 
-
-function ysu_message_og() {
-    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
-Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
-You should use: ${PURPLE}\"%alias\"${NONE}"
-
-    local alias_type_arg="${1}"
-    local command_arg="${2}"
-    local alias_arg="${3}"
-
-    # Escape arguments which will be interpreted by printf incorrectly
-    # unfortunately there does not seem to be a nice way to put this into
-    # a function because returning the values requires to be done by printf/echo!!
-    command_arg="${command_arg//\%/%%}"
-    command_arg="${command_arg//\\/\\\\}"
-
-    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
-    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
-    MESSAGE="${MESSAGE//\%command/$command_arg}"
-    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
-
-    _write_ysu_buffer "$MESSAGE\n"
-}
-
-
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
     if [[ "$YSU_HARDCORE" = 1 ]]; then
@@ -165,7 +139,6 @@ function _check_ysu_hardcore() {
         kill -s INT $$
     fi
 }
-
 
 function _check_git_aliases() {
     local typed="$1"
@@ -199,7 +172,6 @@ function _check_git_aliases() {
         fi
     fi
 }
-
 
 function _check_global_aliases() {
     local typed="$1"
@@ -244,9 +216,7 @@ function _check_global_aliases() {
 function _check_aliases() {
     local typed="$1"
     local expanded="$2"
-    local first_word="${typed%% *}"  # Extracts the first word from the typed command
-    local found_aliases
-    found_aliases=()
+    local found_aliases=()
     local best_match=""
     local best_match_value=""
     local key
