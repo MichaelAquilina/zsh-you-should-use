@@ -2,10 +2,6 @@
 
 export YSU_VERSION='1.7.3'
 
-zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_used_alias_enabled true
-zstyle ':you-should-use:*' you_should_use_abbreviation_enabled true
-
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
     printf "zsh-you-should-use will fallback to uncoloured messages\n"
@@ -16,90 +12,6 @@ else
     YELLOW="$(tput setaf 3)"
     PURPLE="$(tput setaf 5)"
 fi
-
-function load_abbrs() {
-    if ! type abbr >/dev/null 2>&1; then
-        #Install zsh-abbr to use this
-        #https://zsh-abbr.olets.dev/
-        return
-    fi
-
-    typeset -gA abbrs
-    local line abbr_cmd abbr_expansion
-
-    # Fetch abbreviation list directly using abbr list command
-    abbr list | while IFS="=" read -r abbr_cmd abbr_expansion; do
-        # Remove quotes around the command and expansion
-        abbr_cmd=${abbr_cmd//\"/}
-        abbr_expansion=${abbr_expansion//\"/}
-
-        # Store in associative array
-        abbrs[$abbr_cmd]=$abbr_expansion
-    done
-}
-
-
-function load_abbrs_from_file() {
-    if ! type abbr >/dev/null 2>&1; then
-        #Install zsh-abbr to use this
-        #https://zsh-abbr.olets.dev/
-        return
-    fi
-    # Fetch abbreviation list from file
-    local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
-    declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
-    local line abbr_cmd abbr_expansion
-
-    while IFS="" read -r line || [[ -n $line ]]; do
-        if [[ "$line" =~ ^abbr\ \"([^\"]+)\"\=\"([^\"]+)\" ]]; then
-            abbr_cmd=${match[1]}
-            abbr_expansion=${match[2]}
-            abbrs[$abbr_expansion]=$abbr_cmd
-        fi
-    done < "$abbr_file"
-}
-
-function _check_abbrs() {
-    if ! type abbr >/dev/null 2>&1; then
-        #Install zsh-abbr to use this
-        #https://zsh-abbr.olets.dev/
-        return
-    fi
-    local typed="$1"
-    # Directly using the typed command to look up its abbreviation
-    local abbr_match="${abbrs[$typed]}"
-
-    if [[ -n "$abbr_match" ]]; then
-        ysu_message "abbreviation" "$typed" "$abbr_match"
-        if [[ "$YSU_HARDCORE" = 1 ]]; then
-            _write_ysu_buffer "${BOLD}${RED}You Should Use abbreviation mode enabled. Use your abbreviation!${NONE}\n"
-            kill -s INT $$
-        fi
-    fi
-}
-
-function _check_aliases() {
-    local typed="$1"
-    local expanded="$2"
-    local first_word="${typed%% *}"
-    local found=false
-
-    for key in "${(@k)aliases}"; do
-        value="${aliases[$key]}"
-        if [[ "$first_word" == "$key" ]]; then
-            found=true
-            ysu_message "used alias" "$key" "$value"
-            break
-        fi
-    done
-
-    if $found; then
-        _check_ysu_hardcore
-    else
-        # Continue with other checks if not found
-        _find_and_recommend_aliases "$typed"
-    fi
-}
 
 function check_alias_usage() {
     # Optional parameter that limits how far back history is checked
@@ -176,40 +88,75 @@ function _flush_ysu_buffer() {
     _YSU_BUFFER=""
 }
 
-function ysu_message() {
-    local message_type="$1"
-    local command_arg="$2"
-    local abbreviation_arg="$3"
-    local DEFAULT_MESSAGE_FORMAT=""
 
-    # Escape arguments for safe output
-    command_arg="${command_arg//\%/%%}"
-    command_arg="${command_arg//\\/\\\\}"
-    abbreviation_arg="${abbreviation_arg//\%/%%}"
-    abbreviation_arg="${abbreviation_arg//\\/\\\\}"
+function ysu_message() {
+    local alias_type_arg="${1}"
+    local command_arg="${2}"
+    local alias_arg="${3}"
 
     # Determine message format based on message type and whether it's enabled
-    case "$message_type" in
-        "abbreviation")
+    case "$alias_type_arg" in
+        "used_alias")
             if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing abbreviation for ${PURPLE}\"$command_arg\"${YELLOW}. \
-You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$alias_arg\"${NONE}"
             fi
             ;;
         "alias")
             if zstyle -t ':you-should-use:*' you_should_use_alias_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}Found existing alias for ${PURPLE}\"$command_arg\"${YELLOW}. \
-You should use: ${PURPLE}\"$abbreviation_arg\"${NONE}"
+                    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
+You should use: ${PURPLE}\"%alias\"${NONE}"
             fi
             ;;
-        "used alias")
+        "abbreviation")
             if zstyle -t ':you-should-use:*' you_used_alias_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$abbreviation_arg\"${NONE}"
+                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$alias_arg\"${YELLOW} -> ${PURPLE}\"$command_arg\"${NONE}"
             fi
             ;;
+            *)
+            local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
+You should use: ${PURPLE}\"%alias\"${NONE}"
     esac
-    _write_ysu_buffer "$DEFAULT_MESSAGE_FORMAT\n"
+
+    # Escape arguments which will be interpreted by printf incorrectly
+    # unfortunately there does not seem to be a nice way to put this into
+    # a function because returning the values requires to be done by printf/echo!!
+    command_arg="${command_arg//\%/%%}"
+    command_arg="${command_arg//\\/\\\\}"
+
+    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
+    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
+    MESSAGE="${MESSAGE//\%command/$command_arg}"
+    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
+
+    _write_ysu_buffer "$MESSAGE\n"
 }
+
+
+function ysu_message_og() {
+    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
+Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
+You should use: ${PURPLE}\"%alias\"${NONE}"
+
+    local alias_type_arg="${1}"
+    local command_arg="${2}"
+    local alias_arg="${3}"
+
+    # Escape arguments which will be interpreted by printf incorrectly
+    # unfortunately there does not seem to be a nice way to put this into
+    # a function because returning the values requires to be done by printf/echo!!
+    command_arg="${command_arg//\%/%%}"
+    command_arg="${command_arg//\\/\\\\}"
+
+    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
+    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
+    MESSAGE="${MESSAGE//\%command/$command_arg}"
+    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
+
+    _write_ysu_buffer "$MESSAGE\n"
+}
+
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
@@ -218,6 +165,7 @@ function _check_ysu_hardcore() {
         kill -s INT $$
     fi
 }
+
 
 function _check_git_aliases() {
     local typed="$1"
@@ -233,6 +181,13 @@ function _check_git_aliases() {
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
             key="${key#alias.}"
 
+            # if for some reason, read does not split correctly, we
+            # detect that and manually split the key and value
+            if [[ -z "$value" ]]; then
+                value="${key#* }"
+                key="${key%% *}"
+            fi
+
             if [[ "$expanded" = "git $value" || "$expanded" = "git $value "* ]]; then
                 ysu_message "git alias" "$value" "git $key"
                 found=true
@@ -244,6 +199,7 @@ function _check_git_aliases() {
         fi
     fi
 }
+
 
 function _check_global_aliases() {
     local typed="$1"
@@ -288,9 +244,9 @@ function _check_global_aliases() {
 function _check_aliases() {
     local typed="$1"
     local expanded="$2"
-
     local first_word="${typed%% *}"  # Extracts the first word from the typed command
-    local found_aliases=()
+    local found_aliases
+    found_aliases=()
     local best_match=""
     local best_match_value=""
     local key
@@ -302,22 +258,24 @@ function _check_aliases() {
         return
     fi
 
-    # Check if the first word of the typed command is an alias directly
-    for key in "${(@k)aliases}"; do
-        value="${aliases[$key]}"
-        if [[ "$first_word" = "$key" ]]; then  # Check if first word is exactly an alias
-            ysu_message "used alias" "$key" "$value"  # Inform that the alias expands to the full command
-            found=true
-            break
-        fi
-    done
+    if zstyle -T ':you-should-use:*' you_used_alias_enabled ; then
+        # Check if the first word of the typed command is an alias directly
+        for key in "${(@k)aliases}"; do
+            value="${aliases[$key]}"
+            if [[ "$first_word" = "$key" ]]; then  # Check if first word is exactly an alias
+                ysu_message "used_alias" "$key" "$value"  # Inform that the alias expands to the full command
+                found=true
+                break
+            fi
+        done
 
-    if $found; then
-        _check_ysu_hardcore
-        return
+        if $found; then
+            _check_ysu_hardcore
+            return
+        fi
     fi
 
-    # Find alias matches based on the full command
+    # Find alias matches
     for key in "${(@k)aliases}"; do
         value="${aliases[$key]}"
 
@@ -326,25 +284,30 @@ function _check_aliases() {
             continue
         fi
 
-        if [[ "$first_word" = "$value" || "$first_word" = "$value "* ]]; then
-            # if the alias is longer or the same length as its command
-            # we assume that it is there to cater for typos.
-            # If not, then the alias would not save any time
-            # for the user and so doesn't hold much value anyway
-            if [[ "${#value}" -gt "${#key}" ]]; then
-                found_aliases+="$key"
-                # Match aliases to the longest portion of command
-                if [[ "${#value}" -gt "${#best_match_value}" ]]; then
-                    best_match="$key"
-                    best_match_value="$value"
-                # On equal length, choose the shortest alias
-                elif [[ "${#value}" -eq "${#best_match_value}" && ${#key} -lt "${#best_match}" ]]; then
-                    best_match="$key"
-                    best_match_value="$value"
-                fi
+        if [[ "$typed" = "$value" || \
+              "$typed" = "$value "* ]]; then
+
+        # if the alias longer or the same length as its command
+        # we assume that it is there to cater for typos.
+        # If not, then the alias would not save any time
+        # for the user and so doesn't hold much value anyway
+        if [[ "${#value}" -gt "${#key}" ]]; then
+
+            found_aliases+="$key"
+
+            # Match aliases to longest portion of command
+            if [[ "${#value}" -gt "${#best_match_value}" ]]; then
+                best_match="$key"
+                best_match_value="$value"
+            # on equal length, choose the shortest alias
+            elif [[ "${#value}" -eq "${#best_match}" && ${#key} -lt "${#best_match}" ]]; then
+                best_match="$key"
+                best_match_value="$value"
             fi
         fi
+        fi
     done
+
 
     # Print result matches based on current mode
     if [[ "$YSU_MODE" = "ALL" ]]; then
@@ -352,8 +315,9 @@ function _check_aliases() {
             value="${aliases[$key]}"
             ysu_message "alias" "$value" "$key"
         done
+
     elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
-        # Make sure that the best matched alias has not already
+        # make sure that the best matched alias has not already
         # been typed by the user
         value="${aliases[$best_match]}"
         if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
@@ -367,12 +331,74 @@ function _check_aliases() {
     fi
 }
 
+function load_abbrs() {
+    # Check if abbreviation feature is enabled
+    if ! zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
+        return
+    fi
+
+    # Check if zsh-abbr is installed
+    if ! type abbr >/dev/null 2>&1; then
+        echo "zsh-abbr is not installed or enabled. Install it from https://zsh-abbr.olets.dev/ to use this feature."
+        # Attempt to load from file if abbr command is not available
+        load_abbrs_from_file
+        return
+    fi
+
+    # Load abbreviations using abbr command
+    typeset -gA abbrs
+    abbr list | while IFS="=" read -r abbr_cmd abbr_expansion; do
+        # Process and remove outer quotes and extra spaces
+        abbr_cmd=$(echo "${abbr_cmd}" | tr -d '"' | xargs)
+        abbr_expansion=$(echo "${abbr_expansion}" | tr -d '"' | xargs)
+
+        # Store in associative array with command as key and abbreviation as value
+        abbrs[$abbr_expansion]=$abbr_cmd
+    done
+}
+
+function load_abbrs_from_file() {
+    local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
+    if [[ -z ${ABBR_USER_ABBREVIATIONS_FILE:-} && ! -f ${ABBR_USER_ABBREVIATIONS_FILE:-} ]]; then
+        echo "zsh-abbr is not installed or enabled. Install it from https://zsh-abbr.olets.dev/ to use this feature."
+        zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
+        return
+    fi
+    declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
+    local line abbr_cmd abbr_expansion
+
+    while IFS="" read -r line || [[ -n $line ]]; do
+        if [[ "$line" =~ ^abbr\ \"([^\"]+)\"\=\"([^\"]+)\" ]]; then
+            abbr_cmd=${BASH_REMATCH[1]}
+            abbr_expansion=${BASH_REMATCH[2]}
+            abbrs[$abbr_expansion]=$abbr_cmd
+        fi
+    done < "$abbr_file"
+}
+
+function _check_abbrs() {
+    if ! zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
+        return
+    fi
+    local typed="$1"
+    # Directly using the typed command to look up its abbreviation
+    local abbr_match="${abbrs[$typed]}"
+
+    if [[ -n "$abbr_match" ]]; then
+        ysu_message "abbreviation" "$typed" "$abbr_match"
+        if [[ "$YSU_HARDCORE" = 1 ]]; then
+            _write_ysu_buffer "${BOLD}${RED}You Should Use abbreviation mode enabled. Use your abbreviation!${NONE}\n"
+            kill -s INT $$
+        fi
+    fi
+}
+
 function disable_you_should_use() {
     add-zsh-hook -D preexec _check_aliases
     add-zsh-hook -D preexec _check_global_aliases
     add-zsh-hook -D preexec _check_git_aliases
     add-zsh-hook -D precmd _flush_ysu_buffer
-    if type abbr >/dev/null 2>&1; then
+    if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
         add-zsh-hook -D preexec _check_abbrs
     fi
 }
@@ -383,14 +409,18 @@ function enable_you_should_use() {
     add-zsh-hook preexec _check_global_aliases
     add-zsh-hook preexec _check_git_aliases
     add-zsh-hook precmd _flush_ysu_buffer
-    if type abbr >/dev/null 2>&1; then
+    if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
         add-zsh-hook preexec _check_abbrs
     fi
-    
 }
+
+zstyle ':you-should-use:*' you_should_use_alias_enabled true
+zstyle ':you-should-use:*' you_used_alias_enabled false
+zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
-if type abbr >/dev/null 2>&1; then
-   load_abbrs
+if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
+    load_abbrs
 fi
+
