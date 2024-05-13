@@ -92,7 +92,7 @@ function ysu_message() {
     local alias_type_arg="${1}"
     local command_arg="${2}"
     local alias_arg="${3}"
-
+    DEFAULT_MESSAGE_FORMAT=""
     # Determine message format based on message type and whether it's enabled
     case "$alias_type_arg" in
         "abbreviation")
@@ -245,45 +245,48 @@ function _check_aliases() {
             fi
         fi
 
-        if [[ "$typed" = "$value" || \
-              "$typed" = "$value "* ]]; then
+        # Check if alias feature 'you_used_alias_enabled' is enabled
+        if zstyle -T ':you-should-use:*' you_should_use_alias_enabled; then
+            if [[ "$typed" = "$value" || \
+                  "$typed" = "$value "* ]]; then
+                # if the alias longer or the same length as its command
+                # we assume that it is there to cater for typos.
+                # If not, then the alias would not save any time
+                # for the user and so doesn't hold much value anyway
+                if [[ "${#value}" -gt "${#key}" ]]; then
 
-        # if the alias longer or the same length as its command
-        # we assume that it is there to cater for typos.
-        # If not, then the alias would not save any time
-        # for the user and so doesn't hold much value anyway
-        if [[ "${#value}" -gt "${#key}" ]]; then
+                    found_aliases+="$key"
 
-            found_aliases+="$key"
-
-            # Match aliases to longest portion of command
-            if [[ "${#value}" -gt "${#best_match_value}" ]]; then
-                best_match="$key"
-                best_match_value="$value"
-            # on equal length, choose the shortest alias
-            elif [[ "${#value}" -eq "${#best_match}" && ${#key} -lt "${#best_match}" ]]; then
-                best_match="$key"
-                best_match_value="$value"
+                    # Match aliases to longest portion of command
+                    if [[ "${#value}" -gt "${#best_match_value}" ]]; then
+                        best_match="$key"
+                        best_match_value="$value"
+                    # on equal length, choose the shortest alias
+                    elif [[ "${#value}" -eq "${#best_match}" && ${#key} -lt "${#best_match}" ]]; then
+                        best_match="$key"
+                        best_match_value="$value"
+                    fi
+                fi
             fi
         fi
-        fi
     done
+    if zstyle -T ':you-should-use:*' you_should_use_alias_enabled; then
+        # Print result matches based on current mode
+        if [[ "$YSU_MODE" = "ALL" ]]; then
+            for key in ${(@ok)found_aliases}; do
+                value="${aliases[$key]}"
+                ysu_message "alias" "$value" "$key"
+            done
 
-    # Print result matches based on current mode
-    if [[ "$YSU_MODE" = "ALL" ]]; then
-        for key in ${(@ok)found_aliases}; do
-            value="${aliases[$key]}"
-            ysu_message "alias" "$value" "$key"
-        done
-
-    elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
-        # make sure that the best matched alias has not already
-        # been typed by the user
-        value="${aliases[$best_match]}"
-        if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
-            return
+        elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
+            # make sure that the best matched alias has not already
+            # been typed by the user
+            value="${aliases[$best_match]}"
+            if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
+                return
+            fi
+            ysu_message "alias" "$value" "$best_match"
         fi
-        ysu_message "alias" "$value" "$best_match"
     fi
 
     if [[ -n "$found_aliases" ]]; then
