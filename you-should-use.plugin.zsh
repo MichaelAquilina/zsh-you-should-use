@@ -135,6 +135,13 @@ function _check_git_aliases() {
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
             key="${key#alias.}"
 
+            # if for some reason, read does not split correctly, we
+            # detect that and manually split the key and value
+            if [[ -z "$value" ]]; then
+                value="${key#* }"
+                key="${key%% *}"
+            fi
+
             if [[ "$expanded" = "git $value" || "$expanded" = "git $value "* ]]; then
                 ysu_message "git alias" "$value" "git $key"
                 found=true
