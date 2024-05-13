@@ -220,8 +220,8 @@ function _check_aliases() {
     local found_aliases=()
     local best_match=""
     local best_match_value=""
-    local key
-    local value
+    local key=""
+    local value=""
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
