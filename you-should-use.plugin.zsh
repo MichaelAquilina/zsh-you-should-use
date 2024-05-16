@@ -89,10 +89,6 @@ function _flush_ysu_buffer() {
 }
 
 function ysu_message() {
-    local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
-Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
-You should use: ${PURPLE}\"%alias\"${NONE}"
-
     local alias_type_arg="${1}"
     local command_arg="${2}"
     local alias_arg="${3}"
@@ -117,12 +113,18 @@ Found existing %alias_type for ${PURPLE}\"%command\"${YELLOW}. \
 You should use: ${PURPLE}\"%alias\"${NONE}"
     esac
 
-# Prevent command from running if hardcore mode enabled
-function _check_ysu_hardcore() {
-    if [[ "$YSU_HARDCORE" = 1 ]]; then
-        _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
-        kill -s INT $$
-    fi
+    # Escape arguments which will be interpreted by printf incorrectly
+    # unfortunately there does not seem to be a nice way to put this into
+    # a function because returning the values requires to be done by printf/echo!!
+    command_arg="${command_arg//\%/%%}"
+    command_arg="${command_arg//\\/\\\\}"
+
+    local MESSAGE="${YSU_MESSAGE_FORMAT:-"$DEFAULT_MESSAGE_FORMAT"}"
+    MESSAGE="${MESSAGE//\%alias_type/$alias_type_arg}"
+    MESSAGE="${MESSAGE//\%command/$command_arg}"
+    MESSAGE="${MESSAGE//\%alias/$alias_arg}"
+
+    _write_ysu_buffer "$MESSAGE\n"
 }
 
 
