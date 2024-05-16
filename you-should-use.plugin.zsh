@@ -95,11 +95,6 @@ function ysu_message() {
     DEFAULT_MESSAGE_FORMAT=""
     # Determine message format based on message type and whether it's enabled
     case "$alias_type_arg" in
-        "abbreviation")
-            if zstyle -t ':you-should-use:*' you_should_use_abbreviation_enabled; then
-                DEFAULT_MESSAGE_FORMAT="${BOLD} ${PURPLE}\"$command_arg\"${YELLOW} -> ${PURPLE}\"$alias_arg\"${NONE}"
-            fi
-            ;;
         "alias")
             if zstyle -t ':you-should-use:*' you_should_use_alias_enabled; then
                     local DEFAULT_MESSAGE_FORMAT="${BOLD}${YELLOW}\
@@ -294,76 +289,11 @@ function _check_aliases() {
     fi
 }
 
-function load_abbrs() {
-    # Check if abbreviation feature is enabled
-    if ! zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
-        return
-    fi
-
-    # Check if zsh-abbr is installed
-    if ! type abbr >/dev/null 2>&1; then
-        echo "zsh-abbr is not installed or enabled. Install it from https://zsh-abbr.olets.dev/ to use this feature."
-        # Attempt to load from file if abbr command is not available
-        load_abbrs_from_file
-        return
-    fi
-
-    # Load abbreviations using abbr command
-    typeset -gA abbrs
-    abbr list | while IFS="=" read -r abbr_cmd abbr_expansion; do
-        # Process and remove outer quotes and extra spaces
-        abbr_cmd=$(echo "${abbr_cmd}" | tr -d '"' | xargs)
-        abbr_expansion=$(echo "${abbr_expansion}" | tr -d '"' | xargs)
-
-        # Store in associative array with command as key and abbreviation as value
-        abbrs[$abbr_expansion]=$abbr_cmd
-    done
-}
-
-function load_abbrs_from_file() {
-    local abbr_file="$ABBR_USER_ABBREVIATIONS_FILE"
-    if [[ -z ${ABBR_USER_ABBREVIATIONS_FILE:-} && ! -f ${ABBR_USER_ABBREVIATIONS_FILE:-} ]]; then
-        echo "zsh-abbr is not installed or enabled. Install it from https://zsh-abbr.olets.dev/ to use this feature."
-        zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
-        return
-    fi
-    declare -gA abbrs   # Ensure 'abbrs' is declared as a global associative array
-    local line abbr_cmd abbr_expansion
-
-    while IFS="" read -r line || [[ -n $line ]]; do
-        if [[ "$line" =~ ^abbr\ \"([^\"]+)\"\=\"([^\"]+)\" ]]; then
-            abbr_cmd=${BASH_REMATCH[1]}
-            abbr_expansion=${BASH_REMATCH[2]}
-            abbrs[$abbr_expansion]=$abbr_cmd
-        fi
-    done < "$abbr_file"
-}
-
-function _check_abbrs() {
-    if ! zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
-        return
-    fi
-    local typed="$1"
-    # Directly using the typed command to look up its abbreviation
-    local abbr_match="${abbrs[$typed]}"
-
-    if [[ -n "$abbr_match" ]]; then
-        ysu_message "abbreviation" "$typed" "$abbr_match"
-        if [[ "$YSU_HARDCORE" = 1 ]]; then
-            _write_ysu_buffer "${BOLD}${RED}You Should Use abbreviation mode enabled. Use your abbreviation!${NONE}\n"
-            kill -s INT $$
-        fi
-    fi
-}
-
 function disable_you_should_use() {
     add-zsh-hook -D preexec _check_aliases
     add-zsh-hook -D preexec _check_global_aliases
     add-zsh-hook -D preexec _check_git_aliases
     add-zsh-hook -D precmd _flush_ysu_buffer
-    if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
-        add-zsh-hook -D preexec _check_abbrs
-    fi
 }
 
 function enable_you_should_use() {
@@ -372,16 +302,11 @@ function enable_you_should_use() {
     add-zsh-hook preexec _check_global_aliases
     add-zsh-hook preexec _check_git_aliases
     add-zsh-hook precmd _flush_ysu_buffer
-    if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
-        add-zsh-hook preexec _check_abbrs
-    fi
+
 }
 
 zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
+zstyle ':you-should-use:*' you_used_alias_enabled false
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
-if zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
-    load_abbrs
-fi
