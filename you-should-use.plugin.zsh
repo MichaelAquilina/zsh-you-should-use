@@ -271,6 +271,7 @@ function _check_aliases() {
         _check_ysu_hardcore
     fi
 }
+
 function load_abbrs() {
     # Check if abbreviation feature is enabled
     if ! zstyle -T ':you-should-use:*' you_should_use_abbreviation_enabled; then
@@ -355,7 +356,6 @@ function enable_you_should_use() {
 }
 
 zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_used_alias_enabled false
 zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
 
 autoload -Uz add-zsh-hook
