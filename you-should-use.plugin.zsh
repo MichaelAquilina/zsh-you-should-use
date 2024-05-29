@@ -366,7 +366,7 @@ function enable_you_should_use() {
 }
 
 zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_should_use_abbreviation_enabled true
+zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
