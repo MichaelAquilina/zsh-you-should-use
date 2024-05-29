@@ -40,7 +40,7 @@ function check_alias_usage() {
         for entry in ${(@s/|/)line}; do
             # Remove leading whitespace
             # TODO: This is extremely slow
-            entry="$(echo "$entry" | sed -e 's/^ *//')"
+            entry="${entry## }"
 
             # We only care about the first word because that's all aliases work with
             # (this does not count global and git aliases)
@@ -187,7 +187,6 @@ function _check_global_aliases() {
     alias -g | sort | while read entry; do
         tokens=("${(@s/=/)entry}")
         key="${tokens[1]}"
-        # Need to remove leading and trailing ' if they exist
         value="${(Q)tokens[2]}"
 
         # Skip ignored global aliases
@@ -298,8 +297,12 @@ function load_abbrs() {
     typeset -gA abbrs
     abbr list | while IFS="=" read -r abbr_cmd abbr_expansion; do
         # Process and remove outer quotes and extra spaces
-        abbr_cmd=$(echo "${abbr_cmd}" | tr -d '"' | xargs)
-        abbr_expansion=$(echo "${abbr_expansion}" | tr -d '"' | xargs)
+        abbr_cmd="${abbr_cmd//\"/}"
+        abbr_cmd="${abbr_cmd## }"
+        abbr_cmd="${abbr_cmd%% }"
+        abbr_expansion="${abbr_expansion//\"/}"
+        abbr_expansion="${abbr_expansion## }"
+        abbr_expansion="${abbr_expansion%% }"
 
         # Store in associative array with command as key and abbreviation as value
         abbrs[$abbr_expansion]=$abbr_cmd
@@ -330,7 +333,6 @@ function _check_abbrs() {
         return
     fi
     local typed="$1"
-    # Directly using the typed command to look up its abbreviation
     local abbr_match="${abbrs[$typed]}"
 
     if [[ -n "$abbr_match" ]]; then
@@ -364,7 +366,7 @@ function enable_you_should_use() {
 }
 
 zstyle ':you-should-use:*' you_should_use_alias_enabled true
-zstyle ':you-should-use:*' you_should_use_abbreviation_enabled false
+zstyle ':you-should-use:*' you_should_use_abbreviation_enabled true
 
 autoload -Uz add-zsh-hook
 enable_you_should_use
