@@ -35,8 +35,8 @@ function check_alias_usage() {
         total=$limit
     fi
 
+    local entry
     <"$HISTFILE" | tail "-$limit" | cut -d";" -f2 | while read line; do
-        local entry
         for entry in ${(@s/|/)line}; do
             # Remove leading whitespace
             # TODO: This is extremely slow
@@ -54,7 +54,7 @@ function check_alias_usage() {
 
         # print current progress
         let "current = current + 1"
-        printf "[$current/$total]\r"
+        printf "Analysing: [$current/$total]\r"
     done
     # Clear all previous line output
     printf "\r\033[K"
