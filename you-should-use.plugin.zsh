@@ -170,11 +170,10 @@ function _check_global_aliases() {
         return
     fi
 
-    alias -g | sort | while read entry; do
-        tokens=("${(@s/=/)entry}")
-        key="${tokens[1]}"
-        # Need to remove leading and trailing ' if they exist
-        value="${(Q)tokens[2]}"
+    alias -g | sort | while IFS="=" read -r key value; do
+        key="${key## }"
+        key="${key%% }"
+        value="${(Q)value}"
 
         # Skip ignored global aliases
         if [[ ${YSU_IGNORED_GLOBAL_ALIASES[(r)$key]} == "$key" ]]; then
