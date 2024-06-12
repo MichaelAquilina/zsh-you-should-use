@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.7.5
+-----
+* Minor optimization to the way global aliases are checked (#135)
+
 1.7.4
 -----
 * Fix test failures when key and value are not split correctly (#132)
