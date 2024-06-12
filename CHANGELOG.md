@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.8.0
+-----
+* Fix bug in `check_alias_usage` command which would spam `entry=` to stdout
+
 1.7.5
 -----
 * Minor optimization to the way global aliases are checked (#135)
