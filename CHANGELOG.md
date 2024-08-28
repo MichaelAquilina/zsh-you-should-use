@@ -1,6 +1,11 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.9.0
+-----
+* massive performance improvement to `check_alias_usage` #139 (Thanks @AtifChy!)
+* remove dependency on `wc`
+
 1.8.0
 -----
 * Fix bug in `check_alias_usage` command which would spam `entry=` to stdout
