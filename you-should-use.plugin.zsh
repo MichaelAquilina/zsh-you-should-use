@@ -130,6 +130,10 @@ function _check_git_aliases() {
         return
     fi
 
+    # should be after the sudo check!
+    typed="$(_filter_prefixes $1)"
+    expanded="$(_filter_prefixes $2)"
+
     if [[ "$typed" = "git "* ]]; then
         local found=false
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
@@ -156,8 +160,8 @@ function _check_git_aliases() {
 
 
 function _check_global_aliases() {
-    local typed="$1"
-    local expanded="$2"
+    local typed="$(_filter_prefixes $1)"
+    local expanded="$(_filter_prefixes $2)"
 
     local found=false
     local tokens
@@ -194,10 +198,20 @@ function _check_global_aliases() {
     fi
 }
 
+function _filter_prefixes() {
+    local value="$1"
+
+    if [[ "$value" = "sudo "* ]]; then
+        print "${value#"sudo "}"
+    else
+        print "$value"
+    fi
+}
+
 
 function _check_aliases() {
-    local typed="$1"
-    local expanded="$2"
+    local typed="$(_filter_prefixes $1)"
+    local expanded="$(_filter_prefixes $2)"
 
     local found_aliases
     found_aliases=()
