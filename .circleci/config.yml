@@ -92,3 +92,4 @@ workflows:
       - test-zsh-5.6
       - test-zsh-5.7
       - test-zsh-5.8
+      - test-zsh-5.9

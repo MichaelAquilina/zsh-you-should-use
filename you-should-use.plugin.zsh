@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.7.3'
+export YSU_VERSION='1.9.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -16,8 +16,7 @@ fi
 function check_alias_usage() {
     # Optional parameter that limits how far back history is checked
     # I've chosen a large default value instead of bypassing tail because it's simpler
-    # TODO: this should probably be cleaned up
-    local limit="${1:-9000000000000000}"
+    local limit="${1:-${HISTSIZE:-9000000000000000}}"
     local key
 
     declare -A usage
@@ -29,39 +28,40 @@ function check_alias_usage() {
     # Handle and (&&) + (&)
     # others? watch, time etc...
 
+    local -a histfile_lines
+    histfile_lines=("${(@f)$(<$HISTFILE)}")
+    histfile_lines=("${histfile_lines[@]#*;}")
+
     local current=0
-    local total=$(wc -l < "$HISTFILE")
+    local total=${#histfile_lines}
     if [[ $total -gt $limit ]]; then
         total=$limit
     fi
 
-    <"$HISTFILE" | tail "-$limit" | cut -d";" -f2 | while read line; do
-        local entry
+    local entry
+    for line in ${histfile_lines[@]} ; do
         for entry in ${(@s/|/)line}; do
             # Remove leading whitespace
-            # TODO: This is extremely slow
-            entry="$(echo "$entry" | sed -e 's/^ *//')"
+            entry=${entry##*[[:space:]]}
 
             # We only care about the first word because that's all aliases work with
             # (this does not count global and git aliases)
             local word=${entry[(w)1]}
             if [[ -n ${usage[$word]} ]]; then
-                local prev=$usage[$word]
-                let "prev = prev + 1 "
-                usage[$word]=$prev
+                (( usage[$word]++ ))
             fi
         done
 
         # print current progress
-        let "current = current + 1"
-        printf "[$current/$total]\r"
+        (( current++ ))
+        printf "Analysing: [$current/$total]\r"
     done
     # Clear all previous line output
     printf "\r\033[K"
 
     # Print ordered usage
     for key in ${(k)usage}; do
-        echo "${usage[$key]}: $key='${aliases[$key]}'"
+        echo "${usage[$key]}: ${(q+)key}=${(q+)aliases[$key]}"
     done | sort -rn -k1
 }
 
@@ -114,7 +114,7 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
-    if [[ "$YSU_HARDCORE" = 1 ]]; then
+    if (( ${+YSU_HARDCORE} )); then
         _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
         kill -s INT $$
     fi
@@ -134,6 +134,13 @@ function _check_git_aliases() {
         local found=false
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
             key="${key#alias.}"
+
+            # if for some reason, read does not split correctly, we
+            # detect that and manually split the key and value
+            if [[ -z "$value" ]]; then
+                value="${key#* }"
+                key="${key%% *}"
+            fi
 
             if [[ "$expanded" = "git $value" || "$expanded" = "git $value "* ]]; then
                 ysu_message "git alias" "$value" "git $key"
@@ -163,11 +170,10 @@ function _check_global_aliases() {
         return
     fi
 
-    alias -g | sort | while read entry; do
-        tokens=("${(@s/=/)entry}")
-        key="${tokens[1]}"
-        # Need to remove leading and trailing ' if they exist
-        value="${(Q)tokens[2]}"
+    alias -g | sort | while IFS="=" read -r key value; do
+        key="${key## }"
+        key="${key%% }"
+        value="${(Q)value}"
 
         # Skip ignored global aliases
         if [[ ${YSU_IGNORED_GLOBAL_ALIASES[(r)$key]} == "$key" ]]; then
@@ -214,8 +220,7 @@ function _check_aliases() {
             continue
         fi
 
-        if [[ "$typed" = "$value" || \
-              "$typed" = "$value "* ]]; then
+        if [[ "$typed" = "$value" || "$typed" = "$value "* ]]; then
 
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.

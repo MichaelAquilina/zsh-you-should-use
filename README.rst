@@ -81,14 +81,6 @@ Zgen_
 
     zgen load "MichaelAquilina/zsh-you-should-use"
 
-Fig_
-
-Install ``zsh-you-should-use`` with Fig in just one click.
-
-.. image:: https://fig.io/badges/install-with-fig.svg
-  :target: https://fig.io/plugins/other/zsh-you-should-use_MichaelAquilina
-  :alt: Install with Fig
-
 oh-my-zsh_
 
 Clone this repository into ``$ZSH_CUSTOM/custom/plugins``:
