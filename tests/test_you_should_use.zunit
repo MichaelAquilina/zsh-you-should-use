@@ -6,6 +6,9 @@
 }
 
 @test 'ysu version exported' {
+    (( $+commands[git] )) || skip "git not found"
+    [ -d ".git" ] || skip "not in git repo"
+
     git_version="$(git tag --list | sort | tail -1)"
     git tag --list
 
