@@ -124,7 +124,7 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
     MESSAGE="${MESSAGE//\%command/$command_arg}"
     MESSAGE="${MESSAGE//\%alias/$alias_arg}"
 
-    _write_ysu_buffer "$MESSAGE\n"
+    [[ -n $MESSAGE ]] && _write_ysu_buffer "$MESSAGE\n"
 }
 
 # Prevent command from running if hardcore mode enabled
