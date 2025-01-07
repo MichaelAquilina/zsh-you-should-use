@@ -87,7 +87,7 @@ Clone this repository into ``$ZSH_CUSTOM/custom/plugins``:
 
 .. code-block:: sh
 
-    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
+    git clone https://github.com/MichaelAquilina/zsh-you-should-use.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/you-should-use
 
 ``$ZSH_CUSTOM`` is oh-my-zsh’s customization directory (`docs <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`__).
 
