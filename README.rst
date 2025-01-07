@@ -83,7 +83,7 @@ Zgen_
 
 oh-my-zsh_
 
-Clone this repository into ``$ZSH_CUSTOM/custom/plugins``:
+Clone this repository into ``$ZSH_CUSTOM/plugins``:
 
 .. code-block:: sh
 
