@@ -21,6 +21,7 @@ Customization
 Advanced Features
 
 * `Hardcore Mode`_
+* `Hardcore Mode for specific Aliases`_
 * `Check your Alias usage`_
 * `Disable Hints for specific Aliases`_
 * `Temporarily Disabling Messages`_
@@ -193,6 +194,40 @@ it, zsh will refuse to execute that command:
     total 8.0K
     -rw-r--r-- 1 michael users 2.4K Jun 19 20:46 README.md
     -rw-r--r-- 1 michael users  650 Jun 19 20:42 you-should-use.plugin.zsh
+
+Hardcore Mode for specific Aliases
+----------------------------------
+
+If you want hardcore mode behavior but only for specific aliases, you can use ``YSU_HARDCORE_ALIASES``.
+This allows you to selectively enforce specific aliases without enabling full hardcore mode.
+
+Set ``YSU_HARDCORE_ALIASES`` to an array of alias names that should trigger hardcore behavior:
+
+::
+
+    export YSU_HARDCORE_ALIASES=("gs" "ll" "gco")
+
+Now when you type a command that matches one of these specific aliases, zsh will refuse to execute it:
+
+::
+
+    $ export YSU_HARDCORE_ALIASES=("gs" "ll")
+    $ git status
+    Found existing alias for "git status". You should use: "gs"
+    You Should Use hardcore mode enabled. Use your aliases!
+    $ ls -lh
+    Found existing alias for "ls -lh". You should use: "ll" 
+    You Should Use hardcore mode enabled. Use your aliases!
+    $ git checkout main
+    Found existing alias for "git checkout". You should use: "gco"
+    # This command executes normally since "gco" is not in YSU_HARDCORE_ALIASES
+
+**NOTE:** ``YSU_HARDCORE_ALIASES`` only works when ``YSU_HARDCORE`` is not set. If ``YSU_HARDCORE`` is
+enabled, it takes precedence and will enforce all aliases.
+
+**IMPORTANT:** Aliases listed in ``YSU_IGNORED_ALIASES`` (`Disable Hints for specific Aliases`_) will
+take precedence over ``YSU_HARDCORE_ALIASES``. If an alias is in both lists, it will be ignored and
+won't trigger hardcore mode.
 
 Check your Alias usage
 ----------------------

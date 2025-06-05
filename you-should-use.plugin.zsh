@@ -114,7 +114,9 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
 
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
-    if (( ${+YSU_HARDCORE} )); then
+    local alias_name="$1"
+    
+    if (( ${+YSU_HARDCORE} )) || [[ ${YSU_HARDCORE_ALIASES[(r)$alias_name]} == "$alias_name" ]]; then
         _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
         kill -s INT $$
     fi
@@ -248,6 +250,7 @@ function _check_aliases() {
         for key in ${(@ok)found_aliases}; do
             value="${aliases[$key]}"
             ysu_message "alias" "$value" "$key"
+            _check_ysu_hardcore "$key"
         done
 
     elif [[ (-z "$YSU_MODE" || "$YSU_MODE" = "BESTMATCH") && -n "$best_match" ]]; then
@@ -258,10 +261,7 @@ function _check_aliases() {
             return
         fi
         ysu_message "alias" "$value" "$best_match"
-    fi
-
-    if [[ -n "$found_aliases" ]]; then
-        _check_ysu_hardcore
+        _check_ysu_hardcore "$best_match"
     fi
 }
 
