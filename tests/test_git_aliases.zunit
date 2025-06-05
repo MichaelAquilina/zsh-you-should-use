@@ -5,34 +5,42 @@
     YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
     unset YSU_MESSAGE_POSITION
 
-    if [[ ! -f ~/.gitconfig ]]; then
-        touch ~/.gitconfig
-    fi
+    # Exit code for hardcore mode
+    HARDCORE_EXIT_CODE=130
 
-    # Remove use git configuration which may interfere with tests
-    mv ~/.gitconfig ~/.gitconfig.bak
-    touch ~/.gitconfig
+    # Mock the kill command to avoid killing the test process
+    function kill() { echo "kill called with: $*"; return $HARDCORE_EXIT_CODE; }
+
+    # Create isolated git environment using only GIT_CONFIG_GLOBAL
+    export GIT_CONFIG_GLOBAL="$(mktemp)"
+    export GIT_CONFIG_NOSYSTEM=1
 }
 
 @teardown {
-    # Restore users git configuration
-    mv ~/.gitconfig.bak ~/.gitconfig
+   # Remove the temporary git config file created for the test
+   if [[ -n "$GIT_CONFIG_GLOBAL" && -f "$GIT_CONFIG_GLOBAL" ]]; then
+      rm -f "$GIT_CONFIG_GLOBAL"
+   fi
+
+   # Unset environment variables to clean up the test environment
+   unset GIT_CONFIG_GLOBAL
+   unset GIT_CONFIG_NOSYSTEM
 }
 
 @test 'git aliases not triggered by aliased git commands' {
    git config --global alias.co checkout
    run _check_git_aliases "gco" "git checkout"
 
-   assert $state equals 0
    assert "$output" is_empty
+   assert $state equals 0
 }
 
 @test 'git aliases not triggred by non git commands' {
    git config --global alias.cp cherry-pick
    run _check_git_aliases "ls -l" "ls -l"
 
-   assert $state equals 0
    assert "$output" is_empty
+   assert $state equals 0
 }
 
 @test 'git aliases no match' {
@@ -47,7 +55,7 @@
    run _check_git_aliases "git config --list" "git config --list"
 
    assert "$output" contains 'Found existing git alias for "config". You should use: "git cfg"'
-   assert $state equals 0
+   assert $state equals $HARDCORE_EXIT_CODE
 }
 
 @test 'git aliases ignore on sudo' {
@@ -63,15 +71,16 @@
    run _check_git_aliases "git status" "git status"
 
    assert "$output" contains 'Found existing git alias for "status". You should use: "git st"'
-   assert $state equals 0
+   assert $state equals $HARDCORE_EXIT_CODE
 }
 
 @test 'git aliases match parameters' {
    git config --global alias.recommit "commit --amend --reuse-message=HEAD"
+   
    run _check_git_aliases "git commit --amend --reuse-message=HEAD" "git commit --amend --reuse-message=HEAD"
 
    assert "$output" contains 'Found existing git alias for "commit --amend --reuse-message=HEAD". You should use: "git recommit"'
-   assert $state equals 0
+   assert $state equals $HARDCORE_EXIT_CODE
 }
 
 @test 'git aliases not triggered when parameters are different' {
@@ -81,3 +90,4 @@
    assert "$output" is_empty
    assert $state equals 0
 }
+
