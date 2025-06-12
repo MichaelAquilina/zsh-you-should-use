@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export YSU_VERSION='1.9.0'
+export YSU_VERSION='1.10.0'
 
 if ! type "tput" > /dev/null; then
     printf "WARNING: tput command not found on your PATH.\n"
@@ -115,7 +115,7 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
 # Prevent command from running if hardcore mode enabled
 function _check_ysu_hardcore() {
     local alias_name="$1"
-    
+
     if (( ${+YSU_HARDCORE} )) || [[ ${YSU_HARDCORE_ALIASES[(r)$alias_name]} == "$alias_name" ]]; then
         _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
         kill -s INT $$

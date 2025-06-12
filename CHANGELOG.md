@@ -1,6 +1,12 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.10.0
+------
+* Add support for hardcore mode on specific aliases via `YSU_HARDCORE_ALIASES`
+* Improvements to zunit setup and teardown
+* thankyou to @mattarau for this release!
+
 1.9.0
 -----
 * massive performance improvement to `check_alias_usage` #139 (Thanks @AtifChy!)
