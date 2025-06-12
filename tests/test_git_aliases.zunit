@@ -1,32 +1,5 @@
 #!/usr/bin/env zunit
 
-@setup {
-    load "../you-should-use.plugin.zsh"
-    YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
-    unset YSU_MESSAGE_POSITION
-
-    # Exit code for hardcore mode
-    HARDCORE_EXIT_CODE=130
-
-    # Mock the kill command to avoid killing the test process
-    function kill() { echo "kill called with: $*"; return $HARDCORE_EXIT_CODE; }
-
-    # Create isolated git environment using only GIT_CONFIG_GLOBAL
-    export GIT_CONFIG_GLOBAL="$(mktemp)"
-    export GIT_CONFIG_NOSYSTEM=1
-}
-
-@teardown {
-   # Remove the temporary git config file created for the test
-   if [[ -n "$GIT_CONFIG_GLOBAL" && -f "$GIT_CONFIG_GLOBAL" ]]; then
-      rm -f "$GIT_CONFIG_GLOBAL"
-   fi
-
-   # Unset environment variables to clean up the test environment
-   unset GIT_CONFIG_GLOBAL
-   unset GIT_CONFIG_NOSYSTEM
-}
-
 @test 'git aliases not triggered by aliased git commands' {
    git config --global alias.co checkout
    run _check_git_aliases "gco" "git checkout"

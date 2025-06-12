@@ -1,8 +1,6 @@
 #!/usr/bin/env zunit
 
 @setup {
-    load "../you-should-use.plugin.zsh"
-    unset YSU_MESSAGE_POSITION
     _YSU_BUFFER=""
 }
 

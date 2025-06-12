@@ -1,21 +1,5 @@
 #!/usr/bin/env zunit
 
-@setup {
-    load "../you-should-use.plugin.zsh"
-    # Simplify format for tests
-    YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
-    unset YSU_MESSAGE_POSITION
-    
-    # Exit code for hardcore mode
-    HARDCORE_EXIT_CODE=130
-    
-    # Mock the kill command to avoid killing the test process
-    function kill() { echo "kill called with: $*"; return $HARDCORE_EXIT_CODE; }
-}
-
-@teardown {
-}
-
 @test 'global aliases no match' {
     alias -g hw="Hello World!"
     run _check_global_aliases "echo 'hello'"
