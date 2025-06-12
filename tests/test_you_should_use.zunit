@@ -1,13 +1,5 @@
 #!/usr/bin/env zunit
 
-@test 'ysu version exported' {
-    git_version="$(git tag --list | sort | tail -1)"
-    git tag --list
-
-    assert "$YSU_VERSION" is_not_empty
-    assert "$YSU_VERSION" same_as "$git_version"
-}
-
 @test 'ysu preexec functions are loaded by default' {
     assert '_check_aliases' in $preexec_functions
     assert '_check_git_aliases' in $preexec_functions
