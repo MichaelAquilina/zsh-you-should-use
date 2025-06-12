@@ -36,6 +36,8 @@
 }
 
 @test 'ysu - _write_ysu_buffer invalid' {
+    (( $+commands[tput] )) || skip "tput not found"
+
     YSU_MESSAGE_POSITION="invalid"
     export _YSU_BUFFER
 

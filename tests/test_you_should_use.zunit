@@ -1,6 +1,9 @@
 #!/usr/bin/env zunit
 
 @test 'ysu version exported' {
+    (( $+commands[git] )) || skip "git not found"
+    [ -d ".git" ] || skip "not in git repo"
+
     git_version="$(git tag --list | sort | tail -1)"
     git tag --list
 
@@ -29,6 +32,8 @@
 }
 
 @test 'ysu message correct output' {
+    (( $+commands[tput] )) || skip "tput not found"
+
     unset YSU_MESSAGE_FORMAT
     run ysu_message "alias" "ls -l" "ll"
 
@@ -41,6 +46,8 @@
 }
 
 @test 'ysu message correct output 2' {
+    (( $+commands[tput] )) || skip "tput not found"
+
     unset YSU_MESSAGE_FORMAT
     run ysu_message "foobar" "2>/dev/null" "NE"
 
@@ -53,6 +60,8 @@
 }
 
 @test 'escapes \ and % correctly' {
+    (( $+commands[tput] )) || skip "tput not found"
+
     unset YSU_MESSAGE_FORMAT
     run ysu_message "alias" "printf '%s\\n'" "pf"
 
