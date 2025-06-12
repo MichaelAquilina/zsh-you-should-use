@@ -1,15 +1,5 @@
 #!/usr/bin/env zunit
 
-@setup {
-    load "../you-should-use.plugin.zsh"
-    # Simplify format for tests
-    YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
-    unset YSU_MESSAGE_POSITION
-}
-
-@teardown {
-}
-
 @test 'global aliases no match' {
     alias -g hw="Hello World!"
     run _check_global_aliases "echo 'hello'"
@@ -23,7 +13,7 @@
     run _check_global_aliases "echo 'hello' 2>/dev/null"
 
     assert "$output" contains 'Found existing global alias for "2>/dev/null". You should use: "NE"'
-    assert $state equals 0
+    assert $state equals $HARDCORE_EXIT_CODE
 }
 
 @test 'test doesnt match substrings' {

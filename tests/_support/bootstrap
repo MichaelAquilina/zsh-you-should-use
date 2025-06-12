@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+
+# Clear any existing env vars that can cause conflicts
+unset YSU_MESSAGE_POSITION
+unset YSU_HARDCORE_ALIASES
+unset YSU_HARDCORE
+
+# Create isolated git environment using only GIT_CONFIG_GLOBAL
+export GIT_CONFIG_GLOBAL="$(mktemp)"
+export GIT_CONFIG_NOSYSTEM=1
+
+# Simplify format for tests
+export YSU_MESSAGE_FORMAT='Found existing %alias_type for "%command". You should use: "%alias"'
+
+# Exit code for hardcore mode
+export HARDCORE_EXIT_CODE=130
+
+# Mock the kill command to avoid killing the test process
+function kill() {
+    echo "kill called with: $*"
+    return $HARDCORE_EXIT_CODE
+}
+
+# Source the plugin
+source "$PWD/you-should-use.plugin.zsh"
+
+function cleanup() {
+    # Ensure the temporary git config file is removed
+    if [[ -n "$GIT_CONFIG_GLOBAL" && -f "$GIT_CONFIG_GLOBAL" ]]; then
+        echo "Removing temporary git config file:"
+        rm -v -f "$GIT_CONFIG_GLOBAL"
+    fi
+}
+
+trap cleanup EXIT

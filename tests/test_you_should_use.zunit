@@ -1,10 +1,5 @@
 #!/usr/bin/env zunit
 
-@setup {
-    load "../you-should-use.plugin.zsh"
-    unset YSU_MESSAGE_POSITION
-}
-
 @test 'ysu version exported' {
     git_version="$(git tag --list | sort | tail -1)"
     git tag --list
