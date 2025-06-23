@@ -216,7 +216,7 @@ Now when you type a command that matches one of these specific aliases, zsh will
     Found existing alias for "git status". You should use: "gs"
     You Should Use hardcore mode enabled. Use your aliases!
     $ ls -lh
-    Found existing alias for "ls -lh". You should use: "ll" 
+    Found existing alias for "ls -lh". You should use: "ll"
     You Should Use hardcore mode enabled. Use your aliases!
     $ git checkout main
     Found existing alias for "git checkout". You should use: "gco"
@@ -356,8 +356,6 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _Antigen: https://github.com/zsh-users/antigen
 
 .. _ZGen: https://github.com/tarjoilija/zgen
-
-.. _Fig: https://fig.io
 
 .. _oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
 
