@@ -116,7 +116,8 @@ You should use: ${PURPLE}\"%alias\"${NONE}"
 function _check_ysu_hardcore() {
     local alias_name="$1"
 
-    if (( ${+YSU_HARDCORE} )) || [[ ${YSU_HARDCORE_ALIASES[(r)$alias_name]} == "$alias_name" ]]; then
+    local hardcore_lookup="${YSU_HARDCORE_ALIASES[(r)$alias_name]}"
+    if (( ${+YSU_HARDCORE} )) || [[ -n "$hardcore_lookup" && "$hardcore_lookup" == "$alias_name" ]]; then
         _write_ysu_buffer "${BOLD}${RED}You Should Use hardcore mode enabled. Use your aliases!${NONE}\n"
         kill -s INT $$
     fi

@@ -28,7 +28,7 @@
    run _check_git_aliases "git config --list" "git config --list"
 
    assert "$output" contains 'Found existing git alias for "config". You should use: "git cfg"'
-   assert $state equals $HARDCORE_EXIT_CODE
+   assert $state equals 0
 }
 
 @test 'git aliases ignore on sudo' {
@@ -44,16 +44,16 @@
    run _check_git_aliases "git status" "git status"
 
    assert "$output" contains 'Found existing git alias for "status". You should use: "git st"'
-   assert $state equals $HARDCORE_EXIT_CODE
+   assert $state equals 0
 }
 
 @test 'git aliases match parameters' {
    git config --global alias.recommit "commit --amend --reuse-message=HEAD"
-   
+
    run _check_git_aliases "git commit --amend --reuse-message=HEAD" "git commit --amend --reuse-message=HEAD"
 
    assert "$output" contains 'Found existing git alias for "commit --amend --reuse-message=HEAD". You should use: "git recommit"'
-   assert $state equals $HARDCORE_EXIT_CODE
+   assert $state equals 0
 }
 
 @test 'git aliases not triggered when parameters are different' {
@@ -63,4 +63,3 @@
    assert "$output" is_empty
    assert $state equals 0
 }
-
