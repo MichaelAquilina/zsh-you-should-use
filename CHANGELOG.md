@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.10.1
+------
+* Fix bug where hardcore mode would run even when not enabled (#148)
+
 1.10.0
 ------
 * Add support for hardcore mode on specific aliases via `YSU_HARDCORE_ALIASES`
