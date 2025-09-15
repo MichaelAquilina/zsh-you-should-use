@@ -112,6 +112,34 @@ Then add this line to your ``.zshrc``::
 
     source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh
 
+`Home-Manager (Nix)`_
+
+Install the ``zsh-you-should-use`` (Nixpkgs_) package by adding it to ``programs.zsh.plugins``::
+
+    { pkgs, ... }:
+    {
+      programs.zsh.plugins = [
+        {
+          name = "you-should-use";
+          src = pkgs.zsh-you-should-use;
+          file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
+        }
+      ];
+    }
+
+`NixOS`_
+
+Install the ``zsh-you-should-use`` (Nixpkgs_) package by adding it to ``programs.zsh.interactiveShellInit`` in your NixOS configuration::
+
+    { pkgs, ... }:
+    {
+      programs.zsh.interactiveShellInit = ''
+        source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
+      '';
+    }
+
+
+
 Message Position
 ----------------
 
@@ -362,6 +390,12 @@ all you need to do is run ``mv ~/.gitconfig.bak ~/.gitconfig``
 .. _Arch Linux: https://www.archlinux.org/
 
 .. _AUR: https://aur.archlinux.org/packages/zsh-you-should-use/
+
+.. _NixOS: https://nixos.org
+
+.. _Home-Manager (Nix): https://nix-community.github.io/home-manager/
+
+.. _Nixpkgs: https://search.nixos.org/packages?channel=unstable&query=zsh-you-should-use
 
 .. _CHANGELOG: CHANGELOG.md
 
