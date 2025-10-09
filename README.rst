@@ -90,7 +90,7 @@ Clone this repository using the following command:
 
     git clone https://github.com/MichaelAquilina/zsh-you-should-use.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/you-should-use
 
-``$ZSH_CUSTOM`` is oh-my-zsh’s customization directory (`docs <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`__).
+``$ZSH_CUSTOM`` is oh-my-zsh's customization directory (`docs <https://github.com/robbyrussell/oh-my-zsh/wiki/Customization/>`__).
 
 Then add ``you-should-use`` to the ``plugins`` array in your ``.zshrc``:
 
