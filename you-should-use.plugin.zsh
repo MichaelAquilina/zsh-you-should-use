@@ -209,11 +209,6 @@ function _check_aliases() {
     local key
     local value
 
-    # sudo will use another user's profile and so aliases would not apply
-    if [[ "$typed" = "sudo "* ]]; then
-        return
-    fi
-
     # Find alias matches
     for key in "${(@k)aliases}"; do
         value="${aliases[$key]}"
