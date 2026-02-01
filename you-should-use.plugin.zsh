@@ -200,7 +200,7 @@ function _check_global_aliases() {
 
 function _check_aliases() {
     local typed="$1"
-    local expanded="$2"
+    local expanded="${2:-$1}"
 
     local found_aliases
     found_aliases=()
@@ -223,7 +223,7 @@ function _check_aliases() {
             continue
         fi
 
-        if [[ "$typed" = "$value" || "$typed" = "$value "* ]]; then
+        if [[ "$expanded" = "$value" || "$expanded" = "$value "* ]]; then
 
         # if the alias longer or the same length as its command
         # we assume that it is there to cater for typos.
@@ -261,6 +261,31 @@ function _check_aliases() {
         if [[ "$typed" = "$best_match" || "$typed" = "$best_match "* ]]; then
             return
         fi
+
+        # Check if typed command is an alias that recursively uses best_match
+        local typed_cmd="${typed%% *}"
+        local check_value="${aliases[$typed_cmd]}"
+        local check_cmd
+        local -A visited_aliases
+        visited_aliases[$typed_cmd]=1
+        # Follow alias chain to see if it eventually uses best_match
+        while [[ -n "$check_value" ]]; do
+            if [[ "$check_value" = "$best_match" || "$check_value" = "$best_match "* ]]; then
+                return
+            fi
+            check_cmd="${check_value%% *}"
+            # Break if we've already visited this alias (cycle detection)
+            if [[ -n "${visited_aliases[$check_cmd]}" ]]; then
+                break
+            fi
+            visited_aliases[$check_cmd]=1
+            if [[ -n "${aliases[$check_cmd]}" ]]; then
+                check_value="${aliases[$check_cmd]}"
+            else
+                break
+            fi
+        done
+
         ysu_message "alias" "$value" "$best_match"
         _check_ysu_hardcore "$best_match"
     fi

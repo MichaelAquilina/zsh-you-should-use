@@ -139,7 +139,7 @@
     assert $state equals 0
 }
 
-@test 'dont display recommendations for an alias if it is used - 4' {
+@test 'dont display recommendations for an alias if it is used - 3' {
     alias ..='cd ..'
     alias cd..='cd ..'
 
@@ -149,12 +149,46 @@
     assert $state equals 0
 }
 
-@test 'dont display recommendations for an alias if it is used - 3' {
+@test 'dont display recommendations for an alias if it is used - 4' {
     alias ls='ls --color=auto'
     alias ll='ls -lh --group-directories-first'
 
     run _check_aliases 'll' 'ls --color=auto -lh --group-directories-first'
 
     assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'dont display recommendations for an alias if it is used - 5' {
+    alias ls='ls --color=auto'
+    alias ll='ls -lh --group-directories-first'
+    alias la='ll -a'
+
+    run _check_aliases 'la /' 'ls --color=auto -lh --group-directories-first -a /'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'nested alias detection - suggest better alias when using partial alias' {
+    alias g='git'
+    alias gl='git pull'
+
+    run _check_aliases 'g pull' 'git pull'
+
+    assert "$output" contains 'Found existing alias for "git pull". You should use: "gl"'
+    assert $state equals 0
+}
+
+@test 'cyclic alias chain does not cause infinite loop' {
+    # Create a cyclic alias chain: b -> c -> b
+    alias b='c'
+    alias c='b'
+    # Create an alias that starts the chain
+    alias a='b foo'
+
+    # This should complete without hanging and suggest the better alias
+    run _check_aliases 'a' 'b foo'
+
     assert $state equals 0
 }
