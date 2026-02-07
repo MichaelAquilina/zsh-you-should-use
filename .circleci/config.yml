@@ -5,10 +5,23 @@ test: &test
   steps:
     - checkout
     - run:
-        name: Install Dependencies
-        command: apt-get update && apt-get install -y curl git ncurses-bin
+        name: setup tzdata
+        command: |
+          export DEBIIAN_FRONTEND=noninteractive
+          export TZ=Etc/UTC
+          ln -fs /usr/share/zoneinfo/$TZ /etc/localtime
+          echo $TZ > /etc/timezone
     - run:
-        name: Download requirements
+        name: Install Dependencies
+        command: >
+          apt-get update &&
+          apt-get install -y
+          zsh
+          curl
+          ncurses-bin
+          git
+    - run:
+        name: Download Zunit
         command: |
           mkdir -p ~/bin
           curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > ~/bin/revolver
@@ -17,7 +30,10 @@ test: &test
     - run:
         name: Run Zunit
         command: |
-          export TERM="xterm-256color"
+          # Required by pipenv to work correctly
+          export LC_ALL=C.UTF-8
+          export LANG=C.UTF-8
+          export TERM="xterm-256color"  # Required by tput
           export PATH="$HOME/bin:$PATH"
           zunit --verbose
 
@@ -25,58 +41,18 @@ test: &test
 jobs:
   lint:
     docker:
-      - image: "python:3.7-stretch"
+      - image: "python:3.14"
     steps:
       - checkout
       - run:
           name: run restructuredtext linter
           command: |
-            pip install restructuredtext_lint pygments
+            pip install restructuredtext_lint
             rst-lint *.rst
 
-  test-zsh-5.1:
+  test-zsh:
       docker:
-        - image: "zshusers/zsh:5.1"
-      <<: *test
-
-  test-zsh-5.2:
-      docker:
-        - image: "zshusers/zsh:5.2"
-      <<: *test
-
-  test-zsh-5.3:
-      docker:
-        - image: "zshusers/zsh:5.3"
-      <<: *test
-
-  test-zsh-5.4:
-      docker:
-        - image: "zshusers/zsh:5.4"
-      <<: *test
-
-  test-zsh-5.5:
-      docker:
-        - image: "zshusers/zsh:5.5"
-      <<: *test
-
-  test-zsh-5.6:
-      docker:
-        - image: "zshusers/zsh:5.6"
-      <<: *test
-
-  test-zsh-5.7:
-      docker:
-        - image: "zshusers/zsh:5.7"
-      <<: *test
-
-  test-zsh-5.8:
-      docker:
-        - image: "zshusers/zsh:5.8"
-      <<: *test
-
-  test-zsh-5.9:
-      docker:
-        - image: "zshusers/zsh:5.9"
+        - image: "ubuntu:latest"
       <<: *test
 
 workflows:
@@ -84,12 +60,4 @@ workflows:
   test:
     jobs:
       - lint
-      - test-zsh-5.1
-      - test-zsh-5.2
-      - test-zsh-5.3
-      - test-zsh-5.4
-      - test-zsh-5.5
-      - test-zsh-5.6
-      - test-zsh-5.7
-      - test-zsh-5.8
-      - test-zsh-5.9
+      - test-zsh
