@@ -1,6 +1,5 @@
 version: 2
 
-
 test: &test
   steps:
     - checkout
@@ -45,10 +44,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: run restructuredtext linter
+          name: run pre-commit
           command: |
-            pip install restructuredtext_lint pygments
-            rst-lint *.rst
+            pip install pre-commit
+            pre-commit run -a
 
   test-zsh:
       docker:

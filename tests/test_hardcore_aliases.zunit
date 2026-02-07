@@ -9,20 +9,20 @@
     export YSU_HARDCORE_ALIASES=("gs" "ll")
     alias gs="git status"
     alias ll="ls -l"
-    
+
     run _check_ysu_hardcore "gs"
-    
+
     assert $state equals $HARDCORE_EXIT_CODE
     assert "$output" contains "You Should Use hardcore mode enabled"
 }
 
 @test 'hardcore aliases - does not kill when alias not in hardcore list' {
-    export YSU_HARDCORE_ALIASES=("gs" "ll") 
+    export YSU_HARDCORE_ALIASES=("gs" "ll")
     alias gs="git status"
     alias gco="git checkout"
-    
+
     run _check_ysu_hardcore "gco"
-    
+
     assert $state equals 0
     assert "$output" is_empty
 }
@@ -31,10 +31,10 @@
     export YSU_HARDCORE=1
     export YSU_HARDCORE_ALIASES=("gs")
     alias gs="git status"
-    
+
     # YSU_HARDCORE takes precedence, should still kill but with general message
     run _check_ysu_hardcore "gs"
-    
+
     assert $state equals $HARDCORE_EXIT_CODE  # SIGINT exit code
 }
 
@@ -42,10 +42,10 @@
     export YSU_HARDCORE_ALIASES=("gs")
     alias gs="git status"
     alias g="git"
-    
+
     # This should find gs alias and trigger hardcore mode
     run _check_aliases "git status"
-    
+
     assert $state equals $HARDCORE_EXIT_CODE  # SIGINT exit code
 }
 
@@ -54,10 +54,10 @@
     export YSU_HARDCORE_ALIASES=("gs")
     alias gs="git status"
     alias g="git"
-    
+
     # This should find both aliases but only kill for gs
     run _check_aliases "git status"
-    
+
     assert $state equals $HARDCORE_EXIT_CODE  # SIGINT exit code
 }
 
@@ -65,10 +65,10 @@
     export YSU_HARDCORE_ALIASES=("gco")
     alias gs="git status"
     alias g="git"
-    
+
     # Should show normal reminder without killing
     run _check_aliases "git status"
-    
+
     assert $state equals 0
     assert "$output" contains 'Found existing alias for "git status". You should use: "gs"'
 }
@@ -76,9 +76,9 @@
 @test 'hardcore aliases - empty array does not trigger' {
     export YSU_HARDCORE_ALIASES=()
     alias gs="git status"
-    
+
     run _check_ysu_hardcore "gs"
-    
+
     assert $state equals 0
     assert "$output" is_empty
 }
