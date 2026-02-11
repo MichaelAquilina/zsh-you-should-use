@@ -19,6 +19,16 @@
     assert $state equals 0
 }
 
+@test 'aliases default parameter fallback - expanded not provided' {
+    export YSU_MODE="BESTMATCH"
+    alias e='echo'
+
+    run _check_aliases 'echo hello'
+
+    assert "$output" contains 'Found existing alias for "echo". You should use: "e"'
+    assert $state equals 0
+}
+
 @test 'aliases match - all with alphabetical ordering' {
     export YSU_MODE="ALL"
     alias c="git status -v"
@@ -123,6 +133,18 @@
     assert $state equals 0
 }
 
+@test 'aliases ignores - ignored with partial alias usage' {
+    export YSU_MODE="BESTMATCH"
+    export YSU_IGNORED_ALIASES=("gl")
+    alias g='git'
+    alias gl='git pull'
+
+    run _check_aliases 'g pull' 'git pull'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'dont display recommendations for an alias if it is used' {
     alias hu='hg update'
     run _check_aliases 'hu' 'hg update'
@@ -170,11 +192,42 @@
     assert $state equals 0
 }
 
+@test 'dont display recommendations - typing exact alias should not suggest itself' {
+    export YSU_MODE="BESTMATCH"
+    alias gl='git pull'
+    alias g='git'
+
+    run _check_aliases 'gl' 'git pull'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'dont display recommendations - self-referential alias typed directly' {
+    export YSU_MODE="BESTMATCH"
+    alias ls='ls --color=auto'
+
+    run _check_aliases 'ls' 'ls --color=auto'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
 @test 'nested alias detection - suggest better alias when using partial alias' {
     alias g='git'
     alias gl='git pull'
 
     run _check_aliases 'g pull' 'git pull'
+
+    assert "$output" contains 'Found existing alias for "git pull". You should use: "gl"'
+    assert $state equals 0
+}
+
+@test 'nested alias detection - partial alias with additional args' {
+    alias g='git'
+    alias gl='git pull'
+
+    run _check_aliases 'g pull --rebase' 'git pull --rebase'
 
     assert "$output" contains 'Found existing alias for "git pull". You should use: "gl"'
     assert $state equals 0
