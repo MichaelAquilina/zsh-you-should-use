@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.11.0
+------
+* Display best match aliases even if another alias was already used (#153) (Thanks @jameslan)
+
 1.10.1
 ------
 * Fix bug where hardcore mode would run even when not enabled (#148)
