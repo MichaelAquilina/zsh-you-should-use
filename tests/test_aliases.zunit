@@ -245,3 +245,23 @@
 
     assert $state equals 0
 }
+
+@test 'YSU_MODE=ALL does not suggest alias when already using it' {
+    export YSU_MODE="ALL"
+    alias ls='eza --icons --group-directories-first'
+
+    run _check_aliases 'ls' 'eza --icons --group-directories-first'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'YSU_MODE=ALL does not suggest alias when already using it with args' {
+    export YSU_MODE="ALL"
+    alias ls='eza --icons --group-directories-first'
+
+    run _check_aliases 'ls -la' 'eza --icons --group-directories-first -la'
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
