@@ -1,6 +1,10 @@
 Changelog for zsh-you-should-use
 ================================
 
+1.11.1
+------
+* Fixes a regression in YSU_MODE=all behaviour (#154)
+
 1.11.0
 ------
 * Display best match aliases even if another alias was already used (#153) (Thanks @jameslan)
