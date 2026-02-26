@@ -265,3 +265,25 @@
     assert "$output" is_empty
     assert $state equals 0
 }
+
+@test 'YSU_MODE=ALL does not suggest less-specific alias when better alias is already used' {
+    export YSU_MODE="ALL"
+    alias g="git"
+    alias gst="git status"
+
+    run _check_aliases "gst" "git status"
+
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'YSU_MODE=ALL still suggests better alias when less-specific alias is used' {
+    export YSU_MODE="ALL"
+    alias g="git"
+    alias gst="git status"
+
+    run _check_aliases "g status" "git status"
+
+    assert "$output" contains 'Found existing alias for "git status". You should use: "gst"'
+    assert $state equals 0
+}

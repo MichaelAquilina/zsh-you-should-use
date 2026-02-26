@@ -274,10 +274,28 @@ function _check_aliases() {
 
     # Print result matches based on current mode
     if [[ "$YSU_MODE" = "ALL" ]]; then
+        # Find the longest alias value already "used" by the typed command.
+        # This prevents suggesting a less-specific alias (e.g. g→git) when the
+        # user already typed a more-specific alias (e.g. gst→git status).
+        local typed_best_coverage=0
+        for key in ${(@ok)found_aliases}; do
+            if [[ "$typed" = "$key" || "$typed" = "$key "* ]] || _typed_resolves_to_alias "$typed" "$key"; then
+                if [[ "${#aliases[$key]}" -gt $typed_best_coverage ]]; then
+                    typed_best_coverage="${#aliases[$key]}"
+                fi
+            fi
+        done
+
         for key in ${(@ok)found_aliases}; do
             value="${aliases[$key]}"
 
             if [[ "$typed" = "$key" || "$typed" = "$key "* ]] || _typed_resolves_to_alias "$typed" "$key"; then
+                continue
+            fi
+
+            # Don't suggest an alias whose value covers less of the command than
+            # the alias the user is already using.
+            if [[ ${#value} -lt $typed_best_coverage ]]; then
                 continue
             fi
 
