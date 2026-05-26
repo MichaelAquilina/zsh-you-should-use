@@ -84,6 +84,43 @@
     assert $state equals 0
 }
 
+@test 'aliases bestmatch - already-best compound alias is not downgraded to a shorter one' {
+    export YSU_MODE="BESTMATCH"
+    alias g='git'
+    alias gp='git push'
+    alias gpf='git push --force-with-lease'
+    alias gf='git fetch'
+    alias gfa='git fetch --all --prune --jobs=10'
+
+    # Typing an alias that is already the most specific match must not suggest
+    # a shorter, less specific alias (regression for the tie-break that compared
+    # a candidate's value length against the best match's *name* length).
+    run _check_aliases 'gpf' 'git push --force-with-lease'
+    assert "$output" is_empty
+    assert $state equals 0
+
+    run _check_aliases 'gfa' 'git fetch --all --prune --jobs=10'
+    assert "$output" is_empty
+    assert $state equals 0
+}
+
+@test 'aliases bestmatch - full command suggests the most specific compound alias' {
+    export YSU_MODE="BESTMATCH"
+    alias g='git'
+    alias gp='git push'
+    alias gpf='git push --force-with-lease'
+    alias gf='git fetch'
+    alias gfa='git fetch --all --prune --jobs=10'
+
+    run _check_aliases 'git push --force-with-lease'
+    assert "$output" contains 'Found existing alias for "git push --force-with-lease". You should use: "gpf"'
+    assert $state equals 0
+
+    run _check_aliases 'git fetch --all --prune --jobs=10'
+    assert "$output" contains 'Found existing alias for "git fetch --all --prune --jobs=10". You should use: "gfa"'
+    assert $state equals 0
+}
+
 @test 'aliases ignore if sudo' {
     unset YSU_MODE
     alias gs="git status"
